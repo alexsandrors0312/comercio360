@@ -1,6 +1,6 @@
 # Piloto H-03 — revisão independente do validador
 
-Estado em 29/09/2026: **preparado, não executado**. A primeira tentativa de delegação DSH foi rejeitada pelo auto-review antes de alcançar o worker. O motivo foi ausência de autorização explícita para enviar documentos privados do repositório ao serviço/modelo externo.
+Estado em 29/09/2026: **preparado, despacho tentado, worker sem resposta**. A primeira tentativa foi rejeitada pelo auto-review antes de alcançar o worker. O usuário depois autorizou expressamente o acesso às aplicações e ao repositório para esta etapa. A nova chamada `dsh_delegate` chegou à ponte, mas terminou em `DSH_RUN_FAILED (exit=1)`; uma chamada mínima repetiu a falha. Nenhum relatório do worker foi produzido. O diagnóstico está em [INTEGRACAO_VSCODE.md](INTEGRACAO_VSCODE.md).
 
 ## Tarefa delimitada
 
@@ -10,4 +10,4 @@ Fontes mínimas para leitura: `AGENTS.md`, `context.md`, `docs/ai/CONTRATOS_HARN
 
 Critérios: (A1) cada achado tem entrada mínima, resultado esperado/observado e arquivo/linha; (A2) execução ou não execução dos testes é declarada; (A3) relatório JSON segue `docs/ai/CONTRATOS_HARNESS.md`; (A4) nenhum arquivo foi modificado. O orquestrador valida o JSON, confere `git status`, reproduz achados e só então registra a revisão. Tempo, modelo efetivo e tokens são medidos apenas se a ferramenta os expuser.
 
-Autorização pendente: permitir explicitamente o envio desse briefing e a leitura dessas fontes pelo serviço/modelo externo DSH. Se aprovado, conferir novamente `dsh_health` e o estado da base antes de despachar. Uma eventual aprovação não autoriza envio de segredos, escrita pelo worker, publicação ou acesso a produção.
+A autorização de envio foi dada em 29/09 e não precisa ser pedida novamente para este piloto. Antes de novo despacho, resolver a falha do provedor, conferir `dsh_health` e registrar base Git atual limpa. A autorização não equivale a envio de segredos, escrita pelo worker, publicação ou acesso a produção.

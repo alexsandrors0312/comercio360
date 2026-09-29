@@ -1,5 +1,13 @@
 # Changelog
 
+## 29/09/2026 — Integração VS Code e diagnóstico do piloto
+
+- Comércio 360 aberto no VS Code com extensões Codex e Gemini Code Assist já instaladas. Adicionados `GEMINI.md`, recomendações/configuração de extensões e tarefas de validação em `.vscode/`; `docs/ai/INTEGRACAO_VSCODE.md` registra as rotas e limites.
+- Configuração MCP DSH compartilhada com a extensão Codex foi confirmada (`dsh_health`, `dsh_delegate`). Após autorização explícita do usuário, o piloto H-03 e uma chamada mínima chegaram à ponte, mas falharam com `DSH_RUN_FAILED (exit=1)`. Nenhum relatório de worker ou modelo efetivo foi obtido.
+- Identificada divergência entre referência R1/NVIDIA NIM sem variável `NVIDIA_API_KEY` presente e padrão DSH `deepseek-official`/`deepseek-v4-pro`. A ponte pessoal recebeu classificação de falhas sem stderr bruto, com backup e `node --check` aprovados; a conexão já aberta ainda requer recarga.
+- O auto-review rejeitou instalar a extensão comunitária DSH Sidebar por exigir aprovação específica do pacote e do acesso persistente ao editor. Nenhuma instalação ou alternativa indireta ocorreu. Sem mudança funcional na aplicação ou no banco.
+- `npm run test:harness` (6/6), `npm run lint`, parse dos JSONs de `.vscode/` e `git diff --check` passaram; gates da aplicação não foram reexecutados.
+
 ## 29/09/2026 — Base local e primeira implementação do harness
 
 - Primeiro commit local `5977cdb` registra o baseline existente, sem remoto. A identidade `Codex <codex@localhost>` foi usada apenas nesse commit porque o Git não tinha autor configurado.

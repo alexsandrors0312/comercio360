@@ -1,0 +1,19 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "C360: validar harness",
+      "type": "shell",
+      "command": "npm run test:harness",
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "C360: lint",
+      "type": "shell",
+      "command": "npm run lint",
+      "group": "test",
+      "problemMatcher": []
+    }
+  ]
+}
