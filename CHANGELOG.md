@@ -1,5 +1,11 @@
 # Changelog
 
+## 29/09/2026 — Início controlado da avaliação H-04
+
+- Três pares de cópias sintéticas (domínio D1, SQL S1 e interface U1) foram preparados sem credenciais, com baselines e contratos 0.1 iguais por par. As primeiras exportações com conversão involuntária de finais de linha no Windows foram substituídas por moldes conferidos byte a byte com o commit `4a80096`; o protocolo agora exige essa auditoria.
+- O braço Codex D1 corrigido produziu JSON 0.1 válido, passou em 7/7 testes direcionados, tipos e diff, e recebeu revisão independente sem achados bloqueantes. Uma tentativa anterior na cópia inválida e a interrupção por limite de créditos foram preservadas como histórico, sem entrar em comparação de tempo/custo. O resultado está em `docs/ai/H04_D1_CODEX_RESULTADO_2026-09-29.json`.
+- A allowlist DSH pessoal foi atualizada em disco para os três clones corrigidos, mas a conexão MCP ativa ainda mostra só a raiz real; nenhum worker DSH H-04 foi despachado. `docs/ai/RELATORIO_H04.md` registra o estado e os próximos gates. Código funcional do repositório real, migrações, dependências e evidências H1 não foram alterados.
+
 ## 29/09/2026 — Piloto DSH H-03 e preparação H-04
 
 - Após confirmação de resposta no DSH Web, `dsh_delegate` via MCP respondeu `READY`. A primeira revisão H-03 atingiu timeout de 300000 ms; uma segunda chamada delimitada retornou JSON 0.1 na base `1a30bbd`, preservado em `docs/ai/H03_RESULTADO_DSH_2026-09-29.json`. Modelo efetivo, tokens e custo não foram expostos.

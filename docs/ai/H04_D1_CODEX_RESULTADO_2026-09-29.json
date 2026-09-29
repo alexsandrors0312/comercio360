@@ -1,0 +1,145 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-D1-CODEX-02",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "baseline_ref": "bd3103814e8f381c4c47fb6acc620e3b61941b69",
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Corrigida a seleção de contexto para exigir simultaneamente organizationId e storeId quando fornecidos. Teste novo reproduziu a regressão antes da correção e a suíte passou depois. A execução foi interrompida por limite de créditos; o tempo registrado refere-se somente à retomada.",
+  "artifacts": [
+    {
+      "path": "packages/domain/tenancy.ts",
+      "type": "source",
+      "sha256": "639fbad1406a36a425cb23d721368a669dc08af7f7e72d09219c5771cfef37bd"
+    },
+    {
+      "path": "tests/tenancy.test.ts",
+      "type": "test",
+      "sha256": "e22eea85a172b6ec06ec309e643cf46f75045a7cc98797f707106dc28cc07c95"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "packages/domain/tenancy.ts",
+      "operation": "modified",
+      "purpose": "Exigir correspondência de organização e loja na mesma busca."
+    },
+    {
+      "path": "tests/tenancy.test.ts",
+      "operation": "modified",
+      "purpose": "Adicionar teste que falha com a regressão D1 e cobre par válido, par cruzado e ID ausente."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "D1-A1",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/tenancy.test.ts",
+        "packages/domain/tenancy.ts"
+      ]
+    },
+    {
+      "id": "D1-A2",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/tenancy.test.ts",
+        "packages/domain/tenancy.ts"
+      ]
+    },
+    {
+      "id": "D1-A3",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/tenancy.test.ts",
+        "packages/domain/tenancy.ts"
+      ]
+    },
+    {
+      "id": "D1-A4",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/tenancy.test.ts",
+        "packages/domain/tenancy.ts"
+      ]
+    },
+    {
+      "id": "D1-A5",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/tenancy.test.ts",
+        "packages/domain/tenancy.ts"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "D1-V1",
+      "status": "pass",
+      "environment": "clone descartável local com dependências do package-lock.json",
+      "procedure": "npx vitest run tests/tenancy.test.ts",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-d1-blob-285553c194204d5bb34b70a1b980b96f/codex",
+      "executed_at": "2026-09-29T20:34:19.028Z",
+      "exit_code": 0,
+      "assertions": "Vitest: 1 arquivo, 7 testes passaram; o teste novo havia falhado sobre a base com a regressão antes da correção.",
+      "evidence_refs": [
+        "tests/tenancy.test.ts",
+        "packages/domain/tenancy.ts"
+      ]
+    },
+    {
+      "id": "D1-V2",
+      "status": "pass",
+      "environment": "clone descartável local com dependências do package-lock.json",
+      "procedure": "npx tsc --noEmit",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-d1-blob-285553c194204d5bb34b70a1b980b96f/codex",
+      "executed_at": "2026-09-29T20:34:23.667Z",
+      "exit_code": 0,
+      "assertions": "TypeScript terminou sem erros (exit 0).",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    },
+    {
+      "id": "D1-V3",
+      "status": "pass",
+      "environment": "clone descartável local",
+      "procedure": "git diff --check",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-d1-blob-285553c194204d5bb34b70a1b980b96f/codex",
+      "executed_at": "2026-09-29T20:34:29.267Z",
+      "exit_code": 0,
+      "assertions": "git diff --check terminou sem erros (exit 0).",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    }
+  ],
+  "findings": [],
+  "assumptions": [
+    "A lista stores é previamente filtrada por autorização no banco, conforme contrato.",
+    "O tempo elapsed_seconds mede apenas a retomada iniciada em 2026-09-29T20:34:10Z até a preparação deste resultado; o total da execução interrompida não é conhecido."
+  ],
+  "context_requests": [
+    {
+      "item": "Trecho resultSchema e validateResult de scripts/harness/validate.mjs",
+      "reason": "Construir e validar o resultado estrito 0.1; ampliação autorizada pelo orquestrador."
+    }
+  ],
+  "risks": [
+    "A execução anterior foi interrompida por limite de créditos. O total contínuo de tempo e as métricas de tokens/custo não estão disponíveis."
+  ],
+  "metrics": {
+    "elapsed_seconds": 69,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Submeter diff e evidências à revisão independente H-04 D1."
+}
