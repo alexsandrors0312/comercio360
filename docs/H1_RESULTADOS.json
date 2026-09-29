@@ -1,0 +1,175 @@
+{
+  "date": "2026-09-11T00:29:31.252Z",
+  "version": "0.1.1",
+  "project": "qiwblpmocldqbijbylwg",
+  "status": "TESTES_PASSARAM_REVISAO_PENDENTE",
+  "transport": "Next local HTTP; Supabase hospedado HTTPS. Cookie Secure sob HTTPS da aplicacao ainda nao homologado.",
+  "results": [
+    {
+      "test": "Preflight: seed de duas empresas e tres lojas presente",
+      "result": "PASS"
+    },
+    {
+      "test": "Auth hospedado: cadastro publico desativado e email habilitado",
+      "result": "PASS"
+    },
+    {
+      "test": "Auth real: login valido nas quatro identidades ficticias",
+      "result": "PASS"
+    },
+    {
+      "test": "Auth real: senha invalida recusada",
+      "result": "PASS"
+    },
+    {
+      "test": "Auth real: renovacao e validacao no servidor",
+      "result": "PASS"
+    },
+    {
+      "test": "REST RLS: matriz gerente A=A1/A2, caixa A=A1, gerente B=B1, sem vinculo=vazio",
+      "result": "PASS"
+    },
+    {
+      "test": "REST RLS: IDs conhecidos de outro tenant retornam zero linhas",
+      "result": "PASS"
+    },
+    {
+      "test": "REST RLS: insert/update cruzados e RPC sem acesso rejeitados com JWT de usuario",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: organizations.id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: stores.id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: stores.organization_id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: memberships.id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: memberships.organization_id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: memberships.user_id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: user_store_access.id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: user_store_access.organization_id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: user_store_access.membership_id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Trigger hospedado: user_store_access.store_id imutavel; registro e auditoria intactos",
+      "result": "PASS"
+    },
+    {
+      "test": "Auditoria hospedada: snapshots old/new de outro tenant rejeitados",
+      "result": "PASS"
+    },
+    {
+      "test": "Atualizacoes legitimas: nome, papel, ativo e chaves com mesmo valor",
+      "result": "PASS"
+    },
+    {
+      "test": "Servidor web isolado sem variaveis administrativas",
+      "result": "PASS"
+    },
+    {
+      "test": "Navegador real: login invalido nao abre area protegida",
+      "result": "PASS"
+    },
+    {
+      "test": "Navegador real: gerente A, B sem loja omitida, troca A2 persiste ao recarregar",
+      "result": "PASS"
+    },
+    {
+      "test": "Navegador real: caixa restrito a A1 e cookie adulterado sem ampliacao",
+      "result": "PASS"
+    },
+    {
+      "test": "Navegador real: Horizonte apenas B e usuario sem vinculo bloqueado",
+      "result": "PASS"
+    },
+    {
+      "test": "Revogar acesso A2 remove opcao no proximo acesso e REST retorna vazio",
+      "result": "PASS"
+    },
+    {
+      "test": "Vinculo ativo sem nenhuma loja bloqueia navegador e API",
+      "result": "PASS"
+    },
+    {
+      "test": "Revogar vinculo bloqueia proxima requisicao e RPC com JWT ainda valido",
+      "result": "PASS"
+    },
+    {
+      "test": "Auditoria: ator/origem/antes/depois/loja/data e selecao consecutiva idempotente",
+      "result": "PASS"
+    },
+    {
+      "test": "Navegador real: logout e acesso posterior recusado",
+      "result": "PASS"
+    },
+    {
+      "test": "Auth real: logout revoga refresh token; JWT emitido pode durar ate expirar",
+      "result": "PASS"
+    },
+    {
+      "test": "Expiracao real: aguardar vencimento natural e tolerancia documentada",
+      "result": "PASS",
+      "evidence": {
+        "clockSource": "http_date",
+        "allowanceSeconds": 30,
+        "safetySeconds": 5,
+        "clockOffsetSeconds": -1
+      }
+    },
+    {
+      "test": "Expiracao real: JWT antigo API recusado por expiracao",
+      "result": "PASS",
+      "evidence": {
+        "httpStatus": 401,
+        "reason": "jwt_expired"
+      }
+    },
+    {
+      "test": "Expiracao real: JWT antigo navegador recusado por expiracao",
+      "result": "PASS",
+      "evidence": {
+        "httpStatus": 401,
+        "reason": "jwt_expired"
+      }
+    },
+    {
+      "test": "Expiracao real: navegador acessa area autorizada ao recarregar",
+      "result": "PASS",
+      "evidence": {
+        "httpStatus": 200,
+        "destination": "authorized"
+      }
+    },
+    {
+      "test": "Expiracao real: cookie renovado com novo token e validade posterior",
+      "result": "PASS",
+      "evidence": {
+        "expiryExtended": true,
+        "tokenChanged": true
+      }
+    }
+  ]
+}

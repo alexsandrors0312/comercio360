@@ -1,0 +1,62 @@
+# Changelog
+
+## 28/09/2026 — Correção da disponibilidade DSH MCP
+
+- Diagnóstico em `docs/ai/DIAGNOSTICO_DSH_MCP.md`: ausência de cadastro MCP ativo, pacote npm inexistente no registro público e parâmetros incompatíveis na skill.
+- Integração local externa à aplicação registrada no Codex, com ponte de revisão fixa ajustada para Windows e backups. Contrato corrigido para task/cwd/timeout_ms; verificações de protocolo/saúde passaram, sem tarefa de modelo executada. Recarga do Codex ainda necessária para disponibilidade nesta conversa.
+- Atualizados contexto e contratos propostos. Git confirmado inicializado, index preservado, primeiro commit ainda ausente. Sem mudança funcional ou migração do Comércio 360.
+
+## 28/09/2026 — Plano de desenvolvimento por IA
+
+- Adicionados `docs/ai/PLANO_ORQUESTRACAO.md` e `docs/ai/CONTRATOS_HARNESS.md`: mapa do produto, orquestração Sol alto/Astra, funções de workers, seis skills propostas, contexto delimitado, contratos de saída, revisão e implantação gradual.
+- Atualizados os apontadores de continuidade em context.md e README. Harness, perfis, skills e validador ainda não implantados; integração DeepSeek indisponível nesta sessão por ausência de `dsh_delegate`.
+- Conferidos os hashes da evidência H1, das duas migrações e do lockfile contra a revisão anterior. Código funcional e evidências históricas preservados; testes de aplicação não reexecutados nesta tarefa documental.
+- Proposta do Catálogo 002 continua aguardando aceite próprio; condições de publicação/dados reais permanecem abertas.
+
+## 26/09/2026 — Revisão arquitetural H1 e proposta do catálogo
+
+- Fundação 0.1.1 aprovada com condições para continuidade do desenvolvimento; parecer em `docs/REVISAO_ARQUITETURAL_H1.md`. ZIP íntegro e 78 arquivos originais iguais à pasta antes das atualizações documentais; evidências hospedadas, duas migrações, dependências e lockfile preservados.
+- Instalação, lint, tipos, 90 testes unitários/SQL, build, 11 E2E e auditoria npm com zero vulnerabilidades reproduzidos e aprovados. Resultados e incidentes de ambiente registrados no parecer, separados dos 36 PASS hospedados históricos.
+- Login anônimo ainda não conferido pelo operador; HTTPS/cookies, backups/restauração, produção separada e loja participante continuam condições explícitas para implantação e piloto.
+- Proposta revisável do Pacote 002 em `docs/PACOTE_002_CATALOGO_PROPOSTA.md`, com categorias, produtos, variantes, preços por loja, capa privada, permissões e critérios de aceite. Implementação depende de aceite próprio; nenhuma funcionalidade comercial adicionada.
+
+## 10/09/2026 — H1-DEP-01 — correção técnica separada
+
+- Após 36 PASS hospedados, Vitest e @vitest/mocker atualizados para 4.1.11, sem audit fix --force. Dependências de produção, aplicação 0.1.1 e migrações preservadas.
+- Patch e validação em docs/CORRECAO_TECNICA_H1.md. Pacote 002 bloqueado até revisão arquitetural.
+
+## 10/09/2026 — Gate H1 — testes hospedados e roteiro administrativo
+
+- 36 verificações hospedadas PASS, incluindo expiração e renovação do cookie. Evidência anterior com falha preservada; revisão técnica pendente.
+
+- Teste de expiração hospedada aguarda a tolerância de 30 segundos do PostgREST mais margem de cinco segundos e estima diferença de relógio por Date HTTP. Separa recusa dos JWTs, navegação e renovação de cookie em resultados independentes e sanitizados. Não altera validade de sessão, aplicativo ou migrações.
+
+- Diagnósticos administrativos por códigos fixos `H1-SEED-...`, sem mensagens brutas do provedor; captura de stdout/stderr no processo filho preserva o código de saída diante de erros nativos do PowerShell.
+- Campos vazios e senha curta são sinalizados no terminal; seed verifica a presença das empresas/lojas fictícias antes de criar identidades Auth. Onze testes com API local fictícia cobrem preflight, falhas do provedor, ausência de seed SQL e preservação de contas existentes.
+
+- Fase Seed de `scripts/h1-manual.ps1` passa `--env-file=.env.local` diretamente ao Node, corrigindo o bloqueio causado pelo uso não permitido em `NODE_OPTIONS`. Mantém o mesmo programa e os guards de `seed:users`.
+- Saída privada suprimida também em erros nativos do PowerShell; limpeza das variáveis administrativas em sucesso/falha, preservando `NODE_OPTIONS` do operador.
+- Dois testes de regressão executam o wrapper real com programa e entradas fictícios locais. Nenhuma alteração em migrações, dependências ou módulos comerciais.
+
+## 0.1.1 — 08/09/2026 — Pacote corretivo 001.1
+
+- Organizações sem lojas autorizadas omitidas do seletor; vínculo ativo sem nenhuma loja mantém o usuário em `/sem-acesso`.
+- Nova migração transacional protege chaves estruturais de organizações, lojas, vínculos e acessos, inclusive em updates administrativos com `service_role`.
+- Restrição de consistência entre tenant do evento e snapshots de auditoria; testes de seleção entre empresas preservam `old_value` isolado.
+- Seed exige confirmação independente da URL do projeto antes de qualquer chamada à API e valida todos os endereços no domínio exato `example.test`.
+- `requireAccess` memoizado com `React.cache` durante a renderização da requisição, mantendo as validações nas páginas e ações.
+- Testes adicionais de domínio, SQL, preflight do seed e E2E para vínculo ativo sem loja; documentação e ADR-0009 atualizados.
+- Versões de dependências e `.env.example` preservados; nenhuma funcionalidade comercial adicionada.
+
+## 0.1.0 — 07/09/2026
+
+- Fundação Next.js/TypeScript com módulos de domínio, validação, interface e configuração separados.
+- Autenticação Supabase SSR, bloqueio por falta de vínculo, seleção validada de empresa/loja e logout.
+- Migração PostgreSQL com seis tabelas, RLS, grants mínimos, chaves compostas e auditoria append-only.
+- Seed fictício de duas empresas, três lojas e script administrativo opcional de quatro identidades.
+- Painel demonstrativo, estados de carregamento/vazio/erro, navegação responsiva e abas futuras em construção.
+- Prévia pública separada da autenticação e manifesto para apresentação standalone; sem operação offline.
+- Testes de domínio e banco PostgreSQL/PGlite; testes Chromium com contrato de autenticação simulado.
+- Documentação de arquitetura, ADRs, instalação, integração real e recuperação.
+
+Os testes de integração Supabase hospedada do H1 passaram; a revisão arquitetural de 26/09/2026 aprovou a continuidade do desenvolvimento com condições. Nenhuma publicação ou operação comercial real executada.

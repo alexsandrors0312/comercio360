@@ -1,0 +1,9 @@
+node_modules
+.next
+.next-e2e
+package-lock.json
+next-env.d.ts
+docs/architecture/BASE_v0.1.md
+docs/architecture/BASE_v0.3.md
+test-results
+playwright-report
