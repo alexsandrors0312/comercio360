@@ -1,0 +1,132 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-U1-CODEX-01",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "baseline_ref": "32416419132f4aa59b93a8ae95839e097af25064",
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Corrigido aria-expanded para refletir o estado open do menu móvel. O novo teste em 360 px cobre estado inicial, abertura por mouse, Escape sem navegação, reabertura e link por teclado, fechamento e ausência de overflow. Teste focado: 1 asserção de cenário aprovada, mas o encerramento dos servidores Playwright ficou preso no Windows e a sessão foi interrompida. A suíte completa anterior teve 4 cenários aprovados e 2 falhas: localizador inicial do teste novo, já corrigido, e ausência do texto 404 em /demo/nonexistent. O cenário de redirecionamento protegido passou. TypeScript e diff --check passaram após a alteração final.",
+  "artifacts": [
+    {
+      "path": "packages/ui/shell.tsx",
+      "type": "source",
+      "sha256": "b103fc2850d85d5373e4cabc9d3f19f26479ccd8875c5c6b8ea22a2e40c59d5e"
+    },
+    {
+      "path": "tests/e2e/foundation.spec.ts",
+      "type": "playwright-test",
+      "sha256": "535cae367343fe523b3d5c2e939ef85fa7d04ea8af87422d3be7b35e39d77a44"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "packages/ui/shell.tsx",
+      "operation": "modified",
+      "purpose": "Vincular aria-expanded ao estado visual open do menu móvel."
+    },
+    {
+      "path": "tests/e2e/foundation.spec.ts",
+      "operation": "modified",
+      "purpose": "Cobrir estado ARIA, Escape, navegação por teclado e overflow em 360 px."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "U1-A1",
+      "status": "pass",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-A2",
+      "status": "pass",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-A3",
+      "status": "pass",
+      "evidence_refs": ["tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-A4",
+      "status": "pass",
+      "evidence_refs": ["tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-A5",
+      "status": "pass",
+      "evidence_refs": ["tests/e2e/foundation.spec.ts"],
+      "reason": "A asserção de aria-expanded=true depois da abertura falha para o valor sintético fixo false; a primeira execução vermelha falhou antes desta asserção por localizador do aside fechado e não serve como prova empírica do discriminador."
+    },
+    {
+      "id": "U1-A6",
+      "status": "pass",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    }
+  ],
+  "checks": [
+    {
+      "id": "U1-V1",
+      "status": "fail",
+      "environment": "Clone descartável local; Playwright Chromium com Next em 127.0.0.1:3001 e servidor Auth simulado em 127.0.0.1:54329; Windows.",
+      "procedure": "npx playwright test tests/e2e/foundation.spec.ts; depois npx playwright test tests/e2e/foundation.spec.ts --grep \"mobile menu announces\"",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/codex",
+      "executed_at": "2026-09-29T20:41:43Z",
+      "exit_code": 1,
+      "assertions": "Suíte completa antes do ajuste do localizador: 4 aprovados, 2 falhos; o novo teste não localizou o aside fechado por papel ARIA e o teste existente não encontrou texto 404 em /demo/nonexistent. Após ajustar o localizador, teste focado exibiu ok (1.7 s), incluindo estado ARIA, Escape, link por teclado e overflow, mas teardown travou e a sessão foi interrompida; portanto, não há exit code zero final para Playwright.",
+      "evidence_refs": ["tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-V2",
+      "status": "pass",
+      "environment": "Clone descartável local com dependências presentes.",
+      "procedure": "npx tsc --noEmit",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/codex",
+      "executed_at": "2026-09-29T20:45:40Z",
+      "exit_code": 0,
+      "assertions": "Nenhum erro de TypeScript após o ajuste final.",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-V3",
+      "status": "pass",
+      "environment": "Clone descartável local.",
+      "procedure": "git diff --check",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/codex",
+      "executed_at": "2026-09-29T20:45:40Z",
+      "exit_code": 0,
+      "assertions": "Sem erros de whitespace; Git emitiu somente avisos de normalização LF/CRLF.",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-V4",
+      "status": "not_run",
+      "environment": "Revisão independente pendente no clone descartável.",
+      "reason": "A inspeção foi atribuída ao revisor independente.",
+      "evidence_refs": []
+    }
+  ],
+  "findings": [],
+  "assumptions": [
+    "A expansão de leitura de test-results/** foi autorizada pelo orquestrador para identificar as duas falhas; também foi lido somente o trecho resultSchema do validador conforme permitido pelo envelope.",
+    "O instante 20:41:43Z de U1-V1 é a primeira observação de relógio durante a execução, não o instante exato de início.",
+    "A equivalência de modelo e esforço efetivos não foi exposta ao worker."
+  ],
+  "context_requests": [],
+  "risks": [
+    "A suíte Playwright completa não passou; a falha do texto 404 pode depender do ambiente ou da base e requer comparação independente.",
+    "O encerramento do Playwright no Windows ficou preso após os testes; as sessões próprias foram interrompidas, de modo que o teste focado não tem exit code zero final.",
+    "A execução vermelha inicial não demonstrou empiricamente o discriminador ARIA porque falhou primeiro no localizador do aside fechado."
+  ],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable; first explicit clock observation 20:41:43Z to 20:46:26Z spans at least 283 seconds, not the full task duration"
+  },
+  "next_action": "Revisar o diff e as evidências de interação; comparar a falha /demo/nonexistent com a base independente e avaliar o travamento de teardown antes de aceitar U1-V1."
+}
