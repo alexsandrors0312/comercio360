@@ -2,7 +2,7 @@
 
 Para retomar o desenvolvimento, leia primeiro o [contexto permanente](context.md) e atualize-o ao concluir cada mudança relevante.
 
-O [plano de desenvolvimento por IA](docs/ai/PLANO_ORQUESTRACAO.md) mapeia os módulos futuros, agentes, skills e etapas do harness. Há seis perfis em `.codex/agents/`, seis skills em `.agents/skills/` e um [validador local dos contratos](docs/ai/CONTRATOS_HARNESS.md), com 11 testes de harness aprovados. A [integração com VS Code](docs/ai/INTEGRACAO_VSCODE.md) inclui Codex, DSH Sidebar e Antigravity, que respondeu a um teste mínimo com Gemini 3.1 Pro Low selecionado. O piloto DSH foi autorizado e despachado, mas a rota MCP ainda falha em autenticação antes do relatório; a avaliação comparativa de custo/qualidade não ocorreu.
+O [plano de desenvolvimento por IA](docs/ai/PLANO_ORQUESTRACAO.md) mapeia módulos, agentes, skills e etapas do harness. Há seis perfis em `.codex/agents/`, seis skills em `.agents/skills/` e um [validador local dos contratos](docs/ai/CONTRATOS_HARNESS.md). O [piloto H-03](docs/ai/RELATORIO_H03.md) obteve revisão DSH via MCP, reproduziu três achados e integrou correções com 14 testes de harness aprovados. A [integração com VS Code](docs/ai/INTEGRACAO_VSCODE.md) inclui Codex, DSH Sidebar e Antigravity, que respondeu a um teste mínimo com Gemini 3.1 Pro Low selecionado. A [avaliação H-04](docs/ai/AVALIACAO_H04.md) está preparada, mas seus casos e métricas ainda não foram executados.
 
 Fundação executável em Next.js 16, TypeScript e PostgreSQL/Supabase. Interface em português, login por e-mail/senha, seleção de empresa/loja autorizada, políticas RLS, auditoria e painel com dados exclusivamente fictícios. Os demais módulos exibem **Em construção**.
 

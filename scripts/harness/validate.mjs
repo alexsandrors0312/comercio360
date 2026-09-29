@@ -72,6 +72,11 @@ function paths(task) {
   for (const path of task.write_allowlist) assert(!task.protected_paths.some(p => under(path, p) || under(p, path)), `protected path assigned for writing: ${path}`);
 }
 
+function assertGitBaseline(task) {
+  const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: realpathSync(task.workspace), encoding: 'utf8' }).trim();
+  assert(head === task.baseline.ref, 'Git HEAD differs from task baseline');
+}
+
 export function validateTask(raw, { checkGit = true } = {}) {
   const task = taskSchema.parse(raw);
   const root = realpathSync(task.workspace);
@@ -84,10 +89,7 @@ export function validateTask(raw, { checkGit = true } = {}) {
   assert(task.read_refs.includes('AGENTS.md') && task.read_refs.includes('context.md'), 'task must include AGENTS.md and context.md');
   for (const ref of task.read_refs) assert(existsSync(safePath(task.workspace, ref)), `read reference missing: ${ref}`);
   assert(task.baseline.kind === 'git', 'manifest baseline is not supported by this validator');
-  if (checkGit && task.baseline.kind === 'git') {
-    const head = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-    assert(head === task.baseline.ref, 'Git HEAD differs from task baseline');
-  }
+  if (checkGit) assertGitBaseline(task);
   return task;
 }
 
@@ -99,10 +101,11 @@ export function validateAssignedChanges(task, changedPaths, reportedPaths) {
   assert(changedPaths.length === reportedPaths.length && changedPaths.every(p => reportedPaths.includes(p)), 'reported changed_files differ from actual Git changes');
 }
 
-export function validateResult(task, raw, { actualChanges = undefined, checkArtifacts = true } = {}) {
+export function validateResult(task, raw, { actualChanges = undefined, checkArtifacts = true, checkGit = true } = {}) {
   const result = resultSchema.parse(raw);
   assert(result.task_id === task.task_id && result.contract_revision === task.contract_revision, 'result task/revision mismatch');
   assert(result.baseline_ref === task.baseline.ref, 'result baseline mismatch');
+  if (checkGit) assertGitBaseline(task);
   unique(result.criteria.map(x => x.id), 'result criteria');
   unique(result.checks.map(x => x.id), 'result checks');
   unique(result.changed_files.map(x => x.path), 'changed_files');
@@ -112,6 +115,10 @@ export function validateResult(task, raw, { actualChanges = undefined, checkArti
     if (item.status === 'pass') assert(item.evidence_refs.length > 0, `PASS without evidence: ${item.id}`);
     if (item.status === 'not_run' || item.status === 'not_applicable') assert(item.reason, `missing reason: ${item.id}`);
     for (const ref of item.evidence_refs) assert(existsSync(safePath(task.workspace, ref)), `evidence missing: ${ref}`);
+  }
+  for (const finding of result.findings) {
+    assert(finding.evidence_refs.length > 0, `finding without evidence: ${finding.summary}`);
+    for (const ref of finding.evidence_refs) assert(existsSync(safePath(task.workspace, ref)), `evidence missing: ${ref}`);
   }
   for (const check of result.checks) {
     assert(task.checks.some(x => x.id === check.id), `unexpected check: ${check.id}`);
@@ -136,9 +143,10 @@ export function validateResult(task, raw, { actualChanges = undefined, checkArti
 }
 
 function gitChangedPaths(root) {
-  const tracked = execFileSync('git', ['diff', '--name-only', '-z', 'HEAD'], { cwd: root }).toString('utf8').split('\0').filter(Boolean);
+  const worktree = execFileSync('git', ['diff', '--name-only', '-z'], { cwd: root }).toString('utf8').split('\0').filter(Boolean);
+  const staged = execFileSync('git', ['diff', '--cached', '--name-only', '-z', 'HEAD'], { cwd: root }).toString('utf8').split('\0').filter(Boolean);
   const untracked = execFileSync('git', ['ls-files', '--others', '--exclude-standard', '-z'], { cwd: root }).toString('utf8').split('\0').filter(Boolean);
-  return [...new Set([...tracked, ...untracked])];
+  return [...new Set([...worktree, ...staged, ...untracked])];
 }
 
 if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1])).href) {

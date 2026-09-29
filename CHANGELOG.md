@@ -1,5 +1,11 @@
 # Changelog
 
+## 29/09/2026 — Piloto DSH H-03 e preparação H-04
+
+- Após confirmação de resposta no DSH Web, `dsh_delegate` via MCP respondeu `READY`. A primeira revisão H-03 atingiu timeout de 300000 ms; uma segunda chamada delimitada retornou JSON 0.1 na base `1a30bbd`, preservado em `docs/ai/H03_RESULTADO_DSH_2026-09-29.json`. Modelo efetivo, tokens e custo não foram expostos.
+- Três achados do DSH foram reproduzidos independentemente em repositórios temporários: base avançada aceita pela API, mudança somente no índice invisível ao Git diff anterior e evidência inválida em `findings`. O validador e os testes foram corrigidos; `npm run test:harness` passou com 14/14, seis skills verificadas, `node --check`, ESLint direcionado e `git diff --check` passaram.
+- `docs/ai/RELATORIO_H03.md` registra tentativas, evidências e limites. `docs/ai/AVALIACAO_H04.md` prepara três casos comparáveis em cópias descartáveis; nenhum caso foi executado. Código Next.js, banco, dependências e evidências H1 permanecem intactos.
+
 ## 29/09/2026 — Verificação após configuração das chaves e contrato somente leitura
 
 - Após a configuração informada pelo responsável, `dsh_health` permaneceu OK, mas uma chamada mínima em conexão MCP nova retornou `DSH_RUN_FAILED (exit=1; category=authentication)`. DSH Web e headless usam o mesmo cofre atualizado; a chave da Sidebar fica separada. Nenhuma credencial foi lida e o piloto H-03 continua sem relatório.

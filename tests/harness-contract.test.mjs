@@ -29,7 +29,7 @@ const report = {
 };
 const task = (patch = {}) => ({ ...base, ...patch });
 const result = (patch = {}) => ({ ...report, ...patch });
-const validateLocalResult = (parsed, candidate) => validateResult(parsed, candidate, { actualChanges: [] });
+const validateLocalResult = (parsed, candidate) => validateResult(parsed, candidate, { actualChanges: [], checkGit: false });
 
 function git(workspace, ...args) {
   return execFileSync('git', args, { cwd: workspace, encoding: 'utf8' }).trim();
@@ -52,12 +52,25 @@ function resultFixture(t) {
   const baseline = git(workspace, 'rev-parse', 'HEAD');
   const taskFile = join(temporary, 'task.json');
   const resultFile = join(temporary, 'result.json');
-  writeFileSync(taskFile, JSON.stringify(task({ workspace, baseline: { kind: 'git', ref: baseline } })));
-  writeFileSync(resultFile, JSON.stringify(result({ baseline_ref: baseline })));
+  const taskData = task({ workspace, baseline: { kind: 'git', ref: baseline } });
+  const reportData = result({ baseline_ref: baseline });
+  writeFileSync(taskFile, JSON.stringify(taskData));
+  writeFileSync(resultFile, JSON.stringify(reportData));
   return {
-    workspace,
+    workspace, taskData, reportData,
+    runTask: () => spawnSync(process.execPath, [validator, 'task', taskFile], { cwd: workspace, encoding: 'utf8' }),
     run: () => spawnSync(process.execPath, [validator, 'result', taskFile, resultFile], { cwd: workspace, encoding: 'utf8' }),
   };
+}
+
+function validateFixtureTask(taskData) {
+  const previousCwd = process.cwd();
+  try {
+    process.chdir(taskData.workspace);
+    return validateTask(taskData);
+  } finally {
+    process.chdir(previousCwd);
+  }
 }
 
 test('accepts a bounded read-only task and evidenced report', () => {
@@ -94,6 +107,27 @@ test('rejects invented execution data and baseline mismatch', () => {
   assert.throws(() => validateLocalResult(parsed, result({ baseline_ref: 'wrong' })), /baseline mismatch/);
 });
 
+test('rejects a result through the API after HEAD advances beyond the validated task baseline', (t) => {
+  const { workspace, taskData, reportData } = resultFixture(t);
+  const parsed = validateFixtureTask(taskData);
+  writeFileSync(join(workspace, 'later.txt'), 'Later commit\n');
+  git(workspace, 'add', 'later.txt');
+  git(workspace, 'commit', '-qm', 'advance HEAD');
+  assert.throws(() => validateResult(parsed, reportData, { actualChanges: [] }), /Git HEAD differs from task baseline/);
+});
+
+test('rejects missing and escaping finding evidence references', (t) => {
+  const { taskData, reportData } = resultFixture(t);
+  const parsed = validateFixtureTask(taskData);
+  const withFinding = evidence_refs => ({
+    ...reportData,
+    findings: [{ severity: 'high', summary: 'Finding requires evidence', evidence_refs }],
+  });
+  assert.throws(() => validateResult(parsed, withFinding([])), /finding without evidence/);
+  assert.throws(() => validateResult(parsed, withFinding(['missing-evidence.txt'])), /evidence missing: missing-evidence.txt/);
+  assert.throws(() => validateResult(parsed, withFinding(['../outside.txt'])), /invalid path: ..\/outside.txt/);
+});
+
 test('rejects reported changes in review mode, even when the actual change list is empty', () => {
   const parsed = validateTask(task({ mode: 'review' }), { checkGit: false });
   const changed_files = [{ path: 'AGENTS.md', operation: 'modified', purpose: 'Unexpected edit' }];
@@ -105,6 +139,31 @@ test('accepts a clean Git worktree for a read-only result', (t) => {
   const execution = run();
   assert.equal(execution.status, 0, execution.stderr);
   assert.match(execution.stdout, /result valid/);
+});
+
+test('detects an index change masked by worktree content matching HEAD, without double-counting the path', (t) => {
+  const { workspace, taskData, reportData, runTask, run } = resultFixture(t);
+  const parsed = validateFixtureTask(taskData);
+  writeFileSync(join(workspace, 'tracked.txt'), 'Staged version\n');
+  git(workspace, 'add', 'tracked.txt');
+  writeFileSync(join(workspace, 'tracked.txt'), 'Baseline\n');
+  assert.equal(git(workspace, 'diff', '--name-only', 'HEAD'), '');
+
+  const taskExecution = runTask();
+  assert.equal(taskExecution.status, 1, taskExecution.stderr);
+  assert.match(taskExecution.stderr, /dispatch requires a clean Git worktree/);
+
+  const resultExecution = run();
+  assert.equal(resultExecution.status, 1, resultExecution.stderr);
+  assert.match(resultExecution.stderr, /read-only task has actual Git changes/);
+  assert.throws(() => validateResult(parsed, reportData), /read-only task has actual Git changes/);
+
+  const implementationTask = validateFixtureTask({ ...taskData, mode: 'implementation', write_allowlist: ['tracked.txt'] });
+  const implementationReport = {
+    ...reportData,
+    changed_files: [{ path: 'tracked.txt', operation: 'modified', purpose: 'Assigned change' }],
+  };
+  assert.equal(validateResult(implementationTask, implementationReport).status, 'ready_for_review');
 });
 
 for (const [state, mutate] of [
