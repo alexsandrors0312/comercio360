@@ -3,7 +3,7 @@
 ## 29/09/2026 — Braço U1 Codex e revisão independente
 
 - O worker Codex corrigiu a regressão sintética do estado ARIA do menu móvel no clone U1 e acrescentou teste a 360 px, alterando somente os dois arquivos autorizados. O resultado 0.1 foi validado e preservado em `docs/ai/H04_U1_CODEX_RESULTADO_2026-09-29.json`; a revisão cega não encontrou achados bloqueantes no código. TypeScript e diff passaram.
-- A primeira suíte Playwright teve 4 aprovações e 2 falhas. O localizador do teste novo foi corrigido; a execução focada observada pelo worker mostrou `ok`, mas sem código final de saída devido ao encerramento preso no Windows, e a repetição independente também não terminou. Na cópia intacta, `/demo/nonexistent` respondeu HTTP 404 sem texto `404` visível, explicando a falha da asserção antiga sem atribuí-la ao patch. O gate E2E U1 permanece pendente.
+- A primeira suíte Playwright teve 4 aprovações e 2 falhas. O localizador do teste novo foi corrigido; o diagnóstico localizou o travamento no teardown do servidor Next. Em harness externo temporário, Playwright saiu com código 0 e 2/2 cenários focados aprovados (menu e rotas protegidas); o wrapper precisou de encerramento manual dos próprios processos. Na cópia intacta, `/demo/nonexistent` respondeu HTTP 404 sem texto `404` visível, explicando a falha da asserção antiga sem atribuí-la ao patch. O gate original da suíte E2E completa U1 permanece pendente.
 - `Developer: Reload Window` no VS Code não recarregou o MCP da tarefa Codex: `dsh_health` ainda mostra apenas a raiz real. Nenhum braço DSH H-04 foi enviado. Código e evidências H1 do projeto real permanecem intactos.
 
 ## 29/09/2026 — Início controlado da avaliação H-04

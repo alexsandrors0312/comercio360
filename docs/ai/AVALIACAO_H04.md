@@ -18,6 +18,10 @@ O `dsh_health` atual permite `cwd` apenas na raiz real do Comércio 360. **Antes
 
 Em S1, preservar as duas migrações históricas no projeto real e exigir correção incremental na cópia. `tests/database.test.ts` carrega apenas as migrações atuais, então a suíte sem um teste que aplique a migração sintética **não prova** a correção. O caso pode ser fácil de detectar porque a suíte já cobre revogação; registrar essa limitação ao interpretar o resultado.
 
+### Adendo operacional U1 de 29/09/2026
+
+Depois do primeiro braço Codex, o Playwright passou o cenário novo, mas travou em `Terminating the WebServer` ao encerrar o Next no Windows. Uma configuração temporária fora do clone, com os mesmos testes, base URL, navegador, workers e retries e com servidores iniciados separadamente, obteve código de saída 0 para os dois cenários focados no menu e nas rotas protegidas. A suíte original ainda falha por uma asserção antiga que espera texto `404` visível na rota inexistente; uma consulta HTTP da cópia intacta retornou status 404 sem esse texto visível. Essa descoberta **posterior ao braço Codex** deve ser registrada como alteração operacional do protocolo, aplicada da mesma forma ao braço DSH e mantida separada do check original `U1-V1`. O wrapper temporário ainda falha ao encerrar automaticamente seus processos no Windows e não é uma ferramenta validada para uso geral. Não promover U1-V1 a PASS por causa do teste focado.
+
 ## Registro e decisão
 
 Usar envelopes com critérios e orçamento idênticos em cada par. O revisor recebe contrato, diff e evidências sem a conclusão do autor. Guardar por execução: base e SHA final, patch, arquivos/hashes, JSON de resultado, comandos/ambiente/código de saída/asserções, critérios, pedidos de contexto, falhas, retrabalho, tempo total e tempo de espera. Registrar runtime, modelo e esforço **efetivos** somente quando expostos. Tokens e custo indisponíveis permanecem `null` com `source=unavailable`; não converter estimativas em cobrança observada.
