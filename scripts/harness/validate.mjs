@@ -99,7 +99,7 @@ export function validateAssignedChanges(task, changedPaths, reportedPaths) {
   assert(changedPaths.length === reportedPaths.length && changedPaths.every(p => reportedPaths.includes(p)), 'reported changed_files differ from actual Git changes');
 }
 
-export function validateResult(task, raw, { actualChanges = null, checkArtifacts = true } = {}) {
+export function validateResult(task, raw, { actualChanges = undefined, checkArtifacts = true } = {}) {
   const result = resultSchema.parse(raw);
   assert(result.task_id === task.task_id && result.contract_revision === task.contract_revision, 'result task/revision mismatch');
   assert(result.baseline_ref === task.baseline.ref, 'result baseline mismatch');
@@ -123,7 +123,9 @@ export function validateResult(task, raw, { actualChanges = null, checkArtifacts
     safePath(task.workspace, file.path);
     assert(task.write_allowlist.some(owner => under(file.path, owner)), `reported change outside assignment: ${file.path}`);
   }
-  if (actualChanges) validateAssignedChanges(task, actualChanges, result.changed_files.map(x => x.path));
+  const changedPaths = actualChanges ?? gitChangedPaths(task.workspace);
+  if (task.mode !== 'implementation') assert(changedPaths.length === 0, 'read-only task has actual Git changes');
+  validateAssignedChanges(task, changedPaths, result.changed_files.map(x => x.path));
   if (checkArtifacts) for (const artifact of result.artifacts) {
     const file = safePath(task.workspace, artifact.path);
     assert(existsSync(file) && statSync(file).isFile(), `artifact missing: ${artifact.path}`);
@@ -147,7 +149,7 @@ if (process.argv[1] && import.meta.url === pathToFileURL(resolve(process.argv[1]
     if (kind === 'task') assert(gitChangedPaths(task.workspace).length === 0, 'dispatch requires a clean Git worktree');
     if (kind === 'result') {
       assert(resultFile, 'result file required');
-      validateResult(task, JSON.parse(readFileSync(resultFile, 'utf8')), { actualChanges: task.mode === 'implementation' ? gitChangedPaths(task.workspace) : null });
+      validateResult(task, JSON.parse(readFileSync(resultFile, 'utf8')));
     }
     console.log(`${kind} valid: ${task.task_id}@${task.contract_revision}`);
   } catch (error) {

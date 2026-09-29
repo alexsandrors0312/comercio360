@@ -1,5 +1,11 @@
 # Changelog
 
+## 29/09/2026 — Verificação após configuração das chaves e contrato somente leitura
+
+- Após a configuração informada pelo responsável, `dsh_health` permaneceu OK, mas uma chamada mínima em conexão MCP nova retornou `DSH_RUN_FAILED (exit=1; category=authentication)`. DSH Web e headless usam o mesmo cofre atualizado; a chave da Sidebar fica separada. Nenhuma credencial foi lida e o piloto H-03 continua sem relatório.
+- A extensão oficial Antigravity 1.5.0 foi inspecionada no VS Code e `Gemini 3.1 Pro Low` foi selecionado. O painel carregou após fechar e reabrir a janela, sem repetir o aviso anterior de cinco reinícios; um prompt mínimo obteve `READY` com `Thought for 8s` na interface. Não houve telemetria de modelo/custo nem avaliação comparativa H-04.
+- O validador do harness agora confere alterações reais do Git em resultados de análise/revisão e rejeita mutação omitida do relatório. `npm run test:harness` passou com 11/11 testes e seis skills verificadas; `node --check`, `git diff --check` e `npm run lint` passaram. Nenhuma mudança na aplicação Next.js, no banco ou nas evidências H1.
+
 ## 29/09/2026 — Integração VS Code e diagnóstico do piloto
 
 - Inspeção direta no VS Code confirmou a lateral DSH ativa com `DeepSeek-V4-Pro` selecionado. O Gemini Code Assist mostrou que a edição Individual não é mais suportada por esse cliente e pediu login/projeto compatível; nenhuma resposta Gemini foi obtida.
