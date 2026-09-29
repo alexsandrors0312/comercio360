@@ -2,6 +2,8 @@
 
 ## 29/09/2026 — Integração VS Code e diagnóstico do piloto
 
+- Inspeção direta no VS Code confirmou a lateral DSH ativa com `DeepSeek-V4-Pro` selecionado. O Gemini Code Assist mostrou que a edição Individual não é mais suportada por esse cliente e pediu login/projeto compatível; nenhuma resposta Gemini foi obtida.
+- A ponte MCP pessoal agora classifica apenas códigos terminais de erro por lista fechada, com backup e `node --check` aprovados. Uma conexão nova retornou `DSH_RUN_FAILED (exit=1; category=authentication)` em chamada mínima. A interface DSH Web local abriu para que o responsável atualize a chave no cofre DSH; nenhuma credencial foi lida ou inserida.
 - Comércio 360 aberto no VS Code com extensões Codex e Gemini Code Assist já instaladas. Adicionados `GEMINI.md`, recomendações/configuração de extensões e tarefas de validação em `.vscode/`; `docs/ai/INTEGRACAO_VSCODE.md` registra as rotas e limites.
 - Configuração MCP DSH compartilhada com a extensão Codex foi confirmada (`dsh_health`, `dsh_delegate`). Após autorização explícita do usuário, o piloto H-03 e uma chamada mínima chegaram à ponte, mas falharam com `DSH_RUN_FAILED (exit=1)`. Nenhum relatório de worker ou modelo efetivo foi obtido.
 - Identificada divergência entre referência R1/NVIDIA NIM sem variável `NVIDIA_API_KEY` presente e padrão DSH `deepseek-official`/`deepseek-v4-pro`. A ponte pessoal recebeu classificação de falhas sem stderr bruto, com backup e `node --check` aprovados; a conexão já aberta ainda requer recarga.

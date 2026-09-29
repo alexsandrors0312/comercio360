@@ -1,6 +1,6 @@
 # Piloto H-03 — revisão independente do validador
 
-Estado em 29/09/2026: **preparado, despacho tentado, worker sem resposta**. A primeira tentativa foi rejeitada pelo auto-review antes de alcançar o worker. O usuário depois autorizou expressamente o acesso às aplicações e ao repositório para esta etapa. A nova chamada `dsh_delegate` chegou à ponte, mas terminou em `DSH_RUN_FAILED (exit=1)`; uma chamada mínima repetiu a falha. Nenhum relatório do worker foi produzido. O diagnóstico está em [INTEGRACAO_VSCODE.md](INTEGRACAO_VSCODE.md).
+Estado em 29/09/2026: **preparado, despacho tentado, worker sem resposta**. A primeira tentativa foi rejeitada pelo auto-review antes de alcançar o worker. O usuário depois autorizou expressamente o acesso às aplicações e ao repositório para esta etapa. A nova chamada `dsh_delegate` chegou à ponte, mas terminou em `DSH_RUN_FAILED (exit=1)`; chamadas mínimas repetiram a falha. Uma conexão MCP nova classificou a falha como `authentication`, sem expor stderr. Nenhum relatório do worker foi produzido. O diagnóstico está em [INTEGRACAO_VSCODE.md](INTEGRACAO_VSCODE.md).
 
 ## Tarefa delimitada
 
