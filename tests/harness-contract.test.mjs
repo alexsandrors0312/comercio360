@@ -31,6 +31,9 @@ test('accepts a bounded read-only task and evidenced report', () => {
 
 test('rejects traversal and protected writes', () => {
   assert.throws(() => safePath(root, '../outside'), /invalid path/);
+  assert.throws(() => safePath(root, '.env.local'), /private or generated path/);
+  assert.throws(() => safePath(root, 'module/.env.local'), /private or generated path/);
+  assert.throws(() => safePath(root, '.git/config'), /private or generated path/);
   assert.throws(() => validateTask(task({ read_refs: ['AGENTS.md', '../secret'] }), { checkGit: false }), /invalid path/);
   assert.throws(() => validateTask(task({ mode: 'implementation', write_allowlist: ['docs/'], protected_paths: ['docs/H1_RESULTADOS.json'] }), { checkGit: false }), /protected path/);
 });

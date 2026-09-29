@@ -53,7 +53,7 @@ Exemplo de tarefa **apenas de análise** que pode existir antes do aceite comerc
 
 Esse exemplo não pode ser despachado enquanto `baseline.ref` for nulo. O manifesto deve existir e incluir hashes das fontes lidas. Um contrato de implementação também exige que a autorização cubra o pacote e que dependências bloqueantes estejam aceitas.
 
-Na implementação inicial do validador, somente `baseline.kind = "git"` com `ref` igual ao SHA completo de `HEAD` é aceito. O modo `task` exige árvore Git limpa. `manifest` permanece especificado, mas ainda não é suportado. A allowlist aceita arquivo exato ou prefixo de diretório terminado em `/`. Perfis não recebem permissão efetiva por constarem no JSON: o runtime precisa aplicar seu próprio isolamento.
+Na implementação inicial do validador, somente `baseline.kind = "git"` com `ref` igual ao SHA completo de `HEAD` é aceito. O modo `task` exige árvore Git limpa. `manifest` permanece especificado, mas ainda não é suportado. A allowlist aceita arquivo exato ou prefixo de diretório terminado em `/`. Caminhos `.git`, `.env*`, dependências e saídas geradas são rejeitados no contrato. Perfis não recebem permissão efetiva por constarem no JSON: o runtime precisa aplicar seu próprio isolamento.
 
 Contratos de interfaces devem especificar operação, entrada, saída, erro, autorização, escopo de tenant/loja, atomicidade, idempotência, versão de concorrência e efeito auditável quando aplicável. Se um campo não se aplica, registrar o motivo. Não usar um DTO TypeScript como substituto de toda a semântica.
 

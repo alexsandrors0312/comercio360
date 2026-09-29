@@ -51,6 +51,7 @@ export function safePath(workspace, repoPath) {
   assert(!isAbsolute(repoPath) && !repoPath.includes('\\') && !repoPath.includes(':') && !repoPath.startsWith('/'), `invalid path: ${repoPath}`);
   const parts = repoPath.replace(/\/$/, '').split('/');
   assert(parts.every(part => part && part !== '.' && part !== '..'), `invalid path: ${repoPath}`);
+  assert(!parts.some(part => ['.git', 'node_modules', '.next', '.next-e2e', 'coverage', 'test-results', 'playwright-report'].includes(part) || /^\.env($|\.)/.test(part)), `private or generated path: ${repoPath}`);
   const root = realpathSync(workspace);
   const target = resolve(root, ...parts);
   let existing = target;
