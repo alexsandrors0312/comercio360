@@ -1,0 +1,159 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-D1-DSH-02",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "baseline_ref": "bd3103814e8f381c4c47fb6acc620e3b61941b69",
+  "actual_execution": {
+    "runtime": null,
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Corrigida a regressão em selectContext (packages/domain/tenancy.ts): o ramo que busca por storeId agora exige organization_id === organizationId quando organizationId é informado, eliminando a associação cruzada loja/organização. Adicionado teste em tests/tenancy.test.ts que falha no defeito (par cruzado retorna null) e passa na correção, cobrindo também par válido e storeId inexistente. npx tsc --noEmit (exit 0) e git diff --check (exit 0) passaram. npx vitest run não carregou a configuração no sandbox (spawn EPERM); o comportamento foi verificado por execução Node nativa com 8/8 asserções PASS.",
+  "artifacts": [
+    {
+      "path": "packages/domain/tenancy.ts",
+      "type": "typescript",
+      "sha256": "9744c5d6d1e39cb61be2f254d4496706ee5bb5d00056de7776fe782e0adf4f72"
+    },
+    {
+      "path": "tests/tenancy.test.ts",
+      "type": "typescript",
+      "sha256": "7a5f2e5d6949266b9c8f0056a84172be2f711b6dd068aacc9ce1227e0ec08433"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "packages/domain/tenancy.ts",
+      "operation": "modified",
+      "purpose": "Exigir organization_id compatível ao selecionar por storeId, impedindo vazamento de loja entre organizações."
+    },
+    {
+      "path": "tests/tenancy.test.ts",
+      "operation": "modified",
+      "purpose": "Adicionar teste que falha no defeito (par cruzado retorna null) e passa na correção, cobrindo par válido e storeId inexistente."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "D1-A1",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts"
+      ]
+    },
+    {
+      "id": "D1-A2",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    },
+    {
+      "id": "D1-A3",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    },
+    {
+      "id": "D1-A4",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    },
+    {
+      "id": "D1-A5",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "D1-V1",
+      "status": "fail",
+      "environment": "local (Windows sandbox, workspace-write)",
+      "procedure": "npx vitest run tests/tenancy.test.ts",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-d1-blob-285553c194204d5bb34b70a1b980b96f/dsh",
+      "executed_at": "2026-09-29T18:19:37-03:00",
+      "exit_code": 1,
+      "assertions": "Nenhuma asserção executada: o Vitest falhou ao carregar vitest.config.ts antes da coleta dos testes (rolldown externalize-deps disparou child_process exec('net use'), bloqueado pelo sandbox com spawn EPERM ao criar pipe). A alternativa --configLoader runner falhou com 'ReferenceError: require is not defined' em picomatch. A lógica equivalente foi verificada por execução Node nativa (type stripping) com 8/8 asserções PASS.",
+      "evidence_refs": [
+        "vitest.config.ts",
+        "tests/tenancy.test.ts"
+      ],
+      "reason": "Bloqueio de ambiente: o sandbox restringe spawn de processos filhos com stdio pipe (EPERM) e a escalada para danger-full-access não possui canal de aprovação disponível."
+    },
+    {
+      "id": "D1-V2",
+      "status": "pass",
+      "environment": "local (Windows sandbox, workspace-write)",
+      "procedure": "npx tsc --noEmit",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-d1-blob-285553c194204d5bb34b70a1b980b96f/dsh",
+      "executed_at": "2026-09-29T18:19:37-03:00",
+      "exit_code": 0,
+      "assertions": "TypeScript sem erros (0 erros, saída vazia).",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    },
+    {
+      "id": "D1-V3",
+      "status": "pass",
+      "environment": "local (Windows sandbox, workspace-write)",
+      "procedure": "git diff --check",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-d1-blob-285553c194204d5bb34b70a1b980b96f/dsh",
+      "executed_at": "2026-09-29T18:19:37-03:00",
+      "exit_code": 0,
+      "assertions": "Sem erros de whitespace (saída vazia, exit 0).",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "warning",
+      "summary": "O gate de teste npx vitest run tests/tenancy.test.ts não pôde executar neste sandbox: o carregamento da configuração falha com spawn EPERM (restrição de named pipes em child_process) e a alternativa --configLoader runner falha com 'require is not defined' em picomatch. Não é falha de asserção, e sim indisponibilidade do executor de testes no ambiente.",
+      "evidence_refs": [
+        "vitest.config.ts",
+        "tests/tenancy.test.ts"
+      ]
+    },
+    {
+      "severity": "info",
+      "summary": "Defeito confirmado e corrigido: a versão defeituosa de selectContext retornava uma loja de outra organização para um par cruzado (demonstrado por execução Node nativa: org-a/store-b e org-b/store-a retornavam loja em vez de null). A correção exige organization_id compatível no ramo storeId e as 8 asserções de comportamento passam.",
+      "evidence_refs": [
+        "packages/domain/tenancy.ts",
+        "tests/tenancy.test.ts"
+      ]
+    }
+  ],
+  "assumptions": [
+    "stores chega à função já filtrado por autorização (RLS) no banco; selectContext apenas seleciona e não concede permissão.",
+    "O defeito está restrito ao ramo storeId (ignorava organizationId); o ramo sem storeId já estava correto.",
+    "Vitest não é executável neste sandbox por restrição de named pipes (spawn EPERM); a correção foi verificada por npx tsc --noEmit e por execução Node nativa equivalente."
+  ],
+  "context_requests": [],
+  "risks": [
+    "O gate D1-V1 (npx vitest run tests/tenancy.test.ts) não chegou a rodar os testes neste ambiente; a revisão independente deve reexecutá-lo em ambiente sem a restrição de pipes (ou após conceder danger-full-access).",
+    "A verificação Node nativa não substitui o Vitest: cobre somente selectContext e os casos listados, não o restante da suíte."
+  ],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Revisão independente: executar npx vitest run tests/tenancy.test.ts em ambiente sem a restrição de named pipes (ou após conceder danger-full-access) para confirmar que o novo teste falha no molde com defeito e passa nesta correção; na sequência, avaliar a promoção do braço D1."
+}

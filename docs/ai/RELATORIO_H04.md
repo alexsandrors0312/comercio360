@@ -1,6 +1,6 @@
 # H-04 — registro da avaliação comparativa
 
-Atualizado em 29/09/2026. **Avaliação parcial:** os braços Codex de D1 e U1 foram executados e revisados; U1 ainda não passou o gate E2E. Nenhum par Codex × DSH foi concluído. Este relatório registra execuções reais e bloqueios sem converter preparação em resultado.
+Atualizado em 29/09/2026. **Avaliação parcial:** D1 teve os braços Codex e DSH executados e revisados; U1 Codex ainda não passou o gate E2E original. S1 DSH foi despachado e aguarda resultado. Este relatório registra execuções reais e bloqueios sem converter preparação em resultado.
 
 ## Base e moldes descartáveis
 
@@ -20,7 +20,15 @@ O envelope `H04-D1-CODEX-02@1` passou no validador. A primeira tentativa do work
 
 O novo teste distinguiu o defeito. Na cópia final, Vitest passou **7/7**, `npx tsc --noEmit` saiu com código 0 e `git diff --check` saiu com código 0. A revisão independente `H04-D1-CODEX-02-REVIEW-INDEP-20260929` recebeu o envelope e o diff sem ler a conclusão do autor; conferiu apenas os dois caminhos permitidos, a função completa e o callsite, repetiu os três checks e concluiu `no_blocking_findings`. Não executou RLS hospedado nem a suíte inteira, fora do escopo dessa função pura.
 
-O JSON registra 69 segundos para a retomada, enquanto o relato final do worker estimou cerca de 85 segundos até a validação. O tempo total da tentativa interrompida e da retomada **não é conhecido**; nenhum desses números será usado para comparar custo ou rapidez com DSH. Modelo efetivo, tokens e custo não foram expostos. O braço D1 ainda não tem resultado DSH.
+O JSON registra 69 segundos para a retomada, enquanto o relato final do worker estimou cerca de 85 segundos até a validação. O tempo total da tentativa interrompida e da retomada **não é conhecido**; nenhum desses números será usado para comparar custo ou rapidez com DSH. Modelo efetivo, tokens e custo não foram expostos.
+
+## D1 — braço DSH e comparação do par
+
+Após o responsável reiniciar o servidor MCP no Codex desktop, `dsh_health` passou a listar a raiz e os caminhos exatos dos três clones DSH. O envelope `H04-D1-DSH-02@1` foi validado com worktree limpa e enviado via `dsh_delegate` com `cwd` do clone D1. O DSH modificou somente `packages/domain/tenancy.ts` e `tests/tenancy.test.ts`; seu [resultado 0.1](H04_D1_DSH_RESULTADO_2026-09-29.json), SHA-256 `6EC3E5AB501DBCAA5407543E7E04F8484D73701BB5177535C3CF587CFCCFD03B`, passou no validador estrutural/Git do clone.
+
+O worker DSH registrou **FAIL em D1-V1** porque o sandbox interno bloqueou o carregador do Vitest com `spawn EPERM`; não executou as asserções nesse ambiente. Registrou TypeScript e diff com código 0 e uma verificação Node alternativa de 8/8 asserções. O orquestrador executou o comando original `npx vitest run tests/tenancy.test.ts` no mesmo clone fora do sandbox do DSH: **7/7 testes, código 0**; repetiu `npx tsc --noEmit` e `git diff --check`, ambos com código 0. A revisão cega `H04-D1-DSH-02-REVIEW-INDEP-20260929` não leu o resultado do autor nem o par Codex, confirmou os dois arquivos permitidos, inferiu pelo diff que o teste novo falharia na regressão e repetiu os três checks com os mesmos resultados. Concluiu `no_blocking_findings`; não revalidou RLS hospedado, fora do escopo desta função pura.
+
+As duas correções exigem conjuntamente `storeId` e `organizationId` quando ambos são fornecidos. Codex substituiu os ramos por uma única busca; DSH manteve o ramo `storeId` e acrescentou o filtro de organização. Ambas preservam par válido, rejeitam par cruzado, ID inexistente e lista vazia nos testes direcionados. O par D1 passou os invariantes locais e a revisão, com a ressalva de que o gate DSH só executou fora do sandbox do worker. A tentativa Codex interrompida e a ausência de tempos totais, modelo efetivo, tokens e custo impedem concluir qual rota é mais rápida ou barata. A amostra é de um par.
 
 ## U1 — braço Codex em revisão dinâmica
 
@@ -34,8 +42,8 @@ A revisão cega `H04-U1-CODEX-01-REVIEW-INDEP-20260929` conferiu contrato, diff,
 
 ## Transporte DSH e próximos gates
 
-O `config.toml` pessoal contém a raiz real e os caminhos **exatos** dos três clones DSH corrigidos; a comparação com o backup confirmou que só a linha da allowlist mudou. Porém `dsh_health` desta tarefa ainda mostra apenas a raiz real: o processo MCP mantém a configuração anterior. **Nenhum worker DSH foi enviado a esses clones.** Recarregar o servidor MCP DSH no Codex e confirmar os três caminhos em `dsh_health` antes do primeiro despacho. Não usar a raiz real como `cwd` para contornar o limite.
+O `config.toml` pessoal contém a raiz real e os caminhos **exatos** dos três clones DSH corrigidos; a comparação com o backup confirmou que só a linha da allowlist mudou. Após a recarga feita pelo responsável no Codex desktop, `dsh_health` mostrou os três caminhos e D1 DSH foi despachado com o `cwd` exato do clone. S1 DSH foi enviado em seguida e ainda não há resultado. A raiz real não foi usada como `cwd` para contornar o limite.
 
 As seis cópias têm dependências do lockfile instaladas e os seis envelopes passaram no validador local. A preparação inicial de npm no sandbox falhou por `EACCES` de rede; a instalação autorizada e as instalações offline subsequentes passaram. O perfil DSH declara `sandbox: workspace-write`; a allowlist da ponte controla o `cwd`, mas não prova isolamento de leitura do processo. Registrar essa limitação em cada avaliação, conferir o diff real e manter um escritor por cópia. S1 deve carregar explicitamente a migração sintética antes da correção incremental; a suíte SQL original sozinha não valida o caso.
 
-Após a recarga, executar D1 DSH; depois S1 na ordem DSH → Codex e U1 na ordem Codex → DSH. Para U1, reproduzir o harness externo nos dois braços, corrigir seu encerramento e deliberar sobre o teste 404 preexistente antes do aceite formal. Cada braço exige resultado 0.1, revisão independente e aceitação dos invariantes antes de comparar tempo ou custo. Uma execução por caso ainda será amostra pequena e não demonstrará estabilidade estatística.
+Após o par D1, concluir S1 na ordem DSH → Codex e U1 na ordem Codex → DSH. Para U1, reproduzir o harness externo nos dois braços, corrigir seu encerramento e deliberar sobre o teste 404 preexistente antes do aceite formal. Cada braço exige resultado 0.1, revisão independente e aceitação dos invariantes antes de comparar tempo ou custo. Uma execução por caso ainda será amostra pequena e não demonstrará estabilidade estatística.

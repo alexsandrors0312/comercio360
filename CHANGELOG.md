@@ -1,5 +1,11 @@
 # Changelog
 
+## 29/09/2026 — Recarga MCP e primeiro par H-04 D1
+
+- Após o responsável reiniciar o servidor MCP DSH no Codex desktop, `dsh_health` confirmou os três clones sintéticos permitidos. D1 DSH foi enviado pelo MCP nativo com `cwd` do clone, contrato 0.1 e apenas dois arquivos de domínio/teste para escrita. O resultado foi preservado em `docs/ai/H04_D1_DSH_RESULTADO_2026-09-29.json` e passou no validador.
+- O Vitest interno do worker falhou antes das asserções por `spawn EPERM` do sandbox; essa falha permanece no JSON. No mesmo clone, o orquestrador e o revisor cego executaram Vitest com **7/7**, tipos e diff com código 0. Revisão independente sem achados bloqueantes. D1 Codex e DSH passaram nos invariantes locais, mas a interrupção anterior do Codex e a ausência de telemetria impedem comparar tempo/custo com confiança.
+- S1 DSH foi despachado em seu clone limpo conforme a ordem do protocolo. O projeto real recebeu apenas evidências e documentação; código funcional, migrações e H1 não mudaram.
+
 ## 29/09/2026 — Braço U1 Codex e revisão independente
 
 - O worker Codex corrigiu a regressão sintética do estado ARIA do menu móvel no clone U1 e acrescentou teste a 360 px, alterando somente os dois arquivos autorizados. O resultado 0.1 foi validado e preservado em `docs/ai/H04_U1_CODEX_RESULTADO_2026-09-29.json`; a revisão cega não encontrou achados bloqueantes no código. TypeScript e diff passaram.
