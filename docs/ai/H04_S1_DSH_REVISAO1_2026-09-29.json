@@ -1,0 +1,166 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-S1-DSH-01",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "baseline_ref": "8cb9e84ff262980584f900b166ae16af05ab848b",
+  "actual_execution": {
+    "runtime": "dsh-headless",
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Corrigido SOMENTE tests/h04-s1-regression.test.ts no clone sintético: reestruturado com helper setupDb(withCorrection) e duas instâncias PGlite independentes. O cenário RED roda na base somente com a regressão sintética (vínculo revogado com grant retido é aceito: 1 loja visível e set_active_store resolve); os cenários pós-correção (GREEN, acesso válido, sem bypass, cross-tenant, par incoerente, loja inativa) inicializam base já com foundation, tenant_key_guards, regressão sintética e correção incremental, sem depender do RED nem de mutação de outro teste. A migração corretiva, migrações anteriores, seed e demais arquivos permanecem intactos; HEAD 8cb9e84 confirmado e apenas os dois arquivos autorizados seguem added. Comportamento validado por PGlite direto (14/14 asserções) e tsc --noEmit limpo; o runner Vitest está bloqueado neste sandbox (EPERM no loader nativo; require is not defined no --configLoader runner), portanto S1-V1/S1-V2 ficam fail e devem ser repetidos fora do sandbox.",
+  "artifacts": [
+    {
+      "path": "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+      "type": "migration",
+      "sha256": "81dc2cfec12adee9052ad8278cca182c8d989c3310d4b1156e8ba644f8b471ca"
+    },
+    {
+      "path": "tests/h04-s1-regression.test.ts",
+      "type": "test",
+      "sha256": "cdfef143abb099a8132697963dc77f0dd70b3da1e44ac853b55f3be1134ae280"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+      "operation": "added",
+      "purpose": "Migração corretiva incremental que restaura m.active em private.can_access_store (intocada nesta rodada)."
+    },
+    {
+      "path": "tests/h04-s1-regression.test.ts",
+      "operation": "added",
+      "purpose": "Teste de regressão S1 reestruturado com duas instâncias PGlite independentes (setupDb(false) para RED; setupDb(true) para pós-correção)."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "S1-A1",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts",
+        "supabase/migrations/202609290001_h04_s1_membership_regression.sql"
+      ]
+    },
+    {
+      "id": "S1-A2",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"
+      ]
+    },
+    {
+      "id": "S1-A3",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A4",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A5",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A6",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "S1-V1",
+      "status": "fail",
+      "environment": "local",
+      "procedure": "node_modules/.bin/vitest run tests/h04-s1-regression.test.ts --configLoader runner",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/dsh",
+      "executed_at": "2026-09-29T21:47:07Z",
+      "exit_code": 1,
+      "assertions": "Nenhum caso executado: falha ao carregar vitest.config.ts (ReferenceError: require is not defined em vite/node_modules/picomatch via module-runner do --configLoader runner).",
+      "evidence_refs": [],
+      "reason": "Runner bloqueado neste sandbox/toolchain (Node v24.13.1 + Vitest 4.1.11): --configLoader runner não carrega o config; o orquestrador repetirá fora do sandbox."
+    },
+    {
+      "id": "S1-V2",
+      "status": "fail",
+      "environment": "local",
+      "procedure": "node_modules/.bin/vitest run tests/database.test.ts --configLoader runner",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/dsh",
+      "executed_at": "2026-09-29T21:47:07Z",
+      "exit_code": 1,
+      "assertions": "Nenhum caso executado: falha ao carregar vitest.config.ts (ReferenceError: require is not defined em vite/node_modules/picomatch via module-runner do --configLoader runner).",
+      "evidence_refs": [],
+      "reason": "Runner bloqueado neste sandbox/toolchain (Node v24.13.1 + Vitest 4.1.11): --configLoader runner não carrega o config; o orquestrador repetirá fora do sandbox."
+    },
+    {
+      "id": "S1-V3",
+      "status": "pass",
+      "environment": "local",
+      "procedure": "node_modules/.bin/tsc --noEmit",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/dsh",
+      "executed_at": "2026-09-29T21:47:07Z",
+      "exit_code": 0,
+      "assertions": "Typecheck sem erros (exit 0, sem saída), incluindo o teste reestruturado.",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"
+      ]
+    },
+    {
+      "id": "S1-V4",
+      "status": "pass",
+      "environment": "local",
+      "procedure": "git diff --check (vacuoso para untracked) + checagem separada de whitespace dos dois arquivos novos",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/dsh",
+      "executed_at": "2026-09-29T21:47:07Z",
+      "exit_code": 0,
+      "assertions": "git diff --check exit 0 (vacuoso: os dois arquivos são untracked, fora do diff). Whitespace conferido separadamente nos dois arquivos novos: 0 linhas com trailing whitespace/space-before-tab; ambos terminam com newline. Limitação registrada.",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"
+      ]
+    },
+    {
+      "id": "S1-V5",
+      "status": "not_run",
+      "environment": "local",
+      "reason": "Revisão independente não executada nesta rodada (autor e revisor devem ser contextos distintos); marcada not_run para o orquestrador.",
+      "evidence_refs": []
+    }
+  ],
+  "findings": [],
+  "assumptions": [
+    "O envelope de tarefa JSON não foi fornecido nesta retomada; os IDs e descrições de critérios S1-A1..S1-A6 foram reconstruídos do texto da tarefa e de docs/ai/AVALIACAO_H04.md.",
+    "A validação comportamental usou PGlite direto (node, sem Vite) reproduzindo as mesmas asserções do teste, pois o runner Vitest está bloqueado no sandbox (14/14 asserções passaram).",
+    "Os dois arquivos permanecem added (untracked) no Git; nenhum outro arquivo foi tocado nesta rodada.",
+    "Modelo efetivo, tokens e custo não são expostos pelo runtime; registrados como null/unavailable."
+  ],
+  "context_requests": [],
+  "risks": [
+    "Vitest não executável neste sandbox: o loader nativo falha com spawn EPERM (Vite optimizeSafeRealPathSync) e --configLoader runner falha com ReferenceError: require is not defined (picomatch via module-runner). S1-V1/S1-V2 precisam ser reexecutados fora do sandbox pelo orquestrador.",
+    "git diff --check é vacuoso para arquivos untracked; a checagem de whitespace dos dois arquivos novos foi feita separadamente (0 violações) e a limitação registrada.",
+    "A prova de independência por -t 'cross-tenant selection' não pôde ser executada via Vitest (bloqueado); a independência está garantida estruturalmente por duas instâncias PGlite (setupDb(false) vs setupDb(true)) e validada por PGlite direto (14/14 asserções)."
+  ],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Reexecutar S1-V1 e S1-V2 fora do sandbox (comandos exatos com --configLoader runner) e realizar a revisão independente S1-V5; promover a rota apenas com esses gates verdes."
+}

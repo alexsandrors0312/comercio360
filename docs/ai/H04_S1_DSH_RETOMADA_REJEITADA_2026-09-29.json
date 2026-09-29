@@ -1,0 +1,209 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-S1-DSH-01",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "baseline_ref": "8cb9e84ff262980584f900b166ae16af05ab848b",
+  "actual_execution": {
+    "runtime": null,
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Retomada somente-leitura de H04-S1-DSH-01@1 após a tentativa MCP anterior expirar em 600000 ms com saída retida (registrada como não concluída, não convertida em sucesso). Confirmei HEAD=8cb9e84ff262980584f900b166ae16af05ab848b e exatamente dois arquivos untracked autorizados, sem alterações staged/tracked. Inspeção confirma a ordem bootstrap->foundation->tenant_key_guards->regressão sintética->correção, que o corretivo restaura m.active em private.can_access_store (idêntico à fundação) e que o teste cobre RED/GREEN e os negativos. Checks do orquestrador (externos, não do worker): vitest h04-s1-regression 7/7, vitest database 13/13, tsc e git diff --check exit 0. Critérios S1-A1..S1-A6 cobertos; revisão independente S1-V5 pendente.",
+  "artifacts": [
+    {
+      "path": "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+      "type": "sql_migration",
+      "sha256": "81dc2cfec12adee9052ad8278cca182c8d989c3310d4b1156e8ba644f8b471ca"
+    },
+    {
+      "path": "tests/h04-s1-regression.test.ts",
+      "type": "vitest_pglite_test",
+      "sha256": "42e7755a9875ed441746cdf55ab9b2ebeba7bcde30279d5437015b08eb82eea7"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+      "operation": "added",
+      "purpose": "Correção incremental append-only que restaura a exigência de vínculo ativo (m.active) removida pela regressão sintética em private.can_access_store."
+    },
+    {
+      "path": "tests/h04-s1-regression.test.ts",
+      "operation": "added",
+      "purpose": "Teste PGlite que carrega foundation, tenant_key_guards, a regressão sintética e a correção incremental, demonstrando RED/GREEN e os casos negativos."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "S1-A1",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202609070001_foundation.sql",
+        "supabase/migrations/202609080001_tenant_key_guards.sql",
+        "supabase/migrations/202609290001_h04_s1_membership_regression.sql",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A2",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A3",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"
+      ]
+    },
+    {
+      "id": "S1-A4",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A5",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-A6",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+        "tests/h04-s1-regression.test.ts"
+      ]
+    }
+  ],
+  "checks": [
+    {
+      "id": "S1-V1",
+      "status": "pass",
+      "environment": "local (dsh sandbox, worker)",
+      "procedure": "Inspeção estática (leitura) da migração corretiva, do teste e das migrações de base; confirmar a ordem bootstrap->foundation->tenant_key_guards->regressão sintética e a aplicação da correção no teste GREEN.",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/dsh",
+      "executed_at": "2026-09-29T18:36:31-03:00",
+      "assertions": "O corretivo reaplica 'm.active and s.active' em private.can_access_store (idêntico à fundação, create-or-replace append-only); o teste aplica as quatro etapas na ordem correta.",
+      "evidence_refs": [
+        "supabase/migrations/202609070001_foundation.sql",
+        "supabase/migrations/202609080001_tenant_key_guards.sql",
+        "supabase/migrations/202609290001_h04_s1_membership_regression.sql",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-V2",
+      "status": "pass",
+      "environment": "local (dsh sandbox, worker)",
+      "procedure": "git -c safe.directory=... rev-parse HEAD; git -c safe.directory=... status --porcelain=v1 --untracked-files=all; git -c safe.directory=... ls-files --others --exclude-standard",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/dsh",
+      "executed_at": "2026-09-29T18:36:31-03:00",
+      "exit_code": 0,
+      "assertions": "HEAD=8cb9e84ff262980584f900b166ae16af05ab848b; exatamente dois arquivos untracked (migração 202609290002 e tests/h04-s1-regression.test.ts); nenhuma alteração staged ou tracked.",
+      "evidence_refs": [
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-V3",
+      "status": "not_run",
+      "environment": "local (dsh sandbox, worker)",
+      "procedure": "npx vitest run tests/h04-s1-regression.test.ts (execução PGlite do worker)",
+      "reason": "Não reexecutado pelo worker nesta retomada (somente leitura, sem comandos longos). O orquestrador executou fora do sandbox: npx vitest run tests/h04-s1-regression.test.ts = 7/7 exit 0 e npx vitest run tests/database.test.ts = 13/13 exit 0 (checks externos, não atribuídos ao worker).",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-V4",
+      "status": "not_run",
+      "environment": "orchestrator-external (não executado pelo worker)",
+      "procedure": "npx tsc --noEmit; git diff --check",
+      "reason": "Não reexecutados pelo worker nesta retomada. O orquestrador executou fora do sandbox: npx tsc --noEmit = exit 0 e git diff --check = exit 0 (checks externos, não atribuídos ao worker).",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "id": "S1-V5",
+      "status": "not_run",
+      "environment": "independent-reviewer",
+      "procedure": "Revisão independente de segurança do corretivo e do teste (verificação mínima do caso S1).",
+      "reason": "Revisão independente ainda não executada; pendente como próxima etapa do gate.",
+      "evidence_refs": [
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+        "tests/h04-s1-regression.test.ts"
+      ]
+    }
+  ],
+  "findings": [
+    {
+      "severity": "info",
+      "summary": "O corretivo reaplica a definição exata de private.can_access_store da fundação (m.active AND s.active), via create-or-replace append-only; os privilégios da função são preservados no replace pelo PostgreSQL.",
+      "evidence_refs": [
+        "supabase/migrations/202609070001_foundation.sql",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"
+      ]
+    },
+    {
+      "severity": "info",
+      "summary": "Somente os testes RED e GREEN são sensíveis à regressão de m.active; os negativos (tenant cruzado, par incoerente, loja inativa, gerente sem bypass) passam tanto sob a função regredida quanto sob a corrigida, então não detectam esse defeito isoladamente.",
+      "evidence_refs": [
+        "supabase/migrations/202609290001_h04_s1_membership_regression.sql",
+        "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+        "tests/h04-s1-regression.test.ts"
+      ]
+    },
+    {
+      "severity": "info",
+      "summary": "O teste é dependente de ordem: o teste GREEN aplica a migração corretiva na instância PGlite compartilhada, de modo que os testes subsequentes rodam sob a função corrigida.",
+      "evidence_refs": [
+        "tests/h04-s1-regression.test.ts"
+      ]
+    }
+  ],
+  "assumptions": [
+    "A base da cópia descartável é HEAD 8cb9e84ff262980584f900b166ae16af05ab848b, que já comita a regressão sintética 202609290001_h04_s1_membership_regression.sql como arquivo tracked.",
+    "Os dois arquivos untracked são os entregáveis autorizados do worker (operação added, ainda não commitados).",
+    "Os quatro checks do orquestrador (vitest 7/7, vitest 13/13, tsc exit 0, git diff --check exit 0) foram executados fora do sandbox DSH e são reportados como externos, não como execução do worker.",
+    "Modelo efetivo, runtime e telemetria não foram expostos nesta retomada; registrados como null com source=unavailable.",
+    "A tentativa MCP anterior expirou após 600000 ms e reteve a saída; considerada não concluída e não convertida em sucesso.",
+    "A leitura do Git usou 'git -c safe.directory=...' inline para contornar o aviso de dubious ownership, sem persistir configuração global nem modificar o repositório."
+  ],
+  "context_requests": [
+    {
+      "item": "Envelope de tarefa S1 original (JSON 0.1) com acceptance/checks exatos e owner por verificação",
+      "reason": "Para revalidar com scripts/harness/validate.mjs e confirmar a semântica exata de S1-V1..S1-V5 e da write_allowlist."
+    },
+    {
+      "item": "Confirmação de que os dois caminhos untracked constam na write_allowlist da cópia descartável",
+      "reason": "O validador compara as alterações reais do Git com a allowlist atribuída à tarefa."
+    }
+  ],
+  "risks": [
+    "Dependência de ordem: o teste GREEN aplica a correção na instância PGlite compartilhada; shuffle/paralelismo do runner quebraria o invariante RED->GREEN.",
+    "Worker não reexecutou a suíte nesta retomada (somente leitura); a evidência de execução SQL (7/7, 13/13) é do orquestrador, fora do sandbox.",
+    "Revisão independente de segurança (S1-V5) não executada — obrigatória pela verificação mínima do caso S1; o gate permanece incompleto até realizá-la.",
+    "O corretivo usa create-or-replace sem reemitir revoke/grant; depende do PostgreSQL preservar as ACLs no replace (comportamento padrão, porém não autodocumentado no arquivo).",
+    "A regressão sintética permanece como migração tracked na base da cópia; risco operacional se a cópia descartável for confundida com o projeto real."
+  ],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Executar a revisão independente de segurança (S1-V5) e, antes de promover, reexecutar pelo worker a suíte PGlite (S1-V3) registrando evidência própria de execução."
+}

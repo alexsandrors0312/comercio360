@@ -1,0 +1,111 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-S1-CODEX-01",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "baseline_ref": "8cb9e84ff262980584f900b166ae16af05ab848b",
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Migração incremental restaura a exigência de membership ativo em private.can_access_store. Teste PGlite isolado demonstra acesso indevido antes da correção com grant retido e bloqueio após a correção, preservando os acessos válidos e o isolamento por tenant e estado da loja.",
+  "artifacts": [
+    {
+      "path": "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+      "type": "sql_migration",
+      "sha256": "7b8b3927ce01f2e1a894bd69a41aa7e3a47aa57894edd10c457d0800b2c53d5d"
+    },
+    {
+      "path": "tests/h04-s1-regression.test.ts",
+      "type": "pglite_test",
+      "sha256": "6c20fcbc65a420a4b1e63bec027624dfd251d9e37201ecba329575a390112aef"
+    }
+  ],
+  "changed_files": [
+    {
+      "path": "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql",
+      "operation": "added",
+      "purpose": "Restaurar vínculo ativo, grant explícito e loja ativa na autorização por tenant."
+    },
+    {
+      "path": "tests/h04-s1-regression.test.ts",
+      "operation": "added",
+      "purpose": "Provar a regressão sintética antes e os invariantes de autorização depois da correção em banco isolado."
+    }
+  ],
+  "criteria": [
+    { "id": "S1-A1", "status": "pass", "evidence_refs": ["tests/h04-s1-regression.test.ts"] },
+    { "id": "S1-A2", "status": "pass", "evidence_refs": ["tests/h04-s1-regression.test.ts", "supabase/migrations/202609290002_h04_s1_restore_active_membership.sql"] },
+    { "id": "S1-A3", "status": "pass", "evidence_refs": ["tests/h04-s1-regression.test.ts"] },
+    { "id": "S1-A4", "status": "pass", "evidence_refs": ["tests/h04-s1-regression.test.ts"] },
+    { "id": "S1-A5", "status": "pass", "evidence_refs": ["tests/h04-s1-regression.test.ts"] },
+    { "id": "S1-A6", "status": "pass", "evidence_refs": ["supabase/migrations/202609290002_h04_s1_restore_active_membership.sql", "tests/h04-s1-regression.test.ts"] }
+  ],
+  "checks": [
+    {
+      "id": "S1-V1",
+      "status": "pass",
+      "environment": "PGlite local no clone descartável com dependências instaladas",
+      "procedure": "node_modules/.bin/vitest run tests/h04-s1-regression.test.ts --configLoader runner",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/codex",
+      "executed_at": "2026-09-29T18:52:28-03:00",
+      "exit_code": 0,
+      "assertions": "1 teste passou; demonstrou RED com grant retido e GREEN de revogação, acesso válido, cross-tenant, par incoerente e loja inativa.",
+      "evidence_refs": ["tests/h04-s1-regression.test.ts"]
+    },
+    {
+      "id": "S1-V2",
+      "status": "pass",
+      "environment": "PGlite local no clone descartável com dependências instaladas",
+      "procedure": "node_modules/.bin/vitest run tests/database.test.ts --configLoader runner",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/codex",
+      "executed_at": "2026-09-29T18:52:37-03:00",
+      "exit_code": 0,
+      "assertions": "13 testes históricos passaram.",
+      "evidence_refs": ["tests/database.test.ts"]
+    },
+    {
+      "id": "S1-V3",
+      "status": "pass",
+      "environment": "Clone descartável com dependências instaladas",
+      "procedure": "node_modules/.bin/tsc --noEmit",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/codex",
+      "executed_at": "2026-09-29T21:53:06Z",
+      "exit_code": 0,
+      "assertions": "TypeScript concluiu sem diagnósticos.",
+      "evidence_refs": ["tests/h04-s1-regression.test.ts"]
+    },
+    {
+      "id": "S1-V4",
+      "status": "pass",
+      "environment": "Clone descartável local",
+      "procedure": "git diff --check; git diff --no-index --check -- NUL <cada arquivo novo>",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-s1-fixed-4826f7f7205845e2b080eb029d80ed5e/codex",
+      "executed_at": "2026-09-29T21:53:06Z",
+      "exit_code": 0,
+      "assertions": "Sem erro de whitespace no diff ou nos dois arquivos untracked verificados separadamente.",
+      "evidence_refs": ["supabase/migrations/202609290002_h04_s1_restore_active_membership.sql", "tests/h04-s1-regression.test.ts"]
+    },
+    {
+      "id": "S1-V5",
+      "status": "not_run",
+      "environment": "Revisão independente do clone descartável",
+      "procedure": "Inspeção de allowlist, tenant, RLS e privilégios",
+      "evidence_refs": [],
+      "reason": "Verificação atribuída ao revisor no envelope."
+    }
+  ],
+  "findings": [],
+  "assumptions": [],
+  "context_requests": [],
+  "risks": ["Evidência local PGlite; migração sintética e correção não foram aplicadas a Supabase hospedado."],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Revisor executa S1-V5 no clone e avalia o patch com o contrato."
+}

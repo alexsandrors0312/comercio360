@@ -1,5 +1,11 @@
 # Changelog
 
+## 29/09/2026 — Par sintético H-04 S1 revisado
+
+- S1 DSH expirou na primeira chamada de 600000 ms, deixando apenas migração corretiva e teste permitidos. A retomada somente leitura foi preservada como rejeitada por remapear S1-V1/V2. Duas revisões cegas apontaram dependências de ordem no teste; o DSH separou RED/GREEN e passou a criar banco corrigido por cenário. O JSON final passou no validador, mantendo FAIL no Vitest interno do sandbox. Fora dele, teste focado 7/7, cenário isolado 1/1, ordem embaralhada 7/7, suíte histórica 13/13 e TypeScript passaram; revisão final sem achados bloqueantes.
+- S1 Codex usou clone independente, entregou migração incremental e teste PGlite único, com teste focado 1/1, históricos 13/13, TypeScript e revisão cega sem achados bloqueantes. Ambos os braços preservaram as migrações históricas e o banco hospedado. O retrabalho DSH é observado neste par, sem telemetria suficiente para custo/rapidez comparável.
+- U1 DSH foi enviado no terceiro clone. O [registro H-04](docs/ai/RELATORIO_H04.md) guarda hashes, gates e limites; código funcional e evidências H1 do repositório real continuam intactos.
+
 ## 29/09/2026 — Recarga MCP e primeiro par H-04 D1
 
 - Após o responsável reiniciar o servidor MCP DSH no Codex desktop, `dsh_health` confirmou os três clones sintéticos permitidos. D1 DSH foi enviado pelo MCP nativo com `cwd` do clone, contrato 0.1 e apenas dois arquivos de domínio/teste para escrita. O resultado foi preservado em `docs/ai/H04_D1_DSH_RESULTADO_2026-09-29.json` e passou no validador.
