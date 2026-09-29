@@ -1,6 +1,6 @@
 # Contratos propostos para o harness
 
-Data: 28/09/2026. Versão: 0.1. Complemento do [plano de orquestração](PLANO_ORQUESTRACAO.md). **Especificação documental; não há dispatcher ou validador instalado.** Os exemplos são sintéticos e não representam execução nem autorização do Catálogo.
+Data: 28/09/2026; implementação inicial em 29/09/2026. Contrato versão 0.1. Complemento do [plano de orquestração](PLANO_ORQUESTRACAO.md). Há um validador local parcial em `scripts/harness/validate.mjs`; ele não é dispatcher nem sandbox. Os exemplos são sintéticos e não representam execução nem autorização do Catálogo.
 
 ## 1. Envelope de tarefa
 
@@ -53,6 +53,8 @@ Exemplo de tarefa **apenas de análise** que pode existir antes do aceite comerc
 
 Esse exemplo não pode ser despachado enquanto `baseline.ref` for nulo. O manifesto deve existir e incluir hashes das fontes lidas. Um contrato de implementação também exige que a autorização cubra o pacote e que dependências bloqueantes estejam aceitas.
 
+Na implementação inicial do validador, somente `baseline.kind = "git"` com `ref` igual ao SHA completo de `HEAD` é aceito. O modo `task` exige árvore Git limpa. `manifest` permanece especificado, mas ainda não é suportado. A allowlist aceita arquivo exato ou prefixo de diretório terminado em `/`. Perfis não recebem permissão efetiva por constarem no JSON: o runtime precisa aplicar seu próprio isolamento.
+
 Contratos de interfaces devem especificar operação, entrada, saída, erro, autorização, escopo de tenant/loja, atomicidade, idempotência, versão de concorrência e efeito auditável quando aplicável. Se um campo não se aplica, registrar o motivo. Não usar um DTO TypeScript como substituto de toda a semântica.
 
 ## 2. Resultado do worker
@@ -87,9 +89,9 @@ Cada verificação executada deve registrar ID, comando ou procedimento, diretó
 
 Cada artefato informa caminho, tipo e hash. Cada arquivo alterado informa operação (`added`, `modified` ou `deleted`) e finalidade. Em uma revisão sem escrita, `changed_files` deve estar vazio. Métricas indisponíveis são `null`, nunca zero inventado.
 
-## 3. Regras do validador futuro
+## 3. Regras do validador
 
-Implementar JSON Schema ou equivalente com enumerações, campos obrigatórios, tipos e rejeição de campos desconhecidos para cada versão. Versão não suportada exige migração explícita. O parse não basta; também validar:
+O validador inicial usa Zod com campos obrigatórios, enumerações, tipos e rejeição de campos desconhecidos na versão 0.1. Versão não suportada exige migração explícita. Para executar: `node scripts/harness/validate.mjs task caminho/tarefa.json` antes do despacho e `node scripts/harness/validate.mjs result caminho/tarefa.json caminho/resultado.json` após a entrega. No modo de implementação, a segunda chamada compara caminhos alterados no Git com a allowlist e o relatório; ela pressupõe worktree isolada para aquela tarefa. O parse não basta; também é necessário validar:
 
 1. IDs/revisões correspondem à tarefa; base e hashes existem e continuam compatíveis.
 2. Caminhos resolvidos ficam no workspace permitido; rejeitar travessia, links que escapem do escopo e escrita fora da atribuição. Comparar alterações reais, não apenas a lista fornecida pelo worker.
@@ -100,7 +102,7 @@ Implementar JSON Schema ou equivalente com enumerações, campos obrigatórios, 
 7. Base alterada desde a revisão invalida somente as conclusões afetadas, com registro de revalidação necessária.
 8. Relatório ou artefato com dado sensível é interrompido antes de encaminhamento; sanitização não pode ser presumida pelo nome do arquivo.
 
-Não apresentar essas garantias como automatizadas até o validador e seus testes negativos terem sido executados. A checagem de caminhos é proteção do controlador; ela não substitui um sandbox real.
+Os testes negativos em `tests/harness-contract.test.mjs` cobrem versão/forma, travessia, caminho protegido, PASS sem evidência, base divergente e alteração fora da atribuição. A implementação confere SHA de artefatos declarados e existência dos caminhos usados como evidência. **Ainda são conferências manuais**: conteúdo sensível em relatório, semântica do aceite de produto, estado real de dependências, revisão afetada por rebase e operação exata (`added`/`modified`/`deleted`) frente ao Git. A checagem de caminhos protege o controlador; não substitui um sandbox real e não impede escrita indevida antes da inspeção.
 
 ## 4. Contrato da revisão independente
 
@@ -122,4 +124,4 @@ Checkpoint após mudança de contrato, integração ou interrupção: salvar ape
 
 Atualização de 28/09 após o [diagnóstico real da ponte](DIAGNOSTICO_DSH_MCP.md): serializar objetivo, contexto, base, fontes, invariantes, aceite e saída esperada em `task`; passar a raiz autorizada em `cwd` e, opcionalmente, `timeout_ms` entre 1000 e 600000. A ponte instalada não aceita `context`, `sandbox` ou `max_iterations`; esses argumentos da skill anterior estavam incorretos e foram removidos. O envelope lógico das seções anteriores continua válido, mas não é enviado como argumentos extras ao MCP.
 
-Se o retorno não puder ser interpretado no contrato, rejeitar o status de conclusão e pedir correção limitada da estrutura ou registrar bloqueio. Não declarar validação de saída estruturada nativa do DSH: a ponte retorna texto final e o controlador proposto ainda precisa validá-lo. Modelo/telemetria não expostos são registrados como indisponíveis. O servidor foi instalado e o protocolo verificado; recarga do cliente, chamada real e validação de entregas continuam pendentes.
+Se o retorno não puder ser interpretado no contrato, rejeitar o status de conclusão e pedir correção limitada da estrutura ou registrar bloqueio. Não declarar validação de saída estruturada nativa do DSH: a ponte retorna texto final e o controlador ainda precisa validá-lo. Modelo/telemetria não expostos são registrados como indisponíveis. O `dsh_health` respondeu OK no cliente recarregado em 29/09. A primeira tarefa real foi barrada pela revisão automática por falta de autorização explícita para enviar documentos privados do repositório ao serviço/modelo externo; não houve execução do worker nem validação de entrega DSH.

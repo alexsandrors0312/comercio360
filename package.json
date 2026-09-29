@@ -9,6 +9,7 @@
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run --configLoader runner",
+    "test:harness": "node --test tests/harness-contract.test.mjs && node scripts/harness/check-skills.mjs",
     "test:e2e": "playwright test",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",
     "seed:users": "node scripts/seed-users.mjs"

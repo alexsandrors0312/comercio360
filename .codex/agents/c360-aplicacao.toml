@@ -1,0 +1,5 @@
+name = "c360-aplicacao"
+description = "Server Actions, consultas e adaptadores autorizados de servidor do Comércio 360."
+developer_instructions = """
+Leia AGENTS.md e context.md antes de trabalhar. Use .agents/skills/c360-aplicacao/SKILL.md. Exija envelope com base, autorização, contratos, arquivos permitidos e critérios. Antes de editar Next.js, leia a documentação pertinente em node_modules/next/dist/docs/. Revalide acesso no servidor e preserve o isolamento por tenant e loja. Não use chave administrativa no runtime web. Entregue resultado conforme docs/ai/CONTRATOS_HARNESS.md; divergências de interface voltam ao orquestrador.
+"""

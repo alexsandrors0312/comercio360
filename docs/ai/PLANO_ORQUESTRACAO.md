@@ -1,8 +1,8 @@
 # Plano de arquitetura de desenvolvimento por IA — Comércio 360
 
-Data: 28/09/2026. Versão do plano: 0.1. **Proposta de operação, pronta para revisão; harness e skills de projeto ainda não instalados nem avaliados.**
+Data: 28/09/2026. Versão do plano: 0.1; atualização de implementação em 29/09. **Proposta de operação com H-01 concluída e H-02 parcialmente implantada; piloto e avaliação de qualidade/custo pendentes.**
 
-Atualização posterior no mesmo dia: Git inicializado, ainda sem primeiro commit; ponte DSH MCP registrada e verificada no nível de protocolo, com recarga do Codex e tarefa real pendentes. O [diagnóstico da integração](DIAGNOSTICO_DSH_MCP.md) corrige o contrato de transporte da seção 12 para `task`, `cwd`, `timeout_ms`. As seis skills de projeto e o harness completo deste plano continuam pendentes. Os registros de ausência de Git/ferramenta abaixo descrevem a inspeção original.
+Histórico de 28/09: Git inicializado sem primeiro commit; ponte DSH MCP registrada e verificada no nível de protocolo. O [diagnóstico da integração](DIAGNOSTICO_DSH_MCP.md) corrige o contrato de transporte da seção 12 para `task`, `cwd`, `timeout_ms`. Em 29/09 foi criado o baseline `5977cdb`, as seis skills e perfis, e o validador local inicial. O DSH está saudável, mas a primeira tarefa real foi barrada pelo auto-review antes da execução. Os registros de ausência de Git/ferramenta abaixo descrevem a inspeção original.
 
 Este plano atende ao pedido de estruturar o desenvolvimento antes de programar novos módulos. A aplicação continua em 0.1.1. Não aprova o Catálogo 002, não amplia seu escopo e não altera o parecer H1. As regras abaixo são o desenho proposto para a implantação do harness; não constituem evidência de controles já automatizados.
 
@@ -175,13 +175,13 @@ Definir seis skills iniciais, com descrições curtas e gatilhos específicos. O
 
 Os seis perfis de workers não exigem seis skills distintas: QA e Segurança usam modos diferentes de `c360-verificar` com referências carregadas separadamente. Adicionar `c360-operacao` e `c360-integracoes` quando suas fases forem iniciadas.
 
-As skills são específicas deste projeto, portanto a instalação futura preferida é `.agents/skills/c360-*/SKILL.md`, após verificar o suporte do cliente. Perfis de agentes e seleção de modelo pertencem à configuração suportada pelo runtime; `agents/openai.yaml` de uma skill é metadado de interface/dependências, não um worker em execução. Não inventar arquivos de configuração e presumir que foram carregados.
+As seis skills específicas do projeto foram criadas em `.agents/skills/c360-*/SKILL.md` em 29/09. A documentação atual do Codex confirma discovery nessa pasta; a sintaxe e a estrutura foram conferidas localmente, mas a seleção efetiva em uma nova sessão ainda precisa de observação. Perfis de agentes foram criados em `.codex/agents/*.toml`, formato documentado para agentes de projeto. A sintaxe TOML passou; isso não prova que cada perfil foi iniciado. `agents/openai.yaml` de uma skill é metadado de interface/dependências, não um worker em execução.
 
 Antes de ativar: validar frontmatter e referências, testar gatilhos positivos e negativos, executar cenários de comportamento em cópia descartável e conferir discovery no runtime. Validação sintática sozinha não comprova a qualidade da skill. Esta entrega especifica as skills; não cria nem instala seus arquivos executáveis.
 
 ## 9. Contratos e comunicação
 
-O [contrato operacional](CONTRATOS_HARNESS.md) define os campos da tarefa, do resultado, da revisão e do checkpoint. O controlador futuro deverá validar sua estrutura antes de aceitar uma entrega; hoje são especificações, sem validador instalado.
+O [contrato operacional](CONTRATOS_HARNESS.md) define os campos da tarefa, do resultado, da revisão e do checkpoint. Há um validador local inicial para envelope/resultado em `scripts/harness/validate.mjs`, com limites documentados; dispatcher e aceite semântico continuam manuais.
 
 Toda tarefa precisa de objetivo observável, base identificada, autorização, arquivos de leitura/escrita, invariantes, dependências, critérios, verificações, modelo e condições de parada. A saída precisa de alterações, evidências, status, hipóteses, riscos e solicitações de contexto. O autor pode declarar trabalho pronto para revisão, mas só o orquestrador marca a integração como aceita.
 
@@ -191,7 +191,7 @@ Mudanças de contrato voltam ao orquestrador antes de produtores e consumidores 
 
 ## 10. Concorrência e integração
 
-**Condição atualizada: Git inicializado, ainda sem primeiro commit; usar um único escritor até estabelecer o baseline.** Leituras paralelas só contam como revisão da entrega quando a base estiver estável e identificada. Relatórios produzidos sobre arquivos mudando devem ser refeitos para os arquivos afetados.
+**Condição atualizada em 29/09: Git inicializado com baseline local `5977cdb`; manter um único escritor por tarefa até ensaiar worktrees e integração.** Leituras paralelas só contam como revisão da entrega quando a base estiver estável e identificada. Relatórios produzidos sobre arquivos mudando devem ser refeitos para os arquivos afetados.
 
 Na preparação do harness, estabelecer Git local, exclusões de segredos/artefatos, baseline e comparação antes de habilitar múltiplos escritores. Não há criação/publicação de repositório remoto nesta proposta. Depois, usar worktrees isolados a partir da mesma base e integração serial pelo orquestrador, com validação após integração.
 
@@ -216,13 +216,13 @@ Ambientes ficam explícitos: domínio/SQL local, PGlite, Auth simulado, navegado
 
 ## 12. Caminho DeepSeek e recursos disponíveis
 
-A skill local `codex-delegate-to-dsh` foi lida. Na inspeção original, exigia delegação exclusivamente por `dsh_delegate`, mas indicava argumentos sem confirmação em um servidor instalado. A ausência da ferramenta foi registrada naquele momento. Posteriormente, foi instalada a ponte descrita em [DIAGNOSTICO_DSH_MCP.md](DIAGNOSTICO_DSH_MCP.md) e corrigido o contrato da skill. O catálogo desta conversa ainda requer recarga; não houve tarefa real ou benchmark DeepSeek.
+A skill local `codex-delegate-to-dsh` foi lida. Na inspeção original, exigia delegação exclusivamente por `dsh_delegate`, mas indicava argumentos sem confirmação em um servidor instalado. A ausência da ferramenta foi registrada naquele momento. Posteriormente, foi instalada a ponte descrita em [DIAGNOSTICO_DSH_MCP.md](DIAGNOSTICO_DSH_MCP.md) e corrigido o contrato da skill. Em 29/09 o cliente já expunha `dsh_health` e `dsh_delegate`; ainda não houve tarefa real ou benchmark DeepSeek.
 
 Na inspeção original, a skill exigia quatro argumentos sem uma ferramenta disponível para confirmá-los. O diagnóstico posterior demonstrou incompatibilidade e corrigiu a skill: usar `task` (incluindo contexto), `cwd` e `timeout_ms`, conforme schema da ponte instalada. Não há teto de 25 iterações imposto por essa ponte. Exigir a mesma evidência de retorno e não acrescentar parâmetros de modelo ou isolamento que sua API não tenha. Se não houver telemetria suficiente, registrar consumo como indisponível.
 
 A skill existente também contém referências a outro projeto, DC Log Express. Elas não se aplicam ao Comércio 360 e não entram no briefing. O contexto identifica explicitamente workspace, stack e contratos corretos. Revisar a compatibilidade das duas instruções de delegação antes de habilitar a rota: uma tarefa simples fica local; uma tarefa complexa que acione essa skill usa sua ferramenta exigida.
 
-Sem `dsh_delegate`, não simular a integração por shell, HTTP ou outro agente. Workers Codex são uma rota nativa distinta, a adotar explicitamente no rollout, nunca relatada como execução DeepSeek. Descobrir a ferramenta novamente ao configurar o harness; instalar uma skill não demonstra que o servidor MCP está conectado.
+Em 29/09, `dsh_health` retornou OK com perfil headless e workspace permitido. A tentativa de enviar a criação dos perfis ao `dsh_delegate` foi rejeitada pela revisão automática porque o briefing permitiria exportar documentos privados do repositório ao serviço/modelo externo sem autorização explícita para esse payload. Nenhum worker DSH executou. Não contornar essa rejeição por shell, HTTP ou agente alternativo. Workers Codex são rota distinta, não relatada como execução DeepSeek; o piloto DSH exige autorização específica antes de novo despacho.
 
 Credenciais, tokens, senhas e operações que exigem manuseá-los não são delegados ao DSH. Não conceder segredos administrativos a workers. As ferramentas reais e seus privilégios devem ser inspecionados: um prompt restritivo não revoga acesso herdado. Se o runtime não oferecer isolamento de ferramentas/arquivos, tratar a limitação como tal e usar workspace sanitizado ou execução apropriada ao risco.
 
@@ -268,8 +268,8 @@ Um recorte vertical útil para o primeiro ensaio é produto com variante inicial
 
 ## 16. Estado de entrega deste plano
 
-Entregues: mapa do produto, topologia proposta, perfis, catálogo de skills necessárias, roteamento inicial, política de contexto, contratos documentais, avaliação e sequência de implantação. Atualizados os apontadores de continuidade.
+Entregues até 29/09: mapa do produto, topologia, seis perfis TOML, seis skills de projeto, roteamento inicial, política de contexto, contratos documentais, validador local inicial com testes negativos, sequência de implantação e baseline Git `5977cdb`. Atualizados os apontadores de continuidade.
 
-Pendentes: instalação/configuração dos perfis e skills de projeto, primeiro commit/baseline, validador automatizado, piloto de agentes e métricas. A ponte DSH foi instalada posteriormente e verificada no nível de protocolo; recarga do cliente e tarefa real continuam pendentes. Nenhum worker ou suíte de aplicação foi executado para provar este desenho. Nenhuma capacidade comercial, dependência de aplicação ou migração foi adicionada.
+Pendentes: confirmar discovery dos perfis/skills em nova sessão, testar seus gatilhos e comportamento com worker, completar as verificações semânticas do contrato, piloto de agente e métricas H-04. A ponte DSH foi verificada em saúde no cliente; a primeira tarefa real foi barrada por auto-review e não executou. Nenhum worker ou suíte de aplicação foi executado para provar este desenho. Nenhuma capacidade comercial, dependência de aplicação ou migração foi adicionada.
 
-Próximo trabalho recomendado: transformar H-01 e H-02 em implementação do ambiente de desenvolvimento e executar H-03. Depois aplicar o fluxo ao Catálogo 002 quando seu escopo tiver aceite. As condições operacionais H1 permanecem abertas para publicação e dados reais.
+Próximo trabalho recomendado: concluir o [piloto H-03 preparado](PILOTO_H03.md) após autorização explícita para o payload DSH ou escolha documentada de rota nativa, observar discovery e registrar métricas. Depois avaliar H-04 e aplicar o fluxo ao Catálogo 002 quando seu escopo tiver aceite. As condições operacionais H1 permanecem abertas para publicação e dados reais.

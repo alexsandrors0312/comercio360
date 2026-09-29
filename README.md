@@ -2,7 +2,7 @@
 
 Para retomar o desenvolvimento, leia primeiro o [contexto permanente](context.md) e atualize-o ao concluir cada mudança relevante.
 
-O [plano de desenvolvimento por IA](docs/ai/PLANO_ORQUESTRACAO.md) mapeia os módulos futuros, agentes, skills e etapas de implantação do harness. Os [contratos de tarefas e evidências](docs/ai/CONTRATOS_HARNESS.md) são especificações propostas; os perfis, skills e controles automatizados ainda não estão instalados ou avaliados.
+O [plano de desenvolvimento por IA](docs/ai/PLANO_ORQUESTRACAO.md) mapeia os módulos futuros, agentes, skills e etapas do harness. Seis perfis em `.codex/agents/`, seis skills em `.agents/skills/` e um [validador local inicial dos contratos](docs/ai/CONTRATOS_HARNESS.md) foram adicionados em 29/09. O piloto de worker e a avaliação de custo/qualidade ainda não ocorreram; a primeira delegação DSH foi barrada pelo auto-review antes de executar.
 
 Fundação executável em Next.js 16, TypeScript e PostgreSQL/Supabase. Interface em português, login por e-mail/senha, seleção de empresa/loja autorizada, políticas RLS, auditoria e painel com dados exclusivamente fictícios. Os demais módulos exibem **Em construção**.
 

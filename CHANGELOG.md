@@ -1,5 +1,12 @@
 # Changelog
 
+## 29/09/2026 — Base local e primeira implementação do harness
+
+- Primeiro commit local `5977cdb` registra o baseline existente, sem remoto. A identidade `Codex <codex@localhost>` foi usada apenas nesse commit porque o Git não tinha autor configurado.
+- Adicionados seis perfis em `.codex/agents/` e seis skills em `.agents/skills/`, com limites próprios para dados, domínio, aplicação, interface, QA e segurança/arquitetura. TOML e estrutura das skills conferidos; discovery e comportamento em nova sessão ainda não observados.
+- Adicionado validador local de contratos Git 0.1 e seis testes, incluindo casos negativos de travessia, proteção de arquivos, evidência ausente, base divergente e mudança fora da allowlist. `node --test tests/harness-contract.test.mjs`, checagem local de skills e `npm run lint` passaram. O validador oficial de skills não rodou por ausência de `PyYAML` no Python disponível.
+- `dsh_health` retornou OK no cliente. A primeira delegação DSH foi rejeitada pelo auto-review antes da execução por falta de autorização explícita para enviar documentos privados do repositório ao serviço/modelo externo. Nenhum worker ou teste da aplicação foi executado nesta etapa; Catálogo 002 continua sem aceite.
+
 ## 28/09/2026 — Correção da disponibilidade DSH MCP
 
 - Diagnóstico em `docs/ai/DIAGNOSTICO_DSH_MCP.md`: ausência de cadastro MCP ativo, pacote npm inexistente no registro público e parâmetros incompatíveis na skill.
