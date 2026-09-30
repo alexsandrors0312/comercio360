@@ -1,6 +1,6 @@
 # H-04 — protocolo de avaliação comparativa
 
-Estado em 29/09/2026: **protocolo preparado; execução parcial iniciada em D1**. O [registro de execução](RELATORIO_H04.md) separa preparação, tentativas descartadas, resultado Codex revisado e trabalho pendente. O Antigravity respondeu a um teste mínimo com `Gemini 3.1 Pro Low` selecionado, e o MCP DSH respondeu `READY`. Esses testes não medem qualidade de engenharia. O piloto H-03 foi integrado na base `4a800961b3503f143fcf0e940271326e2096f439`, após reprodução e correção dos três achados.
+Estado em 29/09/2026: **protocolo preparado; pares D1 e S1 executados e revisados; U1 em andamento**. O [registro de execução](RELATORIO_H04.md) separa preparação, tentativas descartadas, resultados revisados e trabalho pendente; o [índice leve](H04_RESULTADOS_INDICE.md) resume os 8 JSONs. O Antigravity respondeu a um teste mínimo com `Gemini 3.1 Pro Low` selecionado, e o MCP DSH respondeu `READY`. Esses testes não medem qualidade de engenharia. O piloto H-03 foi integrado na base `4a800961b3503f143fcf0e940271326e2096f439`, após reprodução e correção dos três achados.
 
 ## Unidade de comparação
 
@@ -21,6 +21,10 @@ Em S1, preservar as duas migrações históricas no projeto real e exigir corre�
 ### Adendo operacional U1 de 29/09/2026
 
 Depois do primeiro braço Codex, o Playwright passou o cenário novo, mas travou em `Terminating the WebServer` ao encerrar o Next no Windows. Uma configuração temporária fora do clone, com os mesmos testes, base URL, navegador, workers e retries e com servidores iniciados separadamente, obteve código de saída 0 para os dois cenários focados no menu e nas rotas protegidas. A suíte original ainda falha por uma asserção antiga que espera texto `404` visível na rota inexistente; uma consulta HTTP da cópia intacta retornou status 404 sem esse texto visível. Essa descoberta **posterior ao braço Codex** deve ser registrada como alteração operacional do protocolo, aplicada da mesma forma ao braço DSH e mantida separada do check original `U1-V1`. O wrapper temporário ainda falha ao encerrar automaticamente seus processos no Windows e não é uma ferramenta validada para uso geral. Não promover U1-V1 a PASS por causa do teste focado.
+
+### Adendo de mitigação de tokens (D/E/F) — aplicável a U1-DSH
+
+Conforme [CONTRATOS_HARNESS.md](CONTRATOS_HARNESS.md) §7–§8 e o [diagnóstico](DIAGNOSTICO_TOKENS.md): o envelope U1-DSH não inclui Vitest/Playwright; o worker entrega código e checagens estáticas (tsc, diff/whitespace, `node --check`). O orquestrador executa o harness externo de U1 (e a suíte completa quando deliberada) **uma única vez, fora do sandbox**, e registra comando/código de saída; o revisor confere o log, não reexecuta. Check dinâmico não executado no worker fica `not_run` com motivo. Retomadas enviam só o delta do achado, sem reler `AGENTS.md`/`context.md`, com limite de duas tentativas sem avanço (PLANO §6). O par U1 compara as rotas pelos mesmos gates, mas o check original `U1-V1` continua sendo gate do orquestrador, não do worker.
 
 ## Registro e decisão
 

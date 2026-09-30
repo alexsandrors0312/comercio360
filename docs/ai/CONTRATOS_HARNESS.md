@@ -1,6 +1,6 @@
 # Contratos propostos para o harness
 
-Data: 28/09/2026; implementação inicial em 29/09/2026. Contrato versão 0.1. Complemento do [plano de orquestração](PLANO_ORQUESTRACAO.md). Há um validador local parcial em `scripts/harness/validate.mjs`; ele não é dispatcher nem sandbox. Os exemplos são sintéticos e não representam execução nem autorização do Catálogo.
+Data: 28/09/2026; implementação inicial em 29/09/2026; §2-forma enxuta e §7–§8 acrescentados em 29/09 pela [tríade anti-tokens](DIAGNOSTICO_TOKENS.md) (mitigações C/D/E/F). Contrato versão 0.1. Complemento do [plano de orquestração](PLANO_ORQUESTRACAO.md). Há um validador local parcial em `scripts/harness/validate.mjs`; ele não é dispatcher nem sandbox. Os exemplos são sintéticos e não representam execução nem autorização do Catálogo.
 
 ## 1. Envelope de tarefa
 
@@ -89,6 +89,16 @@ Cada verificação executada deve registrar ID, comando ou procedimento, diretó
 
 Cada artefato informa caminho, tipo e hash. Cada arquivo alterado informa operação (`added`, `modified` ou `deleted`) e finalidade. Em uma revisão sem escrita, `changed_files` deve estar vazio. Métricas indisponíveis são `null`, nunca zero inventado.
 
+### Forma enxuta (mitigação C, obrigatória em envelopes novos)
+
+Os 8 JSONs históricos de H-03/H-04 somam 54.646 B e repetem `evidence_refs`, `cwd` e blocos de check idênticos; ler o [índice leve](H04_RESULTADOS_INDICE.md) em vez dos JSONs completos. Em **novos** resultados:
+
+1. Cada critério cita **um** artefato de evidência — o que prova aquele critério; não repetir a mesma lista em todos os critérios. `evidence_refs` vazio só quando verdadeiro.
+2. Checks que reproduzem o mesmo comando em arquivos diferentes resumem as diferenças num único bloco ou numa linha `assertions`; não duplicar `procedure`/`cwd`/`executed_at` idênticos.
+3. Em retomada da mesma tarefa, o resultado novo não repete blocos de check inalterados da rodada anterior — informa só o delta (IDs alterados e o motivo).
+4. Resumo (`summary`) limitado ao essencial (~150 palavras); detalhes ficam em `findings`/`risks` quando necessários.
+5. JSONs históricos são evidência congelada: **não reescrevê-los** para aplicar esta forma; ela vale daqui em diante.
+
 ## 3. Regras do validador
 
 O validador inicial usa Zod com campos obrigatórios, enumerações, tipos e rejeição de campos desconhecidos na versão 0.1. Versão não suportada exige migração explícita. Para executar: `node scripts/harness/validate.mjs task caminho/tarefa.json` antes do despacho e `node scripts/harness/validate.mjs result caminho/tarefa.json caminho/resultado.json` após a entrega. No modo de implementação, a segunda chamada compara caminhos alterados no Git com a allowlist e o relatório; ela pressupõe worktree isolada para aquela tarefa. O parse não basta; também é necessário validar:
@@ -124,4 +134,22 @@ Checkpoint após mudança de contrato, integração ou interrupção: salvar ape
 
 Atualização de 28/09 após o [diagnóstico real da ponte](DIAGNOSTICO_DSH_MCP.md): serializar objetivo, contexto, base, fontes, invariantes, aceite e saída esperada em `task`; passar a raiz autorizada em `cwd` e, opcionalmente, `timeout_ms` entre 1000 e 600000. A ponte instalada não aceita `context`, `sandbox` ou `max_iterations`; esses argumentos da skill anterior estavam incorretos e foram removidos. O envelope lógico das seções anteriores continua válido, mas não é enviado como argumentos extras ao MCP.
 
-Se o retorno não puder ser interpretado no contrato, rejeitar o status de conclusão e pedir correção limitada da estrutura ou registrar bloqueio. Não declarar validação de saída estruturada nativa do DSH: a ponte retorna texto final e o controlador ainda precisa validá-lo. Modelo/telemetria não expostos são registrados como indisponíveis. O `dsh_health` respondeu OK em 29/09. As primeiras chamadas, antes da correção das credenciais pelo responsável, falharam com `DSH_RUN_FAILED (exit=1)`; esse histórico está no [diagnóstico](INTEGRACAO_VSCODE.md). Depois, uma chamada mínima retornou `READY` e a revisão H-03 produziu JSON 0.1 validado na base original. A primeira tentativa H-03 expirou e permanece registrada como falha; a segunda gerou três achados reproduzidos e corrigidos, conforme o [relatório](RELATORIO_H03.md). O modelo efetivo, tokens e custo não foram expostos pela ponte.
+Se o retorno não puder ser interpretado no contrato, rejeitar o status de conclusão e pedir correção limitada da estrutura ou registrar bloqueio. Não declarar validação de saída estruturada nativa do DSH: a ponte retorna texto final e o controlador ainda precisa validá-lo. Modelo/telemetria não expostos são registrados como indisponíveis. O `dsh_health` respondeu OK em 29/09. A cronologia de falhas (`DSH_RUN_FAILED`, autenticação, `READY`, H-03, H-04) está na fonte única [HISTORICO_DSH.md](HISTORICO_DSH.md). O modelo efetivo, tokens e custo não foram expostos pela ponte.
+
+## 7. Execução de testes fora do sandbox (mitigação D — fail-fast)
+
+Motivação: em H-04, o Vitest falhou dentro do sandbox do worker DSH (`spawn EPERM` em D1; `ReferenceError: require is not defined` em S1), e o mesmo teste foi executado três vezes (worker FAIL, orquestrador PASS, revisor PASS). Isso é desperdício estrutural. Regras válidas a partir de 29/09:
+
+1. **Worker (DSH ou outro runtime com sandbox limitado) entrega código e checagens estáticas** — `tsc --noEmit`, `git diff --check`/whitespace, `node --check` — e registra o resultado honesto. Testes dinâmicos (Vitest, Playwright) **não entram no envelope do worker**.
+2. Check dinâmico que o worker não pode executar fica `not_run` com motivo ("execução única pelo orquestrador, fora do sandbox"), **nunca** `fail` por bloqueio de ambiente nem `pass` inventado.
+3. **A execução de Vitest/Playwright é responsabilidade única do orquestrador**, fora do sandbox do worker, no clone/workspace identificado, com comando e código de saída registrados no relatório H-04/entrega.
+4. **O revisor independente confere o log (saída/stderr sanitizados) e o diff; não reexecuta a suíte.** Reexecução só em risco alto (RLS/transação/auditoria) e apenas a fatia justificada, registrando o motivo.
+5. Em tarefa DSH, o briefing declara explicitamente: "testes dinâmicos serão executados pelo orquestrador fora do sandbox; o worker não deve tentar executá-los".
+
+## 8. Pacote de revisão e retomada por delta (mitigações E/F)
+
+1. **Pacote de revisão:** o revisor recebe somente critérios, diff completo, saída dos comandos já executados (com código de saída) e um resumo de estado de até 3 linhas quando afetar continuidade. Não recebe a narrativa do autor, o `context.md` completo nem o relatório H-04. Não relê `AGENTS.md`/`context.md` quando a tarefa não toca continuidade.
+2. **Proporcionalidade:** caso puro (ex.: função de domínio sem fronteira de confiança) = um revisor, conferência estática + logs, sem reexecução. Risco alto (RLS, transação, auditoria, dinheiro, Storage, integrações) justifica reexecução direcionada e revisão específica.
+3. **Retomada por delta:** em erro/retrabalho, reenviar ao mesmo worker somente o achado do revisor (arquivo/linha/condição), o trecho afetado e o que mudou de instrução. Não reenviar o briefing integral nem reler `AGENTS.md`/`context.md` na mesma tarefa (não mudaram desde o despacho).
+4. **Limite de tentativas:** duas tentativas de correção sem avanço verificável → interromper, diagnosticar e replanejar (regra §6 do plano); não repetir o ciclo indefinidamente.
+5. **Telemetria (G):** antes de novas rodadas comparativas, instrumentar a ponte para capturar ao menos tokens de entrada/saída e duração; sem telemetria, registrar "sem sinal de custo" como conclusão em vez de executar mais pares.

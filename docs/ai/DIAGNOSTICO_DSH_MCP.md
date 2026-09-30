@@ -2,6 +2,8 @@
 
 Data: 28/09/2026, America/Sao_Paulo. Escopo: configuração local do Codex/DSH. **Servidor instalado e protocolo verificado; recarga do cliente e execução real ainda pendentes.**
 
+Este arquivo preserva os fatos duráveis de protocolo e as causas do diagnóstico original. A cronologia posterior (credenciais, `READY`, H-03, H-04, bloqueio do Vitest no sandbox) está na fonte única [HISTORICO_DSH.md](HISTORICO_DSH.md).
+
 ## Causas verificadas
 
 1. `C:/Users/Alexs/.codex/config.toml` não continha `[mcp_servers.dsh]`. O cadastro em `model_providers.dsh-harness` descrevia um provedor de modelo e não registrava ferramentas MCP.
@@ -80,8 +82,8 @@ As nove verificações MCP foram executadas no arquivo preparado e repetidas no 
 
 ## Próxima ação
 
-Recarregar o aplicativo Codex para reconstruir as conexões e o catálogo MCP. Após reabrir esta tarefa, conferir `dsh_health` pela ferramenta nativa e então executar um teste curto explicitamente delimitado pela própria ferramenta `dsh_delegate`. Não substituir essa chamada por execução headless via shell quando o objetivo for delegar.
+Superada em 29/09: o cliente foi recarregado, `dsh_health` confirmou a rota e o piloto H-03 foi executado (ver [HISTORICO_DSH.md](HISTORICO_DSH.md)). O que permanece vigente: conferir `dsh_health` pela ferramenta nativa antes de delegar e usar somente `dsh_delegate` para delegar — não substituir por execução headless via shell.
 
-O Git do Comércio 360 foi confirmado: pasta `.git` inicializada, arquivos no index e branch `master` ainda sem primeiro commit. Não foi criado commit nem alterado o index nesta correção. Antes de trabalhos paralelos com worktrees, estabelecer o baseline versionado.
+O Git do Comércio 360 foi confirmado: pasta `.git` inicializada, arquivos no index e branch `master` ainda sem primeiro commit na data deste diagnóstico. O baseline `5977cdb` foi criado depois; antes de trabalhos paralelos com worktrees, manter um único escritor por tarefa.
 
 Fontes de configuração: [MCP no Codex](https://learn.chatgpt.com/docs/extend/mcp) e documentação local dos pacotes `@deepseek-ai/dsh`, `dsh-headless` e `dsh-base`. O protocolo instalado, e não um nome de pacote presumido, é a fonte para os argumentos da ferramenta.
