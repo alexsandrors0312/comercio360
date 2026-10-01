@@ -11,10 +11,24 @@ for (const file of [
   "seed.sql",
   "tests/fixtures.sql",
   "tests/context-fixtures.sql",
+  "migrations/202609300001_catalog.sql",
 ])
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
   );
+await db.exec(`
+  insert into public.product_categories(id,organization_id,name) values
+   ('10000000-0000-4000-8000-000000000101','10000000-0000-4000-8000-000000000001','Blusas');
+  insert into public.products(id,organization_id,category_id,name,description) values
+   ('10000000-0000-4000-8000-000000000201','10000000-0000-4000-8000-000000000001',
+    '10000000-0000-4000-8000-000000000101','Camiseta básica','Produto fictício do navegador');
+  insert into public.product_variants(id,organization_id,product_id,sku,color,size) values
+   ('10000000-0000-4000-8000-000000000301','10000000-0000-4000-8000-000000000001',
+    '10000000-0000-4000-8000-000000000201','CAM-AZ-P','Azul','P');
+  insert into public.product_prices(organization_id,store_id,variant_id,amount) values
+   ('10000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000011',
+    '10000000-0000-4000-8000-000000000301',59.90);
+`);
 const tokens = new Map();
 const identities = {
   "gerente.aurora@example.test": "a",
@@ -105,17 +119,136 @@ createServer((request, response) => {
           ]);
           return reply(response, 200, null);
         }
+        const catalogRpcArguments = {
+          catalog_search_products: [
+            "p_organization_id",
+            "p_store_id",
+            "p_query",
+            "p_category_id",
+            "p_active",
+            "p_limit",
+            "p_offset",
+          ],
+          catalog_create_category: [
+            "p_organization_id",
+            "p_store_id",
+            "p_name",
+          ],
+          catalog_update_category: [
+            "p_organization_id",
+            "p_store_id",
+            "p_category_id",
+            "p_expected_revision",
+            "p_name",
+            "p_active",
+          ],
+          catalog_create_product: [
+            "p_organization_id",
+            "p_store_id",
+            "p_name",
+            "p_description",
+            "p_category_id",
+            "p_sku",
+            "p_color",
+            "p_size",
+            "p_barcode",
+            "p_idempotency_key",
+          ],
+          catalog_update_product: [
+            "p_organization_id",
+            "p_store_id",
+            "p_product_id",
+            "p_expected_revision",
+            "p_name",
+            "p_description",
+            "p_category_id",
+            "p_active",
+          ],
+          catalog_create_variant: [
+            "p_organization_id",
+            "p_store_id",
+            "p_product_id",
+            "p_sku",
+            "p_color",
+            "p_size",
+            "p_barcode",
+          ],
+          catalog_update_variant: [
+            "p_organization_id",
+            "p_store_id",
+            "p_variant_id",
+            "p_expected_revision",
+            "p_sku",
+            "p_color",
+            "p_size",
+            "p_barcode",
+            "p_active",
+          ],
+          catalog_set_price: [
+            "p_organization_id",
+            "p_store_id",
+            "p_variant_id",
+            "p_expected_revision",
+            "p_amount",
+          ],
+        };
+        const rpcName = url.pathname.replace("/rest/v1/rpc/", "");
+        const argumentNames = catalogRpcArguments[rpcName];
+        if (url.pathname.startsWith("/rest/v1/rpc/") && argumentNames) {
+          const placeholders = argumentNames
+            .map((_, index) => "$" + (index + 1))
+            .join(",");
+          const values = argumentNames.map((name) => body[name] ?? null);
+          const result = await db.query(
+            "select * from public." + rpcName + "(" + placeholders + ")",
+            values,
+          );
+          return reply(response, 200, result.rows);
+        }
         const table = url.pathname.split("/").at(-1);
-        if (!["organizations", "stores", "memberships"].includes(table))
+        if (
+          ![
+            "organizations",
+            "stores",
+            "memberships",
+            "product_categories",
+            "products",
+            "product_variants",
+            "product_prices",
+            "product_images",
+          ].includes(table)
+        )
           return reply(response, 404, { message: "Unknown fixture route" });
         let query = `select * from public.${table}`;
         const values = [];
         const clauses = [];
-        for (const field of ["user_id", "active"]) {
+        for (const field of [
+          "user_id",
+          "active",
+          "organization_id",
+          "id",
+          "product_id",
+          "store_id",
+          "variant_id",
+        ]) {
           const value = url.searchParams.get(field);
           if (value?.startsWith("eq.")) {
             values.push(value.slice(3));
             clauses.push(`${field}=$${values.length}`);
+          } else if (value?.startsWith("in.(") && value.endsWith(")")) {
+            const candidates = value.slice(4, -1).split(",");
+            if (
+              candidates.length < 1 ||
+              candidates.length > 100 ||
+              candidates.some(
+                (candidate) => !/^[0-9a-f-]{36}$/i.test(candidate),
+              )
+            )
+              return reply(response, 400, {
+                message: "Invalid fixture filter",
+              });
+            values.push(candidates);
+            clauses.push(`${field}=any($${values.length}::uuid[])`);
           }
         }
         if (clauses.length) query += " where " + clauses.join(" and ");

@@ -1,6 +1,6 @@
 # Pacote 002 — proposta de Catálogo de Produtos
 
-Data: 26/09/2026. **Proposta para revisão; implementação ainda não aprovada.**
+Data: 26/09/2026. **Escopo integral aceito pelo responsável em 30/09/2026 para implementação no checkout isolado codex/catalogo-002.** A decisão arquitetural está em [ADR-0010](adr/ADR-0010-catalogo-produtos.md); publicação e operações hospedadas não foram autorizadas.
 
 Esta especificação dá continuidade à seção 15C de `architecture/BASE_v0.3.md` e às decisões de `DECISOES_PILOTO.md`. Não altera a fundação 0.1.1, o banco hospedado ou a evidência H1. O parecer da fundação está em `REVISAO_ARQUITETURAL_H1.md`.
 
@@ -26,7 +26,7 @@ Estoque, fornecedores, compras, PDV, descontos, custos/margens, pagamentos, fisc
 
 | Entidade | Escopo e campos essenciais | Integridade |
 | --- | --- | --- |
-| `product_categories` | organização, nome, ativo, datas | Nome não vazio; unicidade do nome normalizado na organização, inclusive inativos |
+| `product_categories` | organização, nome, ativo, datas | Nome normalizado de 1 a 120 caracteres; unicidade na organização, inclusive inativos |
 | `products` | organização, categoria opcional, nome, descrição, ativo, datas | Categoria da mesma organização; nome 1–120 caracteres, descrição até 2.000 |
 | `product_variants` | organização, produto, SKU, cor, tamanho, unidade, código de barras opcional, ativo, datas | Produto da mesma organização; SKU 1–64 caracteres, único por organização após trim/normalização; código de barras tratado como texto para preservar zeros |
 | `product_prices` | organização, loja, variante, valor BRL, datas | Loja e variante da mesma organização; uma linha por loja/variante; valor decimal não negativo |
@@ -40,7 +40,7 @@ Valores monetários entram como texto decimal validado, persistem em `numeric(12
 
 ## Permissões e isolamento
 
-Proposta inicial, a confirmar pelo produto antes da implementação:
+Matriz de papéis aceita pelo responsável em 30/09/2026:
 
 | Papel do vínculo ativo | Consultar catálogo e preço em loja autorizada | Criar, editar e desativar | Alterar imagem |
 | --- | --- | --- | --- |
@@ -99,6 +99,6 @@ Reversão após dados: preferir migração corretiva e desativação da funciona
 
 ## Decisão necessária
 
-A aprovação deve confirmar este escopo, os campos de variantes, a matriz de papéis, preços por loja e imagem privada. A loja participante ainda precisa ser identificada antes da validação operacional com o comerciante; isso não pode ser inferido das lojas fictícias do seed. Fiscal/maquininha permanece levantamento para pacote futuro.
+O aceite de 30/09 confirmou este escopo, os campos de variantes, a matriz de papéis, preços por loja e imagem privada. A loja participante ainda precisa ser identificada antes da validação operacional com o comerciante; isso não pode ser inferido das lojas fictícias do seed. Fiscal/maquininha permanece levantamento para pacote futuro.
 
-O parecer H1 pode liberar a especificação deste pacote sem autorizar publicação. A implementação só começa depois do aceite desta proposta e do registro arquitetural próprio. HTTPS/cookies, login anônimo, backups e produção separada continuam sujeitos às condições da revisão H1.
+O parecer H1 pode liberar a especificação deste pacote sem autorizar publicação. A implementação foi autorizada após o aceite desta proposta e o registro do ADR-0010 no checkout isolado. HTTPS/cookies, login anônimo, backups e produção separada continuam sujeitos às condições da revisão H1.

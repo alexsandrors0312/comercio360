@@ -1,5 +1,12 @@
 # Changelog
 
+## 01/10/2026 — Catálogo 002 implementado localmente
+
+- Proposta integralmente aceita e registrada no ADR-0010. Categorias, produtos, variantes com SKU, pesquisa, filtros, preço por loja e capa privada opcional foram integrados à aba Produtos, com permissões por papel e loja.
+- Três migrações incrementais acrescentam integridade por tenant, RLS, RPCs, revisão concorrente, idempotência, auditoria, Storage privado, atestação HMAC e ledger para limpeza. O runtime web usa sessão/chave pública; manutenção de objetos é processo administrativo separado.
+- Testes locais de domínio, SQL PGlite, aplicação, imagem e navegador acrescentados. Resultados e limites atuais ficam em [ENTREGA_CATALOGO_002](docs/ENTREGA_CATALOGO_002.md). Migrações/Storage reais não foram executados; os 36 PASS hospedados de H1 permanecem históricos.
+- `npm audit` detectou alerta crítico no Next 16.3.4 e alerta alto em `brace-expansion` de desenvolvimento. Next e `eslint-config-next` foram fixados em 16.3.8; o lockfile recebeu a correção de `brace-expansion`. Auditoria completa: zero vulnerabilidades após atualização e repetição dos gates.
+
 ## 29/09/2026 — Par sintético H-04 S1 revisado
 
 - S1 DSH expirou na primeira chamada de 600000 ms, deixando apenas migração corretiva e teste permitidos. A retomada somente leitura foi preservada como rejeitada por remapear S1-V1/V2. Duas revisões cegas apontaram dependências de ordem no teste; o DSH separou RED/GREEN e passou a criar banco corrigido por cenário. O JSON final passou no validador, mantendo FAIL no Vitest interno do sandbox. Fora dele, teste focado 7/7, cenário isolado 1/1, ordem embaralhada 7/7, suíte histórica 13/13 e TypeScript passaram; revisão final sem achados bloqueantes.

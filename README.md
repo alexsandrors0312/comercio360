@@ -1,10 +1,16 @@
-# Comércio 360 — Pacote corretivo 001.1
+# Comércio 360 — Fundação 001.1 e Catálogo 002 local
 
 Para retomar o desenvolvimento, leia primeiro o [contexto permanente](context.md) e atualize-o ao concluir cada mudança relevante.
 
-O [plano de desenvolvimento por IA](docs/ai/PLANO_ORQUESTRACAO.md) mapeia módulos, agentes, skills e etapas do harness. Há seis perfis em `.codex/agents/`, seis skills em `.agents/skills/` e um [validador local dos contratos](docs/ai/CONTRATOS_HARNESS.md). O [piloto H-03](docs/ai/RELATORIO_H03.md) obteve revisão DSH via MCP, reproduziu três achados e integrou correções com 14 testes de harness aprovados. A [integração com VS Code](docs/ai/INTEGRACAO_VSCODE.md) inclui Codex, DSH Sidebar e Antigravity, que respondeu a um teste mínimo com Gemini 3.1 Pro Low selecionado. A [avaliação H-04](docs/ai/AVALIACAO_H04.md) usa moldes sintéticos e [registro de execução](docs/ai/RELATORIO_H04.md): os pares D1 e S1 Codex × DSH passaram nos invariantes locais e revisões independentes; U1 DSH está em execução, e U1 Codex aguarda o gate E2E original. Não há comparação confiável de custo.
+O [plano de desenvolvimento por IA](docs/ai/PLANO_ORQUESTRACAO.md) mapeia módulos, agentes, skills e etapas do harness. Há seis perfis em `.codex/agents/`, seis skills em `.agents/skills/` e um [validador local dos contratos](docs/ai/CONTRATOS_HARNESS.md). O [piloto H-03](docs/ai/RELATORIO_H03.md) obteve revisão DSH via MCP, reproduziu três achados e integrou correções com 14 testes de harness aprovados. A [integração com VS Code](docs/ai/INTEGRACAO_VSCODE.md) inclui Codex, DSH Sidebar e Antigravity, que respondeu a um teste mínimo com Gemini 3.1 Pro Low selecionado. A [avaliação H-04](docs/ai/AVALIACAO_H04.md) usa moldes sintéticos e [registro de execução](docs/ai/RELATORIO_H04.md): os pares D1 e S1 passaram nos invariantes locais; este worktree contém o registro anterior à conclusão sintética de U1 e à telemetria G da árvore principal. Não há comparação confiável de custo.
 
-Fundação executável em Next.js 16, TypeScript e PostgreSQL/Supabase. Interface em português, login por e-mail/senha, seleção de empresa/loja autorizada, políticas RLS, auditoria e painel com dados exclusivamente fictícios. Os demais módulos exibem **Em construção**.
+Fundação executável em Next.js 16, TypeScript e PostgreSQL/Supabase. Interface em português, login por e-mail/senha, seleção de empresa/loja autorizada, políticas RLS, auditoria e painel com dados exclusivamente fictícios. O Catálogo 002 está implementado nesta branch para validação local; os demais módulos comerciais exibem **Em construção**. O estado e os gates desta branch estão no [relatório do Catálogo](docs/ENTREGA_CATALOGO_002.md).
+
+## Catálogo 002 nesta branch
+
+`/app/produtos` oferece categorias, produtos com primeira variante e SKU, variantes adicionais, pesquisa e filtros, preço por loja e capa privada opcional. Proprietário e gerente podem editar; caixa, estoquista e comprador autorizados podem consultar. Toda leitura e escrita exige vínculo, papel e loja ativa autorizada. O catálogo é comum à organização; o preço mostrado pertence à loja selecionada. As três migrações `202609300001_catalog.sql`, `202609300002_catalog_storage.sql` e `202609300003_catalog_image_attestation.sql` são incrementais e ainda não foram aplicadas em Supabase hospedado nesta entrega.
+
+Para testar capas em um ambiente próprio, aplique as migrações em ordem e provisione **a mesma chave aleatória de 32 bytes** na linha única de `private.catalog_image_attestation_key.secret` e na variável de runtime `CATALOG_IMAGE_ATTESTATION_KEY` em base64, por canal seguro. A migração não inclui chave; sem ela o POST de capa responde 503. Nunca coloque essa chave ou `SUPABASE_SECRET_KEY` no repositório, em variáveis `NEXT_PUBLIC_*` ou na conversa. Remoções e falhas de upload deixam objetos rastreáveis para limpeza após carência de duas horas; um operador pode executar `node scripts/catalog-image-cleanup.mjs` em processo separado, com `ALLOW_CATALOG_IMAGE_CLEANUP=yes`, URL do projeto, `CONFIRM_SUPABASE_PROJECT_URL` conferida independentemente e `SUPABASE_SECRET_KEY` temporária. Não importe o script no runtime web. A homologação em Storage real e o provisionamento dessa chave ainda não foram executados.
 
 ## Executar
 
@@ -21,9 +27,9 @@ Abra [demonstração local](http://127.0.0.1:3000/demo). Ela funciona sem conta 
 ## Conectar um Supabase de desenvolvimento
 
 1. Crie ou use um projeto **de desenvolvimento** vazio, com autenticação por e-mail/senha. Não execute o seed em produção.
-2. Aplique, em ordem, `supabase/migrations/202609070001_foundation.sql` e `supabase/migrations/202609080001_tenant_key_guards.sql`. Em um ambiente que já recebeu o Pacote 001, aplique somente a segunda migração. Com a CLI vinculada ao projeto correto, use `supabase db push`. Cada migração é transacional e aplicada uma única vez; a migração original foi preservada.
+2. Em um projeto novo, aplique as migrações da pasta em ordem: as duas da fundação (`202609070001` e `202609080001`) e as três do Catálogo (`202609300001` a `202609300003`). Em um projeto já migrado, aplique apenas as migrações ainda pendentes. Confira a vinculação da CLI e o histórico de migrações antes de `supabase db push`; não repare nem reaplique migrações para contornar divergências. A aplicação hospedada do Catálogo ainda não foi ensaiada nesta branch.
 3. Execute `supabase/seed.sql` nesse mesmo banco para criar duas empresas e três lojas fictícias.
-4. Preencha em `.env.local` somente `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, usando os valores públicos do projeto. Reinicie o servidor.
+4. Preencha em `.env.local` `NEXT_PUBLIC_SUPABASE_URL` e `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`, usando os valores públicos do projeto. Para o POST de capa, configure adicionalmente `CATALOG_IMAGE_ATTESTATION_KEY` pelo processo seguro descrito acima. Reinicie o servidor.
 5. Crie os usuários fictícios com o script abaixo ou provisione usuários, perfis, vínculos e acessos às lojas por um processo administrativo confiável. A aplicação não oferece cadastro público nem criação de permissões.
 6. Desative cadastro público no Supabase hospedado, mantenha limitação de tentativas de login e configure URLs autorizadas. O `config.toml` já desativa cadastro no ambiente local.
 
@@ -98,7 +104,7 @@ Uma restrição adicional rejeita snapshots `old_value`/`new_value` que declarem
 | `tests`               | Domínio, RLS e contratos E2E                            |
 | `docs`                | Arquitetura, ADRs, operação e resultados                |
 
-O banco libera leitura conforme vínculo e escopo. Escritas administrativas são restritas a provisionamento confiável; a única operação exposta ao usuário é a seleção autorizada de loja com auditoria. Papéis iniciais são registrados no vínculo, sem CRUD de permissões nem bypass de proprietário. Novas ações exigem contratos e políticas próprios.
+O banco libera leitura conforme vínculo e escopo. O provisionamento de identidade e permissões permanece administrativo; a seleção de loja e as mutações específicas do Catálogo são as operações expostas aos papéis autorizados, com auditoria. Papéis iniciais são registrados no vínculo, sem CRUD de permissões nem bypass de proprietário. Novas ações exigem contratos e políticas próprios.
 
 `organizations` é a raiz do tenant; `profiles` representa identidade global e se vincula a `auth.users`. As demais tabelas de negócio possuem `organization_id`. As chaves compostas impedem vincular loja de outra empresa, inclusive em gravações privilegiadas. Desative lojas/vínculos em vez de excluir entidades referenciadas pela auditoria.
 
@@ -109,7 +115,7 @@ O manifesto permite apresentação como aplicativo em navegadores compatíveis. 
 - Migrações e seed conferidos no Supabase descartável: **36 verificações hospedadas PASS**, incluindo autenticação, RLS, revogação, auditoria, chaves estruturais e expiração natural.
 - A revisão arquitetural H1 de 26/09/2026 registra **aprovação com condições para continuidade do desenvolvimento**. O ZIP foi comparado com a pasta atual e a evidência hospedada original foi preservada. Veja [parecer atual](docs/REVISAO_ARQUITETURAL_H1.md), [relatório histórico H1](docs/ENTREGA_H1.md) e [execução manual sem credenciais no chat](docs/OPERACAO_H1.md).
 - Nome Comércio 360 e nicho moda/acessórios aprovados; piloto de uma loja, ainda a identificar. [Demais decisões aprovadas](docs/DECISOES_PILOTO.md) orientam etapas futuras e não ampliam o escopo deste gate.
-- A revisão libera a especificação do Pacote 002; a [proposta de Catálogo de Produtos](docs/PACOTE_002_CATALOGO_PROPOSTA.md) ainda exige aceite próprio antes da implementação. O operador ainda não conferiu login anônimo no painel. HTTPS/cookies, backups/restauração e produção separada permanecem condições antes de implantação e dados reais.
+- O [Catálogo 002](docs/PACOTE_002_CATALOGO_PROPOSTA.md) foi aceito e implementado localmente nesta branch. O operador ainda não conferiu login anônimo no painel. HTTPS/cookies, backups/restauração, produção separada e homologação hospedada do Catálogo permanecem condições antes de implantação e dados reais.
 - Correção de Vitest e @vitest/mocker para 4.1.11: [H1-DEP-01](docs/CORRECAO_TECNICA_H1.md).
 - Publicação e operação com dados reais não fazem parte desta entrega local.
 
