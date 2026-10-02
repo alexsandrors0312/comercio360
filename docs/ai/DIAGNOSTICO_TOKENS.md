@@ -2,6 +2,10 @@
 
 Data: 29/09/2026. Escopo: identificar onde o fluxo atual gasta tokens em excesso e propor mitigação. Base: `context.md`, `AGENTS.md`, `PLANO_ORQUESTRACAO.md`, `RELATORIO_H04.md`, `AVALIACAO_H04.md`, `CONTRATOS_HARNESS.md`, JSONs de resultado e o estado real da pasta. Estimativas de tokens são ordem de grandeza (~4 bytes/token para texto pt-BR), não telemetria.
 
+## Ressalva da auditoria de 29/09/2026
+
+O diagnóstico orienta redução de contexto, mas não mede consumo faturado. O valor de ~170.000 tokens não tem contagem de leituras que o sustente: 12 × 6.800 = 81.600 tokens aproximados, ainda sem cache e com tamanho de contexto variável. Não usar nenhum desses números como consumo comprovado ou economia obtida. A–F foram documentadas e parcialmente implementadas; aplicação operacional permanece a validar. Regras vigentes: CONTRATOS_HARNESS §§2/7/8; retomada: CONTINUACAO_NOVO_CHAT.md. RepoMap é heurística de linhas, não Tree-sitter, e complementa (não substitui) envelopes/evidência.
+
 ## Sorvedouros encontrados (por ordem de impacto)
 
 ### 1. `context.md` virou diário corrido, e é relido inteiro a cada tarefa
@@ -50,14 +54,14 @@ Entregar ao revisor só: critérios + diff + saída dos comandos já rodados (n�
 Em vez de reenviar o briefing completo, enviar: achado do revisor (arquivo/linha/condição) + trecho afetado. Não re-ler `AGENTS.md`/`context.md` na retomada da mesma tarefa (não mudaram). Aplicar o limite do plano §6: duas tentativas sem avanço → diagnosticar e replanejar, não repetir.
 
 **G. Telemetria antes de novas rodadas comparativas.**
-Antes de executar U1-DSH ou repetir pares, instrumentar a ponte/configuração para capturar ao menos tokens de entrada/saída e duração. Sem isso, mais rodadas gastam sem gerar o sinal que a H-04 promete. Se não houver telemetria, registrar "sem sinal de custo" como conclusão da H-04 em vez de mais execuções.
+A [ponte instrumentada](TELEMETRIA_G.md) mede duração monotônica e agrega tokens informados pelo provedor no turno raiz DSH; campos ausentes ficam `null`. O código foi instalado e testado com CLI simulado em 30/09, mas a conexão MCP desta conversa ainda precisa de recarga e amostra real. A rota Codex e o custo por tarefa continuam sem medição equivalente. Até fechar essas lacunas, a conclusão de custo da H-04 é "sem sinal de custo"; não iniciar novo par para inferi-lo.
 
 ## Próximo passo sugerido
 
 1. Aplicar **A** e **B** (mudança só documental, baixo risco, retorno imediato). — **Feito em 29/09.**
 2. Aplicar **D** antes de concluir o braço U1-DSH. — **Feito em 29/09** (CONTRATOS §7; adendo em AVALIACAO_H04).
 3. Aplicar **C/E/F** na próxima tarefa de worker. — **Feito em 29/09** (índice H04_RESULTADOS_INDICE.md; CONTRATOS §2-forma enxuta e §8).
-4. Decidir **G** com o responsável antes de mais pares comparativos. — **Pendente.**
+4. Implementar **G** antes de mais pares comparativos. — **Ponte DSH instalada; validação de uso real após recarga e telemetria Codex pendentes.**
 
 ## Estado das mitigações (29/09/2026)
 
@@ -66,4 +70,4 @@ Antes de executar U1-DSH ou repetir pares, instrumentar a ponte/configuração p
 - **RepoMap.** `scripts/harness/repomap.mjs` (Node puro, sem dependências — o lockfile protegido não foi tocado) gera `docs/ai/REPOMAP.md` via `npm run repomap`: ~10,5 KB (~2,6 k tokens) com assinaturas de código, migrações SQL e nomes de teste. Acima da estimativa de 1–2 k por incluir SQL/testes; substitui a varredura da árvore.
 - **C.** `docs/ai/H04_RESULTADOS_INDICE.md` resume os 8 JSONs (estados, checks, critérios, SHAs) — leitura de ~3 KB no lugar de ~54,6 KB; os JSONs permanecem intocados como evidência. Forma enxuta obrigatória para envelopes novos em CONTRATOS §2.
 - **D/E/F.** CONTRATOS §7–§8: testes dinâmicos fora do sandbox com execução única pelo orquestrador; revisor confere log; pacote de revisão leve; retomada por delta; limite de duas tentativas sem avanço. Adendo aplicável a U1-DSH em AVALIACAO_H04.
-- **G.** Aguarda decisão do responsável sobre instrumentar a ponte antes de novas rodadas comparativas.
+- **G.** Decisão autorizada em 30/09; ponte e overlay instalados, 15/15 testes de harness. Captura real e rota Codex pendentes; ver [TELEMETRIA_G.md](TELEMETRIA_G.md).

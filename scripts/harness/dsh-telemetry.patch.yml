@@ -1,0 +1,10 @@
+# Applied only by the Comércio 360 MCP bridge, after the stock headless bundle.
+# A targeted patch changes config only; disable the stock row and insert the local overlay.
+- id: headless-runner
+  disabled: true
+- insert:
+    - id: c360-telemetry-runner
+      name: 'file:///C:/Users/Alexs/Desktop/Comercio360/scripts/harness/dsh-telemetry-headless.mjs'
+      inject: [headlessStartup]
+      config:
+        task: !!js ctx.headlessStartup.task

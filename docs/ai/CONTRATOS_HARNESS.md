@@ -93,9 +93,9 @@ Cada artefato informa caminho, tipo e hash. Cada arquivo alterado informa opera�
 
 Os 8 JSONs históricos de H-03/H-04 somam 54.646 B e repetem `evidence_refs`, `cwd` e blocos de check idênticos; ler o [índice leve](H04_RESULTADOS_INDICE.md) em vez dos JSONs completos. Em **novos** resultados:
 
-1. Cada critério cita **um** artefato de evidência — o que prova aquele critério; não repetir a mesma lista em todos os critérios. `evidence_refs` vazio só quando verdadeiro.
-2. Checks que reproduzem o mesmo comando em arquivos diferentes resumem as diferenças num único bloco ou numa linha `assertions`; não duplicar `procedure`/`cwd`/`executed_at` idênticos.
-3. Em retomada da mesma tarefa, o resultado novo não repete blocos de check inalterados da rodada anterior — informa só o delta (IDs alterados e o motivo).
+1. Cada critério cita o menor conjunto suficiente de evidências; usar mais de uma referência quando necessário. Evitar listas copiadas sem pertinência. `evidence_refs` vazio só quando verdadeiro.
+2. Manter IDs, procedimentos e campos obrigatórios do esquema 0.1. Reutilizar referências aos logs em vez de copiar conteúdo; não fundir checks distintos nem remapear IDs para passar validação.
+3. O transporte de uma correção pode conter só o delta. O resultado final persistido continua autocontido e válido no esquema 0.1, com todos os critérios e checks previstos (inclusive `not_run` justificado). O validador não resolve herança entre resultados. Evidência anterior só é reutilizável se a revisão testada continuar aplicável.
 4. Resumo (`summary`) limitado ao essencial (~150 palavras); detalhes ficam em `findings`/`risks` quando necessários.
 5. JSONs históricos são evidência congelada: **não reescrevê-los** para aplicar esta forma; ela vale daqui em diante.
 
@@ -136,20 +136,21 @@ Atualização de 28/09 após o [diagnóstico real da ponte](DIAGNOSTICO_DSH_MCP.
 
 Se o retorno não puder ser interpretado no contrato, rejeitar o status de conclusão e pedir correção limitada da estrutura ou registrar bloqueio. Não declarar validação de saída estruturada nativa do DSH: a ponte retorna texto final e o controlador ainda precisa validá-lo. Modelo/telemetria não expostos são registrados como indisponíveis. O `dsh_health` respondeu OK em 29/09. A cronologia de falhas (`DSH_RUN_FAILED`, autenticação, `READY`, H-03, H-04) está na fonte única [HISTORICO_DSH.md](HISTORICO_DSH.md). O modelo efetivo, tokens e custo não foram expostos pela ponte.
 
-## 7. Execução de testes fora do sandbox (mitigação D — fail-fast)
+## 7. Testes externos ao worker DSH (mitigação D)
 
 Motivação: em H-04, o Vitest falhou dentro do sandbox do worker DSH (`spawn EPERM` em D1; `ReferenceError: require is not defined` em S1), e o mesmo teste foi executado três vezes (worker FAIL, orquestrador PASS, revisor PASS). Isso é desperdício estrutural. Regras válidas a partir de 29/09:
 
-1. **Worker (DSH ou outro runtime com sandbox limitado) entrega código e checagens estáticas** — `tsc --noEmit`, `git diff --check`/whitespace, `node --check` — e registra o resultado honesto. Testes dinâmicos (Vitest, Playwright) **não entram no envelope do worker**.
-2. Check dinâmico que o worker não pode executar fica `not_run` com motivo ("execução única pelo orquestrador, fora do sandbox"), **nunca** `fail` por bloqueio de ambiente nem `pass` inventado.
-3. **A execução de Vitest/Playwright é responsabilidade única do orquestrador**, fora do sandbox do worker, no clone/workspace identificado, com comando e código de saída registrados no relatório H-04/entrega.
-4. **O revisor independente confere o log (saída/stderr sanitizados) e o diff; não reexecuta a suíte.** Reexecução só em risco alto (RLS/transação/auditoria) e apenas a fatia justificada, registrando o motivo.
-5. Em tarefa DSH, o briefing declara explicitamente: "testes dinâmicos serão executados pelo orquestrador fora do sandbox; o worker não deve tentar executá-los".
+1. **Worker DSH entrega código e checagens estáticas** aplicáveis (tipos, whitespace, sintaxe). O envelope conserva os IDs dos gates dinâmicos com `owner: orchestrator`; o worker recebe instrução explícita para não executar Vitest/Playwright. Mudança de responsabilidade exige revisão identificada do contrato, sem mudar o significado do check.
+2. **Não tentado = `not_run`**, com motivo. Comando tentado que terminou em erro = `fail`, inclusive por ambiente; registrar a causa separadamente. Nunca reclassificar falhas históricas como não execução ou sucesso.
+3. O orquestrador usa executor local autorizado, separado do sandbox do worker. Isso não autoriza desativar isolamento: aplicar as permissões vigentes e tratar restrições concretas quando ocorrerem.
+4. Uma execução canônica por candidato e ambiente. Reexecutar apenas a fatia afetada por mudança, evidência ausente/inválida, flakiness ou achado concreto, registrando motivo. Não repetir automaticamente entre worker, orquestrador e revisor.
+5. Log sanitizado com comando, cwd, data, ambiente, hash dos arquivos/commit testados, stdout, stderr e código de saída. Separar códigos do runner e do wrapper; preservar falhas de cleanup. Vincular resultado e log por referência/hash, sem copiar o log no JSON.
+6. O revisor confere código pertinente, critérios, diff e logs. Pode solicitar ou reproduzir teste direcionado por risco alto ou dúvida concreta na evidência; explica o motivo. Ausência de reexecução não obriga a aceitar evidência insuficiente.
 
 ## 8. Pacote de revisão e retomada por delta (mitigações E/F)
 
-1. **Pacote de revisão:** o revisor recebe somente critérios, diff completo, saída dos comandos já executados (com código de saída) e um resumo de estado de até 3 linhas quando afetar continuidade. Não recebe a narrativa do autor, o `context.md` completo nem o relatório H-04. Não relê `AGENTS.md`/`context.md` quando a tarefa não toca continuidade.
+1. **Pacote leve:** contrato/critério, base e candidato identificados, diff completo, logs de §7 e resumo de estado de até três linhas. Acrescentar arquivos completos ou invariantes que a revisão exigir. RepoMap localiza símbolos; não comprova comportamento nem substitui evidência/contrato. Novo chat ou novo agente cumpre AGENTS/context e skill aplicável uma vez; pacote leve não dispensa instruções obrigatórias.
 2. **Proporcionalidade:** caso puro (ex.: função de domínio sem fronteira de confiança) = um revisor, conferência estática + logs, sem reexecução. Risco alto (RLS, transação, auditoria, dinheiro, Storage, integrações) justifica reexecução direcionada e revisão específica.
-3. **Retomada por delta:** em erro/retrabalho, reenviar ao mesmo worker somente o achado do revisor (arquivo/linha/condição), o trecho afetado e o que mudou de instrução. Não reenviar o briefing integral nem reler `AGENTS.md`/`context.md` na mesma tarefa (não mudaram desde o despacho).
+3. **Delta:** na mesma sessão com contexto preservado, enviar achado (arquivo/linha/condição), trecho afetado e instrução alterada. Uma nova chamada MCP pode iniciar sessão nova: não presumir memória do worker. Nesse caso incluir cápsula mínima com objetivo, revisão, base, escopo, invariantes, critérios e ponteiros. Evitar releitura na mesma tarefa quando fontes e instruções não mudaram.
 4. **Limite de tentativas:** duas tentativas de correção sem avanço verificável → interromper, diagnosticar e replanejar (regra §6 do plano); não repetir o ciclo indefinidamente.
-5. **Telemetria (G):** antes de novas rodadas comparativas, instrumentar a ponte para capturar ao menos tokens de entrada/saída e duração; sem telemetria, registrar "sem sinal de custo" como conclusão em vez de executar mais pares.
+5. **Telemetria G:** antes de novos pares voltados a custo, registrar tokens de entrada/saída, duração e fonte por tarefa. A ponte DSH instrumentada em 30/09 expõe `C360_TELEMETRY_V1` e JSONL sanitizado; uma chamada real confirmou uso do provedor e duração, ver [TELEMETRIA_G.md](TELEMETRIA_G.md). `input_tokens` inclui cache (`totalTokens - outputTokens`), `output_tokens` inclui eventual raciocínio, e ausência de uso é `null`, nunca zero. A duração mede a chamada ao CLI; o custo permanece `null`. Cobertura de subagentes e medição equivalente da rota Codex ainda faltam. Sem elas, conclusão = “sem sinal de custo”; não repetir pares para tentar inferir economia. Estas regras dependem da aplicação pelo orquestrador; uma amostra do provedor não prova cobertura de todo o fluxo.

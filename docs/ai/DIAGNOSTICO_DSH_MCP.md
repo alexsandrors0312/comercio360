@@ -2,7 +2,7 @@
 
 Data: 28/09/2026, America/Sao_Paulo. Escopo: configuração local do Codex/DSH. **Servidor instalado e protocolo verificado; recarga do cliente e execução real ainda pendentes.**
 
-Este arquivo preserva os fatos duráveis de protocolo e as causas do diagnóstico original. A cronologia posterior (credenciais, `READY`, H-03, H-04, bloqueio do Vitest no sandbox) está na fonte única [HISTORICO_DSH.md](HISTORICO_DSH.md).
+Este arquivo preserva os fatos duráveis de protocolo e as causas do diagnóstico original. A cronologia posterior (credenciais, `READY`, H-03, H-04, bloqueio do Vitest no sandbox) está na fonte única [HISTORICO_DSH.md](HISTORICO_DSH.md). A instrumentação posterior é descrita em [TELEMETRIA_G.md](TELEMETRIA_G.md); as tabelas abaixo registram o estado histórico da ponte anterior.
 
 ## Causas verificadas
 

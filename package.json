@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run --configLoader runner",
-    "test:harness": "node --test tests/harness-contract.test.mjs && node scripts/harness/check-skills.mjs",
+    "test:harness": "node --test tests/harness-contract.test.mjs tests/harness-telemetry.test.mjs && node scripts/harness/check-skills.mjs",
     "repomap": "node scripts/harness/repomap.mjs",
     "test:e2e": "playwright test",
     "check": "npm run lint && npm run typecheck && npm test && npm run build",

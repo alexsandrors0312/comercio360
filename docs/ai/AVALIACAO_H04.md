@@ -1,6 +1,6 @@
 # H-04 — protocolo de avaliação comparativa
 
-Estado em 29/09/2026: **protocolo preparado; pares D1 e S1 executados e revisados; U1 em andamento**. O [registro de execução](RELATORIO_H04.md) separa preparação, tentativas descartadas, resultados revisados e trabalho pendente; o [índice leve](H04_RESULTADOS_INDICE.md) resume os 8 JSONs. O Antigravity respondeu a um teste mínimo com `Gemini 3.1 Pro Low` selecionado, e o MCP DSH respondeu `READY`. Esses testes não medem qualidade de engenharia. O piloto H-03 foi integrado na base `4a800961b3503f143fcf0e940271326e2096f439`, após reprodução e correção dos três achados.
+Estado em 29/09/2026, com adendo em 30/09 UTC: **pares D1 e S1 executados e revisados; U1 aceito no gate funcional externo para H-04; runner original pendente**. O [registro de execução](RELATORIO_H04.md) separa preparação, tentativas descartadas, resultados revisados e trabalho pendente; o [índice leve](H04_RESULTADOS_INDICE.md) resume os JSONs históricos e o resultado U1 composto. O Antigravity respondeu a um teste mínimo com `Gemini 3.1 Pro Low` selecionado, e o MCP DSH respondeu `READY`. Esses testes não medem qualidade de engenharia. O piloto H-03 foi integrado na base `4a800961b3503f143fcf0e940271326e2096f439`, após reprodução e correção dos três achados.
 
 ## Unidade de comparação
 
@@ -22,9 +22,13 @@ Em S1, preservar as duas migrações históricas no projeto real e exigir corre�
 
 Depois do primeiro braço Codex, o Playwright passou o cenário novo, mas travou em `Terminating the WebServer` ao encerrar o Next no Windows. Uma configuração temporária fora do clone, com os mesmos testes, base URL, navegador, workers e retries e com servidores iniciados separadamente, obteve código de saída 0 para os dois cenários focados no menu e nas rotas protegidas. A suíte original ainda falha por uma asserção antiga que espera texto `404` visível na rota inexistente; uma consulta HTTP da cópia intacta retornou status 404 sem esse texto visível. Essa descoberta **posterior ao braço Codex** deve ser registrada como alteração operacional do protocolo, aplicada da mesma forma ao braço DSH e mantida separada do check original `U1-V1`. O wrapper temporário ainda falha ao encerrar automaticamente seus processos no Windows e não é uma ferramenta validada para uso geral. Não promover U1-V1 a PASS por causa do teste focado.
 
+### Adendo U1 de 30/09 UTC
+
+O executor temporário foi corrigido e aplicado aos dois braços. A suíte completa externa passou 6/6 em cada braço, inclusive a asserção de 404; o foco DSH passou 2/2. O cleanup usou fallback nos PIDs iniciados pelo próprio executor e liberou as portas. A captura canônica separa stdout/stderr, código do Playwright e código do wrapper. Essas execuções não reclassificam o FAIL histórico de U1-V1 nem comprovam o runner original com webServer. A revisão 2 mantém o ID original e aceita U1-V5 completo como gate funcional substitutivo somente para H-04; U1-V6 é foco complementar. O reparo do runner original fica como pendência de infraestrutura. Ver [relatório](RELATORIO_H04.md) e [logs](evidencias/h04-u1-2026-09-30/README.md).
+
 ### Adendo de mitigação de tokens (D/E/F) — aplicável a U1-DSH
 
-Conforme [CONTRATOS_HARNESS.md](CONTRATOS_HARNESS.md) §7–§8 e o [diagnóstico](DIAGNOSTICO_TOKENS.md): o envelope U1-DSH não inclui Vitest/Playwright; o worker entrega código e checagens estáticas (tsc, diff/whitespace, `node --check`). O orquestrador executa o harness externo de U1 (e a suíte completa quando deliberada) **uma única vez, fora do sandbox**, e registra comando/código de saída; o revisor confere o log, não reexecuta. Check dinâmico não executado no worker fica `not_run` com motivo. Retomadas enviam só o delta do achado, sem reler `AGENTS.md`/`context.md`, com limite de duas tentativas sem avanço (PLANO §6). O par U1 compara as rotas pelos mesmos gates, mas o check original `U1-V1` continua sendo gate do orquestrador, não do worker.
+Aplicar [CONTRATOS_HARNESS.md](CONTRATOS_HARNESS.md) §§2/7/8. Gates dinâmicos mantêm IDs e passam ao executor do orquestrador em revisão explícita do envelope; o worker registra `not_run` quando não tentou. Execução externa identifica candidato e logs; reexecuções exigem motivo. Novo agente cumpre a entrada obrigatória; deltas evitam repetição na mesma tarefa. U1-V1 original permanece FAIL; a alternativa focada não o substitui. Antes de retomar, consultar [checkpoint](CONTINUACAO_NOVO_CHAT.md), pois os clones conservam contratos antigos.
 
 ## Registro e decisão
 

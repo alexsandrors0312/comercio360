@@ -1,0 +1,2 @@
+warning: in the working copy of 'packages/ui/shell.tsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'tests/e2e/foundation.spec.ts', LF will be replaced by CRLF the next time Git touches it

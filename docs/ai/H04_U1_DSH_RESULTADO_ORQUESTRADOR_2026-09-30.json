@@ -1,0 +1,106 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-U1-DSH-01",
+  "contract_revision": 2,
+  "status": "ready_for_review",
+  "baseline_ref": "32416419132f4aa59b93a8ae95839e097af25064",
+  "actual_execution": {
+    "runtime": "dsh-headless (patch parcial); codex-orchestrator (delta e verificacoes)",
+    "model": null,
+    "reasoning": null
+  },
+  "summary": "Resultado composto pelo orquestrador após interrupcao do DSH, sem JSON final do worker. O patch parcial corrigiu aria-expanded; a revisao independente encontrou o link da marca sem fechamento, corrigido pelo orquestrador. TypeScript, diff e Playwright externo passaram. Para H-04, U1-V5 completo e o gate funcional substitutivo; U1-V1 original nao foi repetido no DSH e conserva o FAIL historico Codex.",
+  "artifacts": [
+    {
+      "path": "packages/ui/shell.tsx",
+      "type": "source",
+      "sha256": "e0bf7741290fa754d12e61c5069deb56f2775beacab6e91f9ef6e1195b177824"
+    },
+    {
+      "path": "tests/e2e/foundation.spec.ts",
+      "type": "test",
+      "sha256": "743fd82d582dbb98a921a4c6264fc0e641ff9d775ab079200e38ce6085b71165"
+    }
+  ],
+  "changed_files": [
+    { "path": "packages/ui/shell.tsx", "operation": "modified", "purpose": "Sincronizar aria-expanded e fechar o menu ao navegar pela marca." },
+    { "path": "tests/e2e/foundation.spec.ts", "operation": "modified", "purpose": "Cobrir estado, Escape, mouse, teclado, marca e overflow em 360 px." }
+  ],
+  "criteria": [
+    { "id": "U1-A1", "status": "pass", "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"] },
+    { "id": "U1-A2", "status": "pass", "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"] },
+    { "id": "U1-A3", "status": "pass", "evidence_refs": ["tests/e2e/foundation.spec.ts"] },
+    { "id": "U1-A4", "status": "pass", "evidence_refs": ["tests/e2e/foundation.spec.ts", "app/app/layout.tsx"] },
+    { "id": "U1-A5", "status": "pass", "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"] },
+    { "id": "U1-A6", "status": "pass", "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"] }
+  ],
+  "checks": [
+    {
+      "id": "U1-V1",
+      "status": "not_run",
+      "environment": "clone DSH; runner Playwright original com webServer",
+      "procedure": "npx playwright test tests/e2e/foundation.spec.ts",
+      "evidence_refs": [],
+      "reason": "Runner original ja travou no teardown no braco Codex; nao repetido no DSH. O FAIL historico U1-V1 Codex continua FAIL; a execucao externa completa e registrada separadamente em U1-V5."
+    },
+    {
+      "id": "U1-V2",
+      "status": "pass",
+      "environment": "clone DSH local, Node e dependencias do lockfile",
+      "procedure": "npx tsc --noEmit; stdout/stderr em docs/ai/evidencias/h04-u1-2026-09-30/u1-dsh-tsc.*.log",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/dsh",
+      "executed_at": "2026-09-30T02:38:14.345Z",
+      "exit_code": 0,
+      "assertions": "TypeScript sem erros no candidato identificado pelos hashes dos artefatos.",
+      "evidence_refs": ["packages/ui/shell.tsx"]
+    },
+    {
+      "id": "U1-V3",
+      "status": "pass",
+      "environment": "clone DSH local",
+      "procedure": "git diff --check; stdout/stderr em docs/ai/evidencias/h04-u1-2026-09-30/u1-dsh-diff.*.log",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/dsh",
+      "executed_at": "2026-09-30T02:38:18.004Z",
+      "exit_code": 0,
+      "assertions": "Sem erro de whitespace; avisos de conversao LF/CRLF no stderr nao alteram o exit code.",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-V4",
+      "status": "pass",
+      "environment": "revisao QA independente, leitura do clone DSH",
+      "procedure": "H04-U1-DSH-QA-01: diff, shell, teste, rota protegida e allowlist; achado da marca corrigido e delta reinspecionado.",
+      "executed_at": "2026-09-30T02:38:31Z",
+      "assertions": "no_blocking_findings por inspecao; revisor nao executou Playwright nem TypeScript e havia lido resumo Codex do checkpoint.",
+      "evidence_refs": ["packages/ui/shell.tsx", "tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-V5",
+      "status": "pass",
+      "environment": "clone DSH local; Playwright Chromium com Auth e Next externos, portas 54329 e 3001",
+      "procedure": "node ../run-u1-external.mjs dsh full; stdout/stderr separados em docs/ai/evidencias/h04-u1-2026-09-30/u1-dsh-full-*.log",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/dsh",
+      "executed_at": "2026-09-30T02:41:39.241Z",
+      "exit_code": 0,
+      "assertions": "6/6 testes; Playwright=0, wrapper=0, portas livres apos cleanup; inclui 404 e redirecionamento de /app.",
+      "evidence_refs": ["tests/e2e/foundation.spec.ts"]
+    },
+    {
+      "id": "U1-V6",
+      "status": "pass",
+      "environment": "clone DSH local; Playwright Chromium com Auth e Next externos, portas 54329 e 3001",
+      "procedure": "node ../run-u1-external.mjs dsh focused; stdout/stderr separados em docs/ai/evidencias/h04-u1-2026-09-30/u1-dsh-focused-*.log",
+      "cwd": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/dsh",
+      "executed_at": "2026-09-30T02:42:31.014Z",
+      "exit_code": 0,
+      "assertions": "2/2 testes; Playwright=0, wrapper=0, portas livres apos cleanup.",
+      "evidence_refs": ["tests/e2e/foundation.spec.ts"]
+    }
+  ],
+  "findings": [],
+  "assumptions": ["O resultado foi consolidado pelo orquestrador; nenhum JSON final nem telemetria de modelo do worker DSH foi recebido."],
+  "context_requests": [],
+  "risks": ["U1-V1 original permanece sem nova execucao no DSH; o runner Playwright com webServer ainda exige correcao de infraestrutura separada. A substituicao por U1-V5 vale somente para H-04, nao para gates futuros de integracao."],
+  "metrics": { "elapsed_seconds": null, "input_tokens": null, "output_tokens": null, "cost": null, "source": "unavailable" },
+  "next_action": "Encerrar U1 no escopo sintetico H-04, manter o patch apenas no clone descartavel e priorizar telemetria G antes de novos pares."
+}

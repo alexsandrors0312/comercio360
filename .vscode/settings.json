@@ -1,3 +1,5 @@
 {
-  "chatgpt.openOnStartup": true
+  "chatgpt.openOnStartup": true,
+  "deepseekHarness.autonomousDebugging": true,
+  "geminicodeassist.agentDebugMode": true
 }

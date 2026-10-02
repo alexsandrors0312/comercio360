@@ -1,6 +1,6 @@
 # RepoMap — índice estrutural do Comércio 360
 
-Gerado em 2026-09-29 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
+Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
 
 ## Código e símbolos
 
@@ -65,6 +65,28 @@ Gerado em 2026-09-29 por `npm run repomap`. Heurístico de linhas, sem dependên
 ### packages/validation/index.ts
 - L2 export const loginSchema = …
 - L6 export const contextSchema = …
+### scripts/harness/dsh-mcp-telemetry.mjs
+- L42 function telemetryAvailable ()
+- L50 function parseUsage (raw, runId)
+- L82 function persistTelemetry (record)
+- L89 function stopOwnedChild (child)
+- L97 function log (message)
+- L101 function findDsh ()
+- L110 function spawnSyncProbe (args)
+- L123 function runHeadless (task, cwd, timeoutMs, runId)
+- L277 function health ()
+- L300 function send (message)
+- L315 function handle (request)
+### scripts/harness/dsh-telemetry-headless.mjs
+- L55 function summarize (session, firstSeq)
+- L80 function emitUsage (session, firstSeq)
+- L119 function streamReasoning (ctx, agent, stderr)
+- L171 function fail (io, error)
+- L181 function run (ctx, task, io)
+- L229 function apply (ctx, config)
+- L242 export { Config, apply, inject, internals, name }
+### scripts/harness/telemetry-turn-events.mjs
+- L2 export function firstCompleteTurnEvents (events)
 ### scripts/seed-diagnostics.mjs
 - L2 export function seedPreflightExitCode (env)
 - L11 export function seedFailureExitCode (stage, error)
@@ -185,6 +207,9 @@ Gerado em 2026-09-29 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L144 test('detects an index change masked by worktree content …')
 - L177 test('rejects a read-only result with ${state} Git change…')
 - L186 test('compares real changed paths with the assigned and r…')
+### tests/harness-telemetry.test.mjs
+- L13 test('usage aggregation receives only the complete turn, …')
+- L44 test('bridge captures provider usage, duration and unavai…')
 ### tests/seed-diagnostics.test.ts
 - L18 describe('seed sanitized diagnostics with loopback API only')
 ### tests/seed-guard.test.ts

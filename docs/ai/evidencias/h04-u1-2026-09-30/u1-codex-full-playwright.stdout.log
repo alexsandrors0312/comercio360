@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ok 1 tests\e2e\foundation.spec.ts:3:7 › navigation and demo states at 360px (1.7s)
+  ok 2 tests\e2e\foundation.spec.ts:3:7 › navigation and demo states at 768px (809ms)
+  ok 3 tests\e2e\foundation.spec.ts:3:7 › navigation and demo states at 1440px (803ms)
+  ok 4 tests\e2e\foundation.spec.ts:38:5 › mobile menu announces its state and closes on Escape and navigation (801ms)
+  ok 5 tests\e2e\foundation.spec.ts:78:5 › protected routes require a real session; demo cannot grant access (2.0s)
+  ok 6 tests\e2e\foundation.spec.ts:91:5 › demo context selection is explicit and navigation has no fake operations (2.5s)
+
+  6 passed (9.7s)

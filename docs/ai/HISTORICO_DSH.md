@@ -10,16 +10,16 @@ Regra de manutenção: acrescentar entradas no fim com data e evidência; **não
 | --- | --- |
 | Ponte MCP local | Instalada em `C:/Users/Alexs/.codex/mcp/dsh`; `dsh_health` OK (0.1.5-rc.3, headless); contrato `task`/`cwd`/`timeout_ms` |
 | H-03 | Concluído: três achados reproduzidos e corrigidos; integrado em `4a80096`; um timeout preservado como falha |
-| H-04 | Pares D1 e S1 executados e revisados; U1 Codex sem o gate E2E original; U1 DSH em andamento |
+| H-04 | D1/S1 e U1 sintéticos encerrados; runner E2E original segue pendente. [RELATORIO_H04.md](RELATORIO_H04.md) |
 | Testes no sandbox DSH | Bloqueados (`spawn EPERM` em D1; `ReferenceError: require is not defined` em S1) → contrato passou a testes externos (D/E) |
-| Telemetria | Modelo efetivo, tokens e custo indisponíveis; decisão de instrumentação (G) pendente com o responsável |
+| Telemetria | G capturou uso real do turno raiz DSH após recarga e correção do patch; custo comparável indisponível. [TELEMETRIA_G.md](TELEMETRIA_G.md) |
 
 ## Fatos duráveis do transporte (contrato efetivo)
 
 - Ponte comunitária local (origem [jeremy9682/dsh-cursor-codex](https://github.com/jeremy9682/dsh-cursor-codex), revisão `81def5abbc01bd5b461710ed11a595bb4355f5f7`, licença MIT), com correções Windows e allowlist locais; hashes e proveniência em `DIAGNOSTICO_DSH_MCP.md`.
 - Contrato: `task` e `cwd` obrigatórios; `timeout_ms` entre 1000 e 600000; briefing ≤ 20.000 caracteres; uma execução por vez; workspace permitido somente Comércio 360. Não aceita `context`, `sandbox` nem `max_iterations`; não impõe 25 iterações.
 - `dsh_health({})` informa versão, perfil e workspaces permitidos.
-- O stderr do headless pode conter raciocínio do provedor; a ponte drena o canal sem encaminhá-lo e devolve códigos terminais de lista fechada. Modelo efetivo, tokens e custo **não são expostos**.
+- O stderr do headless pode conter raciocínio do provedor; a ponte drena o canal sem encaminhá-lo e devolve códigos terminais de lista fechada. A ponte G adiciona canal privado para tokens informados pelo provedor, sem cálculo de custo; veja [TELEMETRIA_G.md](TELEMETRIA_G.md).
 - A allowlist limita a raiz de lançamento, **não é sandbox**; isolamento de ferramentas pertence ao perfil DSH.
 - Credenciais: a Sidebar usa o SecretStorage do VS Code; o MCP headless usa o cofre `~/.dsh/.credentials.yaml` ou ambiente (precedência ambiente > cofre > `.env`). Credenciais, senhas e segredos não são delegados ao DSH nem registrados em relatório ou conversa.
 - Configuração de perfil efetiva: `~/.dsh/settings.yaml` (deepseek-official/deepseek-v4-pro/high). `~/.dsh/config.yml` cita R1 via NVIDIA NIM sem `NVIDIA_API_KEY`; não é a configuração usada pelo launcher.
@@ -69,3 +69,9 @@ Regra de manutenção: acrescentar entradas no fim com data e evidência; **não
 - Conferência documental: hashes de `docs/H1_RESULTADOS.json`, das duas migrações e de `package-lock.json` coincidem com os registrados na revisão H1.
 - [Diagnóstico de tokens](DIAGNOSTICO_TOKENS.md): `context.md` com 26.297 B, saga duplicada em 5+ documentos, 8 JSONs com 54.646 B, retrabalho S1 ×5 e Vitest executado 3×; mitigações A–G priorizadas por ROI.
 - Tríade aprovada e aplicada nesta data: poda do `context.md` (A), este arquivo como fonte única (B), RepoMap sem dependências (`scripts/harness/repomap.mjs` → `docs/ai/REPOMAP.md`), índice leve dos JSONs H-04 + orientação de envelope enxuto (C) e contratos de testes externos/revisão proporcional/retomada por delta (D/E/F). A decisão G (telemetria antes de novas rodadas comparativas) aguarda o responsável.
+
+### 30/09/2026 — fechamento sintético H-04 e telemetria G
+
+- U1 foi retomado em clones descartáveis. O gate externo substituto U1-V5 teve 6/6 em ambos os braços; QA DSH não encontrou bloqueio. O gate U1-V1 original permanece FAIL no braço Codex e `not_run` no DSH; o patch ficou nos clones. Evidências e limites em [RELATORIO_H04.md](RELATORIO_H04.md) e [CONTINUACAO_NOVO_CHAT.md](CONTINUACAO_NOVO_CHAT.md).
+- G: ponte MCP `0.1.0-c360.2`, overlay headless local e JSONL de métricas numéricas instalados. `npm run test:harness` passou 15/15; verificação de protocolo MCP passou nove checks; `--help` saiu com código 0, mas não comprovava carregamento do overlay. A conexão MCP já aberta ainda executava a versão antiga; uma amostra real do provedor aguardava recarga. Fonte de implementação, hashes e limites: [TELEMETRIA_G.md](TELEMETRIA_G.md). Nenhum novo par de custo foi iniciado.
+- Após a recarga, três chamadas mínimas responderam `READY` com `usage: null`: o patch inicial alterava só a configuração e não substituía o runner. Uma tentativa de substituição por expressão falhou antes de criar sessão. O patch passou a desativar o runner original e inserir o overlay por URL local; `--dump-config` confirmou ambos os nós. A chamada real `4db0e9d3` retornou `READY`, 8.298 tokens de entrada, 65 de saída e 6,51 s; o JSONL coincidiu. Testes de harness **16/16**. Os registros anteriores permanecem como falhas; custo e cobertura da rota Codex continuam indisponíveis. Evidência: [TELEMETRIA_G.md](TELEMETRIA_G.md).

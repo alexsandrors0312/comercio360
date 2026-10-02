@@ -1,0 +1,141 @@
+{
+  "schema_version": "0.1",
+  "task_id": "H04-U1-DSH-01",
+  "contract_revision": 2,
+  "objective": "Corrigir a regressão sintética U1 do estado ARIA do menu móvel no clone descartável e acrescentar teste Playwright que a detecta, preservando navegação e autenticação.",
+  "mode": "implementation",
+  "authorization": {
+    "source": "Pedido do responsável em 29/09/2026 para continuar o desenvolvimento do harness multiagente conforme docs/ai/AVALIACAO_H04.md",
+    "scope": "Somente avaliação sintética H-04 U1 no clone descartável; sem implementar o Pacote 002, alterar o repositório real, acessar dados reais ou publicar"
+  },
+  "workspace": "C:/Users/Alexs/AppData/Local/Temp/h04-u1-78223936cb97431ea3d9dc282179834e/dsh",
+  "baseline": {
+    "kind": "git",
+    "ref": "32416419132f4aa59b93a8ae95839e097af25064"
+  },
+  "role": "frontend-accessibility",
+  "runtime": "dsh-headless",
+  "model": "deepseek-v4-pro",
+  "reasoning": "high",
+  "depends_on": [],
+  "read_refs": [
+    "AGENTS.md",
+    "context.md",
+    ".agents/skills/c360-interface/SKILL.md",
+    "docs/ai/AVALIACAO_H04.md",
+    "docs/ai/CONTRATOS_HARNESS.md",
+    "packages/ui/shell.tsx",
+    "tests/e2e/foundation.spec.ts",
+    "app/app/layout.tsx",
+    "app/demo/[[...module]]/page.tsx",
+    "playwright.config.ts",
+    "package.json"
+  ],
+  "write_allowlist": [
+    "packages/ui/shell.tsx",
+    "tests/e2e/foundation.spec.ts"
+  ],
+  "protected_paths": [
+    "AGENTS.md",
+    "context.md",
+    "README.md",
+    "package.json",
+    "package-lock.json",
+    "docs/",
+    "app/",
+    "lib/",
+    "proxy.ts",
+    "supabase/migrations/"
+  ],
+  "invariants": [
+    "A interface não concede autorização: /app continua dependendo da sessão e das validações do servidor; /demo não autoriza operação.",
+    "No menu móvel em 360 px, aria-expanded reflete o estado visual e volta a false após Escape ou navegação.",
+    "Links do menu permanecem operáveis por mouse e teclado; Escape fecha o menu sem navegação.",
+    "Sem overflow horizontal em 360 px e sem modificação de autenticação, banco, migrações ou evidência H1.",
+    "Antes de editar código de interface, ler os guias locais de Next.js em node_modules/next/dist/docs/01-app/03-api-reference/01-directives/use-client.md, node_modules/next/dist/docs/03-architecture/accessibility.md e node_modules/next/dist/docs/01-app/02-guides/testing/playwright.md. Estes caminhos gerados não entram em read_refs porque o validador 0.1 os proíbe.",
+    "Na avaliacao H-04, U1-V5 (suíte completa externa) e o gate funcional substitutivo; U1-V1 original conserva o resultado historico e nao recebe PASS por equivalencia. O reparo do runner original e pendencia de infraestrutura separada."
+  ],
+  "acceptance": [
+    {
+      "id": "U1-A1",
+      "criterion": "Em viewport de 360 px, o botão Abrir menu inicia com aria-expanded=false e muda para true quando o menu abre."
+    },
+    {
+      "id": "U1-A2",
+      "criterion": "Após Escape, o menu fecha e aria-expanded volta a false; reabrir e clicar em link navega e fecha o menu com aria-expanded=false."
+    },
+    {
+      "id": "U1-A3",
+      "criterion": "Links do menu funcionam em 360 px e document.documentElement.scrollWidth não excede window.innerWidth."
+    },
+    {
+      "id": "U1-A4",
+      "criterion": "Sem sessão real, a rota protegida /app/visao-geral redireciona para /login; a prévia /demo não concede acesso."
+    },
+    {
+      "id": "U1-A5",
+      "criterion": "Teste Playwright em tests/e2e/foundation.spec.ts distingue a regressão sintética aria-expanded=false permanente e passa após a correção."
+    },
+    {
+      "id": "U1-A6",
+      "criterion": "Somente packages/ui/shell.tsx e tests/e2e/foundation.spec.ts são modificados; autenticação, migrações e evidências H1 permanecem intactas."
+    }
+  ],
+  "checks": [
+    {
+      "id": "U1-V1",
+      "kind": "command",
+      "target": "npx playwright test tests/e2e/foundation.spec.ts",
+      "environment": "clone descartável local, Playwright com servidores de teste em 127.0.0.1:3001 e 127.0.0.1:54329",
+      "owner": "orchestrator"
+    },
+    {
+      "id": "U1-V2",
+      "kind": "command",
+      "target": "npx tsc --noEmit",
+      "environment": "clone descartável local com dependências do package-lock.json",
+      "owner": "orchestrator"
+    },
+    {
+      "id": "U1-V3",
+      "kind": "command",
+      "target": "git diff --check",
+      "environment": "clone descartável local",
+      "owner": "orchestrator"
+    },
+    {
+      "id": "U1-V4",
+      "kind": "inspection",
+      "target": "Revisar estado ARIA e teclado em 360 px, redirecionamento protegido e diff restrito à write_allowlist",
+      "environment": "clone descartável local",
+      "owner": "reviewer"
+    },
+    {
+      "id": "U1-V5",
+      "kind": "command",
+      "target": "node ../run-u1-external.mjs dsh full",
+      "environment": "clone descartável local; config externa equivalente com servidores iniciados separadamente",
+      "owner": "orchestrator"
+    },
+    {
+      "id": "U1-V6",
+      "kind": "command",
+      "target": "node ../run-u1-external.mjs dsh focused",
+      "environment": "clone descartável local; config externa equivalente com servidores iniciados separadamente",
+      "owner": "orchestrator"
+    }
+  ],
+  "constraints": {
+    "network": "loopback_only",
+    "nested_delegation": false,
+    "summary_words_target": 350
+  },
+  "stop_conditions": [
+    "HEAD diferente do baseline ou alterações iniciais não atribuídas.",
+    "Necessidade de editar arquivo fora da write_allowlist, especialmente autenticação, migrações ou evidência H1.",
+    "Guias Next.js locais indisponíveis antes de editar UI: registrar needs_context em vez de presumir API.",
+    "Dependências ou navegadores locais indisponíveis: registrar check not_run com motivo, sem declarar PASS.",
+    "Pedido de credencial, rede externa, dados reais ou publicação.",
+    "Isolamento do runtime não confirmado: devolver controle ao orquestrador antes de ler ou escrever."
+  ]
+}
