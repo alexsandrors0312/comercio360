@@ -1,0 +1,59 @@
+{
+  "project_ref": "qiwblpmocldqbijbylwg",
+  "executed_at": "2026-10-02T15:12:00.447Z",
+  "environment": "hosted Supabase Auth/Postgres/Storage HTTP",
+  "tests": [
+    {
+      "test": "Conta fictícia temporária e vínculo de loja",
+      "result": "PASS"
+    },
+    {
+      "test": "Produto temporário administrativo",
+      "result": "PASS"
+    },
+    {
+      "test": "Atualização autenticada simples",
+      "result": "PASS"
+    },
+    {
+      "test": "Reserva autenticada de imagem",
+      "result": "PASS"
+    },
+    {
+      "test": "Upload HTTP reservado no Storage",
+      "result": "PASS"
+    },
+    {
+      "test": "Objeto reservado sem leitura nem URL assinada",
+      "result": "PASS"
+    },
+    {
+      "test": "Atestação HMAC e vínculo da capa",
+      "result": "PASS"
+    },
+    {
+      "test": "URL assinada lê bytes; rota pública permanece fechada",
+      "result": "PASS"
+    },
+    {
+      "test": "Substituição revoga leitura da capa anterior",
+      "result": "PASS"
+    },
+    {
+      "test": "Revogação do vínculo bloqueia sessão já aberta",
+      "result": "PASS"
+    },
+    {
+      "test": "Revogação impede nova URL assinada",
+      "result": "PASS"
+    },
+    {
+      "test": "Concorrência CAS entre duas sessões reais",
+      "result": "FAIL"
+    },
+    {
+      "test": "Limpeza das fixtures temporárias",
+      "result": "PASS"
+    }
+  ]
+}

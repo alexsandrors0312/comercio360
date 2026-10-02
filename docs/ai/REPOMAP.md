@@ -366,6 +366,9 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L95 REVOKE all on function private.catalog_hmac_sha256(bytea,bytea),
 - L97 REVOKE all on function public.catalog_mark_image_attested(
 - L99 GRANT execute on function public.catalog_mark_image_attested(
+### supabase/migrations/202610020001_catalog_service_role_normalization.sql
+- L6 GRANT usage on schema private to service_role
+- L7 GRANT execute on function private.catalog_whitespace(), private.catal…
 ### supabase/tests/bootstrap.sql
 - L6 CREATE TABLE auth.users
 - L7 CREATE FUNCTION auth.uid() RETURNS …
@@ -405,17 +408,18 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L60 it('bounds multipart bytes before parsing, including re…')
 ### tests/catalog-sql.test.ts
 - L68 describe('Catálogo 002 SQL')
-- L102 it('applies incrementally over H1 with RLS on each new …')
-- L112 it('requires role and live store grant for read/write, …')
-- L166 it('normalizes uniqueness, returns same idempotent resu…')
-- L228 it('isolates price by store, preserves decimals and rol…')
-- L296 it('rejects administrative cross-tenant relations and s…')
-- L319 it('keeps existing products under an inactive category …')
-- L356 it('reserves SKU, barcode and option combination after …')
-- L405 it('paginates deterministically with a textual store pr…')
-- L453 it('removes catalog and price visibility immediately af…')
-- L581 it('atomically replaces a validated cover and retires t…')
-- L686 it('rejects a direct cover link after the product is de…')
+- L103 it('applies incrementally over H1 with RLS on each new …')
+- L113 it('allows service_role to normalize administrative cat…')
+- L138 it('requires role and live store grant for read/write, …')
+- L192 it('normalizes uniqueness, returns same idempotent resu…')
+- L254 it('isolates price by store, preserves decimals and rol…')
+- L322 it('rejects administrative cross-tenant relations and s…')
+- L345 it('keeps existing products under an inactive category …')
+- L382 it('reserves SKU, barcode and option combination after …')
+- L431 it('paginates deterministically with a textual store pr…')
+- L479 it('removes catalog and price visibility immediately af…')
+- L607 it('atomically replaces a validated cover and retires t…')
+- L712 it('rejects a direct cover link after the product is de…')
 ### tests/catalog-ui.test.tsx
 - L76 describe('Catálogo: apresentação com escopo de loja')
 - L77 it('mostra ausência de preço sem transformar em zero e …')

@@ -1,5 +1,11 @@
 # Changelog
 
+## 02/10/2026 — Homologação parcial do Catálogo no Supabase
+
+- Projeto descartável `comercio360-dev` identificado no painel; migrações 001–003 do Catálogo aplicadas após dry-run. O ensaio hospedado encontrou `42501` no DML administrativo de produto; a migração incremental `202610020001_catalog_service_role_normalization.sql` concede acesso apenas às funções puras necessárias e foi aplicada após teste PGlite. Histórico remoto: seis versões alinhadas.
+- PostgreSQL remoto passou em papel/tenant, preço, busca, auditoria, política de Storage e CAS direto em duas conexões. Auth/Storage HTTP passou em upload reservado, HMAC, URL assinada, substituição, revogação de vínculo e limpeza das fixtures. Cadastro público e login anônimo foram confirmados desativados no painel.
+- Concorrência simultânea pela API REST permanece **FAIL**: uma atualização concluiu e a outra recebeu HTTP 504 sem SQLSTATE. Worker de limpeza rodou com fila vazia; exclusão/retry, endpoint Next hospedado e HTTPS continuam pendentes. [Evidência e limites](docs/CATALOGO_002_HOSPEDADO.md). Nenhuma chave de teste persistiu.
+
 ## 02/10/2026 — Integração local do Catálogo 002 com H-04/G
 
 - Checkpoint H-04/G preservado em commit separado antes da mescla. Catálogo 002 integrado à árvore principal, com contexto e RepoMap consolidados; resultados H1 e H-04 históricos mantidos.

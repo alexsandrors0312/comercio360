@@ -88,6 +88,7 @@ describe("Catálogo 002 SQL", () => {
       grant select,insert on storage.objects to authenticated;
     `);
     await db.exec(sql("migrations/202609300002_catalog_storage.sql"));
+    await db.exec(sql("migrations/202610020001_catalog_service_role_normalization.sql"));
   });
   afterAll(async () => {
     await db?.close();
@@ -107,6 +108,31 @@ describe("Catálogo 002 SQL", () => {
     ).rows;
     expect(rows).toHaveLength(7);
     expect(rows.every((row) => row.relrowsecurity)).toBe(true);
+  });
+
+  it("allows service_role to normalize administrative catalog DML", async () => {
+    await db.exec("set role service_role");
+    const category = (
+      await db.query<{ id: string }>(
+        "insert into public.product_categories(organization_id,name) values($1,$2) returning id",
+        [orgA, "  Blusas  de verão  "],
+      )
+    ).rows[0];
+    const product = (
+      await db.query<{ id: string; name: string }>(
+        "insert into public.products(organization_id,category_id,name) values($1,$2,$3) returning id,name",
+        [orgA, category.id, "  Camiseta  "],
+      )
+    ).rows[0];
+    expect(product.name).toBe("Camiseta");
+    const variant = (
+      await db.query<{ sku: string }>(
+        "insert into public.product_variants(organization_id,product_id,sku) values($1,$2,$3) returning sku",
+        [orgA, product.id, "  HOSTED-ADMIN  "],
+      )
+    ).rows[0];
+    expect(variant.sku).toBe("HOSTED-ADMIN");
+    await db.exec("reset role");
   });
 
   it("requires role and live store grant for read/write, including catalog audit", async () => {

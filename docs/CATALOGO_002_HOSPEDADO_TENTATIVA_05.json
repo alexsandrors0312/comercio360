@@ -1,0 +1,23 @@
+{
+  "project_ref": "qiwblpmocldqbijbylwg",
+  "executed_at": "2026-10-02T15:07:27.113Z",
+  "environment": "hosted Supabase Auth/Postgres/Storage HTTP",
+  "tests": [
+    {
+      "test": "Conta fictícia temporária e vínculo de loja",
+      "result": "PASS"
+    },
+    {
+      "test": "Produto temporário administrativo",
+      "result": "PASS"
+    },
+    {
+      "test": "Concorrência CAS entre duas sessões reais",
+      "result": "FAIL"
+    },
+    {
+      "test": "Limpeza das fixtures temporárias",
+      "result": "PASS"
+    }
+  ]
+}
