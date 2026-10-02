@@ -1,6 +1,6 @@
 # RepoMap — índice estrutural do Comércio 360
 
-Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
+Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
 
 ## Código e símbolos
 
@@ -9,6 +9,27 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L7 export function login (_previous form
 - L20 export function logout ()
 - L31 export function changeContext (form
+### app/actions/catalog.ts
+- L1 "use server"
+- L20 export type CatalogMutationResult = | { status: "success"; message: string; id: string; revisio…
+- L27 function failure ( status ): CatalogMutationResult
+- L41 function databaseFailure (code
+- L50 function mutate ( scope input schema rpcName parameters => Record<string, unkno…
+- L96 export function createCatalogCategory ( scope input ): Promise<CatalogMutationResult>
+- L109 export function updateCatalogCategory ( scope categoryId input ): Promise<CatalogMutationResult>
+- L129 export function createCatalogProduct ( scope input ): Promise<CatalogMutationResult>
+- L151 export function updateCatalogProduct ( scope productId input ): Promise<CatalogMutationResult>
+- L173 export function createCatalogVariant ( scope productId input ): Promise<CatalogMutationResult>
+- L194 export function updateCatalogVariant ( scope variantId input ): Promise<CatalogMutationResult>
+- L217 export function setCatalogPrice ( scope variantId input ): Promise<CatalogMutationResult>
+### app/api/catalog/images/[productId]/route.ts
+- L16 export const runtime = "nodejs";
+- L21 function reply (status message
+- L28 function sqlFailure (code
+- L37 function accessFailure (error
+- L47 export function GET (request { params }
+- L82 export function POST (request { params }
+- L223 export function DELETE (request { params }
 ### app/app/[module]/page.tsx
 - L6 export default function Module (
 ### app/app/error.tsx
@@ -19,6 +40,14 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L4 export default function AppLayout (
 ### app/app/page.tsx
 - L2 export default function App ()
+### app/app/produtos/error.tsx
+- L1 "use client"
+- L5 export default function Error (
+### app/app/produtos/loading.tsx
+- L3 export default function Loading ()
+### app/app/produtos/page.tsx
+- L22 function first (value
+- L26 export default function CatalogPage (
 ### app/demo/[[...module]]/page.tsx
 - L7 export const dynamic = "force-dynamic";
 - L8 export default function Demo (
@@ -37,6 +66,33 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L2 export default function Home ()
 ### app/sem-acesso/page.tsx
 - L2 export default function NoAccess ()
+### lib/catalog-image/attestation.ts
+- L3 export type CatalogImageAttestation = { organizationId: string; storeId: string; productId: str…
+- L17 export function catalogImageAttestationPayload ( value ): string
+- L36 export function parseCatalogImageKey (encoded
+- L47 export function signCatalogImageAttestation ( value key ): string
+### lib/catalog-image/form.ts
+- L3 export function readBoundedMultipart ( request maxBytes ): Promise<FormData>
+### lib/catalog-image/process.ts
+- L7 class CatalogImageError
+- L17 export type ProcessedCatalogImage = { bytes: Buffer; mimeType: "image/jpeg" | "image/png" | "im…
+- L24 export function processCatalogImage ( input ): Promise<ProcessedCatalogImage>
+### lib/catalog/server.ts
+- L18 export type CatalogScope = z.input<typeof scopeSchema>; export type CatalogFilters = z.input<ty…
+- L19 export type CatalogFilters = z.input<typeof filtersSchema>; export type CatalogCategory = { id:…
+- L20 export type CatalogCategory = { id: string; name: string; active: boolean; revision: string; };
+- L26 export type CatalogPrice = { value: string; revision: string };
+- L27 export type CatalogVariant = { id: string; sku: string; color: string | null; size: string | nu…
+- L38 export type CatalogProduct = { id: string; name: string; description: string | null; categoryId…
+- L48 export type CatalogProductSummary = { id: string; name: string; description: string | null; cat…
+- L57 export type CatalogPage = { items: CatalogProductSummary[]; page: number; pageSize: number; tot…
+- L64 class CatalogAccessError
+- L86 export function authorizeCatalog ( scope mode = … "read")
+- L134 export function getCatalogAccess (scope
+- L143 export function listCatalogCategories ( scope ): Promise<CatalogCategory[]>
+- L173 function priceText (value
+- L180 export function listCatalogProducts ( scope filters = … {}): Promise<CatalogPage>
+- L258 export function getCatalogProduct ( scope productId ): Promise<CatalogProduct | null>
 ### lib/supabase/server.ts
 - L4 export function isConfigured ()
 - L10 export function createClient ()
@@ -44,12 +100,57 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L14 export const requireAccess = …
 ### packages/config/navigation.ts
 - L1 export const navigation = …
+### packages/domain/catalog.ts
+- L6 export function characterCount (value
+- L10 export function normalizeCategoryName (value
+- L14 export function categoryNameKey (value
+- L18 export function normalizeProductName (value
+- L22 export function normalizeDescription ( value ): string | null
+- L29 export function normalizeSku (value
+- L33 export function skuKey (value
+- L37 export function normalizeVariantAttribute ( value ): string | null
+- L45 export function variantAttributeKey ( value ): string | null
+- L52 export function variantCombinationKey ( productId color size ): string
+- L63 export function normalizeBarcode ( value ): string | null
+- L71 export function barcodeKey (value
+- L80 export function parseBrlDecimal (value
+- L96 export function brlDecimalToCents (value
+- L103 export function formatBrlPrice (value
+- L113 export function parseCatalogRevision (value
 ### packages/domain/tenancy.ts
 - L1 export type Store = { id: string; organization_id: string; name: string };
 - L2 export type Organization = { id: string; name: string };
 - L3 export type Membership = { id: string; organization_id: string; user_id: string; role: string;…
 - L11 export function selectableOrganizations ( organizations stores ): Organization[]
 - L20 export function selectContext ( stores organizationId? storeId? ): Store | null
+### packages/ui/catalog/cover.tsx
+- L1 "use client"
+- L14 function imageUrl (scope productId revision
+- L27 function parseResult (response
+- L36 export function CatalogCover (
+- L71 function announce (next
+- L76 function choose (file
+- L93 function upload (event
+- L151 function remove ()
+### packages/ui/catalog/workspace.tsx
+- L1 "use client"
+- L44 function hrefFor (filters page = 1, productId = ""): string
+- L55 function value (form name
+- L58 function optional (form name
+- L61 function Field (
+- L94 function VariantFields ({ variant }
+- L126 export function CatalogWorkspace (
+- L147 function perform ( label task => Promise<CatalogMutationResult>, onSuccess?: ( r…
+- L175 function submitCategory (event
+- L186 function submitCategoryEdit ( event category )
+- L201 function submitProduct (event
+- L234 function submitProductEdit ( event item )
+- L254 function toggleProduct (item
+- L269 function submitVariant ( event item )
+- L290 function submitVariantEdit ( event variant )
+- L309 function toggleVariant (variant
+- L326 function submitPrice ( event variant )
+- L340 function openPanel (next
 ### packages/ui/dashboard.tsx
 - L1 "use client"
 - L19 export function Dashboard ()
@@ -62,9 +163,30 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L2 export function Construction ({ label }
 - L17 export function Loading ()
 - L30 export function Empty ()
+### packages/validation/catalog.ts
+- L22 export const catalogCategoryNameSchema = z
+- L30 export const catalogProductNameSchema = z
+- L38 export const catalogDescriptionSchema = z
+- L47 export const catalogSkuSchema = z
+- L52 export const catalogVariantAttributeSchema = z
+- L61 export const catalogBarcodeSchema = z
+- L70 export const catalogBrlPriceSchema = z
+- L75 export const catalogRevisionSchema = z
+- L80 export const catalogCategoryInputSchema = …
+- L84 export const catalogCategoryUpdateInputSchema = …
+- L90 export const catalogProductInputSchema = …
+- L99 export const catalogProductUpdateInputSchema = …
+- L106 export const catalogVariantInputSchema = …
+- L114 export const catalogVariantUpdateInputSchema = …
+- L121 export const catalogProductCreateInputSchema = …
+- L129 export const catalogPriceInputSchema = …
 ### packages/validation/index.ts
 - L2 export const loginSchema = …
 - L6 export const contextSchema = …
+### scripts/catalog-image-cleanup.mjs
+- L5 function projectOrigin (value)
+- L23 export function validateCatalogCleanupEnv (env)
+- L34 export function runCatalogImageCleanup (env = process.env)
 ### scripts/harness/dsh-mcp-telemetry.mjs
 - L42 function telemetryAvailable ()
 - L50 function parseUsage (raw, runId)
@@ -150,6 +272,100 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L3 CREATE FUNCTION private.guard_structural_keys() RETURNS …
 - L21 REVOKE all on function private.guard_structural_keys() from public,ano…
 - L30 ALTER TABLE public.audit_events ADD constraint
+### supabase/migrations/202609300001_catalog.sql
+- L5 CREATE FUNCTION private.catalog_whitespace() RETURNS …
+- L11 CREATE FUNCTION private.catalog_trim(p_value text) RETURNS …
+- L15 CREATE FUNCTION private.catalog_spaces(p_value text) RETURNS …
+- L20 CREATE FUNCTION private.catalog_optional(p_value text) RETURNS …
+- L24 CREATE FUNCTION private.catalog_amount(p_value text) RETURNS …
+- L37 REVOKE all on function private.catalog_whitespace(),private.catalog_tr…
+- L39 GRANT execute on function private.catalog_whitespace(),private.catalo…
+- L41 CREATE TABLE public.product_categories
+- L47 CREATE INDEX product_categories_name_key
+- L49 CREATE TABLE public.products
+- L58 CREATE INDEX products_search
+- L59 CREATE INDEX products_category_filter
+- L61 CREATE TABLE public.product_variants
+- L73 CREATE INDEX product_variants_sku_key
+- L74 CREATE INDEX product_variants_barcode_key
+- L75 CREATE INDEX product_variants_option_key
+- L76 CREATE INDEX product_variants_by_product
+- L78 CREATE TABLE public.product_prices
+- L88 CREATE INDEX product_prices_by_variant
+- L90 CREATE TABLE public.catalog_image_objects
+- L105 CREATE INDEX catalog_image_cleanup
+- L108 CREATE TABLE public.product_images
+- L117 CREATE TABLE public.catalog_create_requests
+- L124 CREATE FUNCTION private.catalog_request_immutable() RETURNS …
+- L129 CREATE TRIGGER catalog_request_no_update
+- L131 CREATE TRIGGER catalog_request_no_truncate
+- L133 REVOKE all on function private.catalog_request_immutable() from public…
+- L136 CREATE FUNCTION private.catalog_before_write() RETURNS …
+- L168 CREATE FUNCTION private.catalog_image_object_guard() RETURNS …
+- L185 CREATE TRIGGER catalog_image_object_guard
+- L187 CREATE FUNCTION private.catalog_guard_keys() RETURNS …
+- L205 CREATE FUNCTION private.can_read_catalog(p_org uuid) RETURNS …
+- L213 CREATE FUNCTION private.can_write_catalog(p_org uuid,p_store uuid) RETURNS …
+- L221 CREATE FUNCTION private.catalog_can_upload_object(p_path text) RETURNS …
+- L230 CREATE FUNCTION private.catalog_can_read_object(p_path text) RETURNS …
+- L237 REVOKE all on function private.catalog_guard_keys(),private.can_read_c…
+- L239 GRANT execute on function private.can_read_catalog(uuid),private.can_…
+- L240 REVOKE all on function private.catalog_can_upload_object(text),private…
+- L242 GRANT execute on function private.catalog_can_upload_object(text),pri…
+- L244 CREATE FUNCTION private.catalog_audit() RETURNS …
+- L268 CREATE FUNCTION private.catalog_bump_product() RETURNS …
+- L282 CREATE FUNCTION private.catalog_retire_cover_object() RETURNS …
+- L301 CREATE FUNCTION public.catalog_search_products(p_organization_id uuid,p_store_id uuid,p_query t…
+- L331 REVOKE all on function public.catalog_search_products(uuid,uuid,text,u…
+- L332 GRANT execute on function public.catalog_search_products(uuid,uuid,te…
+- L333 CREATE TRIGGER catalog_image_object_audit
+- L335 CREATE TRIGGER catalog_variant_bump
+- L337 CREATE TRIGGER catalog_price_bump
+- L339 CREATE TRIGGER catalog_cover_bump
+- L341 CREATE TRIGGER catalog_cover_retire
+- L344 ALTER TABLE public.product_categories ENABLE RLS
+- L345 ALTER TABLE public.products ENABLE RLS
+- L346 ALTER TABLE public.product_variants ENABLE RLS
+- L347 ALTER TABLE public.product_prices ENABLE RLS
+- L348 ALTER TABLE public.product_images ENABLE RLS
+- L349 ALTER TABLE public.catalog_image_objects ENABLE RLS
+- L350 ALTER TABLE public.catalog_create_requests ENABLE RLS
+- L351 REVOKE all on public.product_categories,public.products,public.product…
+- L353 GRANT select on public.product_categories,public.products,public.prod…
+- L355 GRANT all on public.product_categories,public.products,public.product…
+- L357 CREATE POLICY catalog_category_read ON public.product_categories
+- L359 CREATE POLICY catalog_product_read ON public.products
+- L361 CREATE POLICY catalog_variant_read ON public.product_variants
+- L363 CREATE POLICY catalog_price_read ON public.product_prices
+- L365 CREATE POLICY catalog_cover_read ON public.product_images
+- L371 CREATE POLICY scoped_audit_read ON public.audit_events
+- L381 REVOKE all on function private.catalog_before_write(),private.catalog_…
+- L384 CREATE FUNCTION private.catalog_require_write(p_org uuid,p_store uuid) RETURNS …
+- L392 REVOKE all on function private.catalog_require_write(uuid,uuid) from p…
+- L394 CREATE FUNCTION public.catalog_create_category(p_organization_id uuid,p_store_id uuid,p_name te…
+- L404 CREATE FUNCTION public.catalog_update_category(p_organization_id uuid,p_store_id uuid,p_categor…
+- L420 CREATE FUNCTION public.catalog_create_product(p_organization_id uuid,p_store_id uuid,p_name tex…
+- L455 CREATE FUNCTION public.catalog_update_product(p_organization_id uuid,p_store_id uuid,p_product_…
+- L471 CREATE FUNCTION public.catalog_create_variant(p_organization_id uuid,p_store_id uuid,p_product_…
+- L486 CREATE FUNCTION public.catalog_update_variant(p_organization_id uuid,p_store_id uuid,p_variant_…
+- L507 CREATE FUNCTION public.catalog_set_price(p_organization_id uuid,p_store_id uuid,p_variant_id uu…
+- L552 CREATE FUNCTION public.catalog_reserve_image(p_organization_id uuid,p_store_id uuid,p_product_i…
+- L570 CREATE FUNCTION public.catalog_mark_image_uploaded(p_organization_id uuid,p_store_id uuid,p_obj…
+- L587 CREATE FUNCTION public.catalog_set_cover(p_organization_id uuid,p_store_id uuid,p_product_id uu…
+- L627 CREATE FUNCTION public.catalog_get_cover_path(p_organization_id uuid,p_store_id uuid,p_product_…
+### supabase/migrations/202609300002_catalog_storage.sql
+- L13 CREATE POLICY catalog_reserved_object_insert ON storage.objects
+- L17 CREATE POLICY catalog_authorized_object_read ON storage.objects
+### supabase/migrations/202609300003_catalog_image_attestation.sql
+- L6 CREATE TABLE private.catalog_image_attestation_key
+- L11 REVOKE all on private.catalog_image_attestation_key from public,anon,a…
+- L12 ALTER TABLE private.catalog_image_attestation_key ENABLE RLS
+- L19 CREATE FUNCTION private.catalog_hmac_sha256(p_payload bytea,p_key bytea) RETURNS …
+- L36 CREATE FUNCTION private.catalog_equal_mac(p_left bytea,p_right bytea) RETURNS …
+- L47 CREATE FUNCTION public.catalog_mark_image_attested(p_organization_id uuid,p_store_id uuid,p_obj…
+- L95 REVOKE all on function private.catalog_hmac_sha256(bytea,bytea),
+- L97 REVOKE all on function public.catalog_mark_image_attested(
+- L99 GRANT execute on function public.catalog_mark_image_attested(
 ### supabase/tests/bootstrap.sql
 - L6 CREATE TABLE auth.users
 - L7 CREATE FUNCTION auth.uid() RETURNS …
@@ -158,6 +374,53 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 
 ## Testes (describe/it/test)
 
+### tests/catalog-application.test.ts
+- L81 describe('catalog application authorization')
+- L82 it('requires an active member with an explicit active s…')
+- L91 it('keeps read roles from mutating and denies revoked s…')
+- L106 it('does not treat a valid ID from another tenant as pe…')
+- L112 it('does not invoke RPC after revocation and supplies o…')
+### tests/catalog-cleanup-guard.test.ts
+- L11 describe('catalog image cleanup preflight')
+- L12 it('requires explicit flag, separate matching origin an…')
+### tests/catalog-domain.test.ts
+- L34 describe('catalog normalization and boundaries')
+- L35 it('preserves category display accents but folds whites…')
+- L53 it('checks product name and optional description limits…')
+- L68 it('normalizes SKU and attributes, retaining exact barc…')
+- L92 it('requires the first-cycle unit UN and accepts an unc…')
+- L105 it('validates atomic product creation and idempotency k…')
+- L127 describe('exact BRL prices and revisions')
+- L128 it('normalizes decimal text without floating point and …')
+- L140 it('aligns the input maximum with numeric(12,2) and rej…')
+- L162 it('transports PostgreSQL bigint revisions as bounded d…')
+### tests/catalog-image-attestation.test.ts
+- L22 describe('Catalog image attestation')
+- L55 it('matches the standard HMAC-SHA256 output')
+- L65 it('rejects forged, stale and unauthorized marks; accep…')
+### tests/catalog-image.test.ts
+- L8 describe('catalog cover processing')
+- L9 it('decodes, reencodes and strips source metadata befor…')
+- L28 it('rejects unsupported, malformed, oversized and extre…')
+- L60 it('bounds multipart bytes before parsing, including re…')
+### tests/catalog-sql.test.ts
+- L68 describe('Catálogo 002 SQL')
+- L102 it('applies incrementally over H1 with RLS on each new …')
+- L112 it('requires role and live store grant for read/write, …')
+- L166 it('normalizes uniqueness, returns same idempotent resu…')
+- L228 it('isolates price by store, preserves decimals and rol…')
+- L296 it('rejects administrative cross-tenant relations and s…')
+- L319 it('keeps existing products under an inactive category …')
+- L356 it('reserves SKU, barcode and option combination after …')
+- L405 it('paginates deterministically with a textual store pr…')
+- L453 it('removes catalog and price visibility immediately af…')
+- L581 it('atomically replaces a validated cover and retires t…')
+- L686 it('rejects a direct cover link after the product is de…')
+### tests/catalog-ui.test.tsx
+- L76 describe('Catálogo: apresentação com escopo de loja')
+- L77 it('mostra ausência de preço sem transformar em zero e …')
+- L84 it('não oferece controles de alteração a quem só consul…')
+- L93 it('oferece edição de produto e preço ao papel autoriza…')
 ### tests/database.test.ts
 - L27 describe('PostgreSQL migration, RLS and audit')
 - L45 it('seed is repeatable and every exposed foundation tab…')
@@ -180,6 +443,11 @@ Gerado em 2026-09-30 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L87 test('authenticated user without membership is refused')
 - L94 test('cashier cannot expand access with a forged cookie')
 - L119 test('invalid login shows an actionable error and does no…')
+### tests/e2e/catalog.spec.ts
+- L11 test('manager searches and reads store price in the catal…')
+- L43 test('cashier can read catalog but cannot edit it')
+- L56 test('manager creates a product and sets its store price')
+- L74 test('catalog fits viewport at ${width}px')
 ### tests/e2e/foundation.spec.ts
 - L3 test('navigation and demo states at ${width}px')
 - L38 test('protected routes require a real session; demo canno…')

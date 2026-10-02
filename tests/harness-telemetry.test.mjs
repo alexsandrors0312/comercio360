@@ -48,14 +48,14 @@ test("bridge captures provider usage, duration and unavailable states without ra
   const cli = join(root, "fake-cli.mjs");
   const dshHome = join(root, "dsh");
   const patch = join(root, "scripts", "harness", "dsh-telemetry.patch.yml");
-  const module = join(root, "scripts", "harness", "dsh-telemetry-headless.mjs");
+  const headlessModule = join(root, "scripts", "harness", "dsh-telemetry-headless.mjs");
   const log = join(root, "telemetry.jsonl");
   mkdirSync(join(dshHome, "profiles", "headless"), { recursive: true });
   mkdirSync(dirname(patch), { recursive: true });
   writeFileSync(join(dshHome, "profiles", "headless", "package.json"), "{}");
   writeFileSync(cli, fakeCliSource);
   writeFileSync(patch, "[]\n");
-  writeFileSync(module, "export const name = 'fixture';\n");
+  writeFileSync(headlessModule, "export const name = 'fixture';\n");
 
   const child = spawn(process.execPath, [bridge], {
     cwd: tmpdir(),

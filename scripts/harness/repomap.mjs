@@ -87,6 +87,7 @@ function stripParamTypes(text) {
 
 function shortRhs(line, nameEnd) {
   const rhs = collapse(line.slice(nameEnd)).replace(/^=\s*/, "");
+  if (!rhs) return "…";
   if (rhs.length > SHORT_RHS || rhs.includes("=>") || rhs.includes("{") || rhs.includes("(") || rhs.startsWith("[")) return "…";
   return rhs;
 }
