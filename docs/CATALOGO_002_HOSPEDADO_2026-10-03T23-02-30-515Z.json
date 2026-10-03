@@ -1,0 +1,111 @@
+{
+  "project_ref": "qiwblpmocldqbijbylwg",
+  "executed_at": "2026-10-03T23:02:43.471Z",
+  "environment": "hosted Supabase Auth/Postgres/Storage HTTP",
+  "tests": [
+    {
+      "test": "Conta fictícia temporária e vínculo de loja",
+      "result": "PASS"
+    },
+    {
+      "test": "Produto temporário administrativo",
+      "result": "PASS"
+    },
+    {
+      "test": "Atualização autenticada simples",
+      "result": "PASS"
+    },
+    {
+      "test": "Reserva autenticada de imagem",
+      "result": "PASS"
+    },
+    {
+      "test": "Upload HTTP reservado no Storage",
+      "result": "PASS"
+    },
+    {
+      "test": "Objeto reservado sem leitura nem URL assinada",
+      "result": "PASS"
+    },
+    {
+      "test": "Atestação HMAC e vínculo da capa",
+      "result": "PASS"
+    },
+    {
+      "test": "URL assinada lê bytes; rota pública permanece fechada",
+      "result": "PASS"
+    },
+    {
+      "test": "Substituição revoga leitura da capa anterior",
+      "result": "PASS"
+    },
+    {
+      "test": "Revogação do vínculo bloqueia sessão já aberta",
+      "result": "PASS"
+    },
+    {
+      "test": "Revogação impede nova URL assinada",
+      "result": "PASS"
+    },
+    {
+      "test": "Concorrência CAS entre duas sessões reais",
+      "result": "PASS"
+    },
+    {
+      "test": "Next local com Auth real e cookies SSR",
+      "result": "PASS"
+    },
+    {
+      "test": "Endpoint Next rejeita origem externa e conteúdo falso",
+      "result": "PASS"
+    },
+    {
+      "test": "Endpoint Next reencoda imagem e remove EXIF no Storage real",
+      "result": "PASS"
+    },
+    {
+      "test": "Endpoint Next devolve 409 e preserva capa em revisão obsoleta",
+      "result": "PASS"
+    },
+    {
+      "test": "Endpoint Next revalida papel e vínculo na sessão aberta",
+      "result": "PASS"
+    },
+    {
+      "test": "Endpoint Next remove capa com CAS e leitura passa a 404",
+      "result": "PASS"
+    },
+    {
+      "test": "Worker real remove objeto vencido e retoma objeto já ausente",
+      "result": "PASS"
+    },
+    {
+      "test": "Limpeza das fixtures temporárias",
+      "result": "PASS"
+    }
+  ],
+  "observations": [
+    {
+      "test": "CAS REST",
+      "elapsed_ms": 97,
+      "outcomes": [
+        "ok",
+        "conflict"
+      ],
+      "http_statuses": [
+        200,
+        409
+      ]
+    }
+  ],
+  "source_files": {
+    "tests/hosted/catalog-storage.mjs": "d203b6d9b43c8b8b0bbc516e3d14e2efbb4f6189400ff47b4a3eb6bfb6c7c4bf",
+    "tests/hosted/catalog-next-probe.mjs": "6c6a340787489a1136636f4aad515a72e447946fccbaa039456aeb2f2e41ea3e",
+    "tests/hosted/catalog-cleanup-probe.mjs": "d98274aa0a70924ff8f9f6b1f6cee4bf86bdd3f0f1d0079b5f61ece54b8dc781",
+    "scripts/catalog-hosted.ps1": "6868476c58801f1b66473f1c60c234dc88119d26a6734b2c93b904178e96f0b2",
+    "scripts/catalog-image-cleanup.mjs": "dfd1ca266058a709b6c9255514261fe94773f463edca4cddcb44fd53f26f03c5",
+    "app/actions/catalog.ts": "bc6a60aa4b9c108bad25ea39954dcb8aa730f7b2346a053fc132621ed4be8bcc",
+    "app/api/catalog/images/[productId]/route.ts": "8f96f2642b3ffe6627d83b8c00e474389441c02dab9c7308eedf82df98bef2aa",
+    "supabase/migrations/202610030001_catalog_conflict_http.sql": "053e96bb01285064989ebe3f9e5bd552b50680785d4263599e4b0e0420ff1a42"
+  }
+}

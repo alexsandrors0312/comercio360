@@ -1,5 +1,11 @@
 # Changelog
 
+## 03/10/2026 — Conflito REST e ensaio real da capa
+
+- A migração incremental `202610030001_catalog_conflict_http.sql` substitui sete erros artificiais `40001` por `PT409` em seis RPCs do Catálogo. A disputa REST real passou com HTTP 200/409 em 97 ms; as três tentativas de 02/10 com 504 permanecem preservadas como FAIL histórico.
+- O POST da rota Next passou a comparar origem com o `Host` recebido, mantendo a exigência de protocolo igual. Em Next local com Auth/Storage hospedados, upload reencodado sem EXIF, capa privada, conflito, revogação e remoção passaram. O worker real removeu uma fixture vencida, retomou outra ausente e preservou ativo/recente. Contagens finais: zero fixtures e zero chaves HMAC.
+- Vitest 124/124, lint, tipos e build passaram. E2E 17/17 foi executado antes do ajuste de origem; o endpoint corrigido recebeu teste HTTP integrado posterior. O [relatório de 03/10](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md) registra as tentativas FAIL, os 20 PASS finais e os limites de implantação.
+
 ## 02/10/2026 — Homologação parcial do Catálogo no Supabase
 
 - Projeto descartável `comercio360-dev` identificado no painel; migrações 001–003 do Catálogo aplicadas após dry-run. O ensaio hospedado encontrou `42501` no DML administrativo de produto; a migração incremental `202610020001_catalog_service_role_normalization.sql` concede acesso apenas às funções puras necessárias e foi aplicada após teste PGlite. Histórico remoto: seis versões alinhadas.

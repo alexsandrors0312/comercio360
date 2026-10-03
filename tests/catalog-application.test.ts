@@ -10,6 +10,7 @@ const state = vi.hoisted(() => ({
   memberRole: "owner" as string | null,
   memberActive: true,
   storeAccess: true,
+  rpcError: null as string | null,
   rpcCalls: [] as Array<{ name: string; args: Record<string, unknown> }>,
 }));
 
@@ -60,7 +61,9 @@ vi.mock("../lib/supabase/server", () => ({
       state.rpcCalls.push({ name, args });
       return {
         data: [{ id: "66666666-6666-4666-8666-666666666666", revision: 1 }],
-        error: null,
+        error: state.rpcError
+          ? { code: state.rpcError, message: "private provider details" }
+          : null,
       };
     },
   }),
@@ -76,9 +79,20 @@ beforeEach(() => {
   state.memberActive = true;
   state.storeAccess = true;
   state.rpcCalls.length = 0;
+  state.rpcError = null;
 });
 
 describe("catalog application authorization", () => {
+  it("maps a domain PT409 to conflict without exposing the provider response", async () => {
+    state.rpcError = "PT409";
+    const result = await createCatalogCategory(scopeA, { name: "Blusas" });
+    expect(result.status).toBe("conflict");
+    expect(result.message).not.toContain("private provider details");
+    state.rpcError = "40001";
+    expect(
+      (await createCatalogCategory(scopeA, { name: "Blusas" })).status,
+    ).toBe("unavailable");
+  });
   it("requires an active member with an explicit active store for writes", async () => {
     const granted = await authorizeCatalog(scopeA, "write");
     expect(granted.role).toBe("owner");

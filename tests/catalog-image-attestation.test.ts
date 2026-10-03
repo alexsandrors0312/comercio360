@@ -47,6 +47,10 @@ describe("Catalog image attestation", () => {
     `);
     await db.exec(sql("migrations/202609300002_catalog_storage.sql"));
     await db.exec(sql("migrations/202609300003_catalog_image_attestation.sql"));
+    await db.exec(
+      sql("migrations/202610020001_catalog_service_role_normalization.sql"),
+    );
+    await db.exec(sql("migrations/202610030001_catalog_conflict_http.sql"));
   });
   afterAll(async () => {
     await db?.close();

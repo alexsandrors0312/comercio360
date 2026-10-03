@@ -1,0 +1,105 @@
+{
+  "schema_version": "0.1",
+  "task_id": "CAT-002-REST-CONFLICT-01",
+  "contract_revision": 1,
+  "objective": "Corrigir conflitos de domínio no Catálogo para PT409 (HTTP 409), evitando retries de SQLSTATE 40001 no PostgREST, com migração incremental e consumidores/testes coerentes.",
+  "mode": "implementation",
+  "authorization": {
+    "source": "Usuário aceitou Catálogo 002, testes hospedados e em 03/10 pediu continuar desenvolvendo.",
+    "scope": "Código local do corretivo de concorrência do Catálogo; sem acesso remoto ou credenciais."
+  },
+  "workspace": "C:/Users/Alexs/Desktop/Comercio360",
+  "baseline": {
+    "kind": "git",
+    "ref": "f6a02c8f12a08d7eb0acda3a7c3cf44b8400408e"
+  },
+  "role": "data-application",
+  "runtime": "dsh-headless",
+  "model": "configured-profile",
+  "reasoning": "configured-profile",
+  "depends_on": [],
+  "read_refs": [
+    "AGENTS.md",
+    "context.md",
+    "docs/adr/ADR-0010-catalogo-produtos.md",
+    "docs/CATALOGO_002_HOSPEDADO.md",
+    "supabase/migrations/202609300001_catalog.sql",
+    "app/actions/catalog.ts",
+    "app/api/catalog/images/[productId]/route.ts",
+    "tests/catalog-sql.test.ts",
+    "tests/catalog-application.test.ts",
+    "tests/catalog-image.test.ts",
+    "tests/catalog-image-attestation.test.ts",
+    "tests/support/auth-server.mjs"
+  ],
+  "write_allowlist": [
+    "supabase/migrations/202610030001_catalog_conflict_http.sql",
+    "app/actions/catalog.ts",
+    "app/api/catalog/images/[productId]/route.ts",
+    "tests/catalog-sql.test.ts",
+    "tests/catalog-application.test.ts",
+    "tests/catalog-image.test.ts",
+    "tests/catalog-image-attestation.test.ts",
+    "tests/support/auth-server.mjs"
+  ],
+  "protected_paths": [
+    "supabase/migrations/202609300001_catalog.sql",
+    "supabase/migrations/202609300002_catalog_storage.sql",
+    "supabase/migrations/202609300003_catalog_image_attestation.sql",
+    "supabase/migrations/202610020001_catalog_service_role_normalization.sql",
+    "docs/H1_RESULTADOS.json"
+  ],
+  "invariants": [
+    "Não alterar migrações aplicadas ou evidência histórica; nova migração redefine explicitamente apenas as seis RPCs com conflitos artificiais 40001, preservando argumentos, locks, CAS, RLS, grants, autoria, auditoria e idempotência.",
+    "PT409 apenas para conflito de revisão/idempotência; não transformar falhas nativas de serialização em sucesso nem retirar locks.",
+    "Não acessar .env, credenciais, tokens, Supabase remoto, CLI autenticado ou rede privada; você não está sozinho no workspace, não reverta alterações de outros.",
+    "Antes de editar código Next leia guia pertinente em node_modules/next/dist/docs/. Sem novos subagentes; sem git commit."
+  ],
+  "acceptance": [
+    {
+      "id": "C1",
+      "criterion": "Migração incremental converte todos os sete raises artificiais 40001 das seis RPCs para PT409 preservando segurança e comportamento."
+    },
+    {
+      "id": "C2",
+      "criterion": "Server Actions e rota de imagem traduzem PT409 para conflito reconhecível e mantêm tratamento de erro seguro."
+    },
+    {
+      "id": "C3",
+      "criterion": "Testes de regressão cobrem conflito PT409 de categoria/produto/variante/preço/capa/idempotência e mapeamento nos consumidores; loaders testam migração nova."
+    }
+  ],
+  "checks": [
+    {
+      "id": "STATIC",
+      "kind": "static",
+      "target": "C1,C2,C3",
+      "environment": "local",
+      "owner": "worker"
+    },
+    {
+      "id": "TESTS",
+      "kind": "dynamic",
+      "target": "C1,C2,C3",
+      "environment": "local",
+      "owner": "orchestrator"
+    },
+    {
+      "id": "HOSTED",
+      "kind": "dynamic",
+      "target": "C1,C2",
+      "environment": "Supabase descartável",
+      "owner": "orchestrator"
+    }
+  ],
+  "constraints": {
+    "network": "Somente fontes públicas opcionais; sem serviços autenticados. Fonte já conferida pelo orquestrador: https://supabase.com/docs/guides/troubleshooting/high-cpu-and-infinite-transaction-retries-when-using-custom-error-codes-in-rpc-functions-77326b explica loop 40001; https://postgrest.org/en/stable/references/errors.html documenta PT409.",
+    "nested_delegation": false,
+    "summary_words_target": 150
+  },
+  "stop_conditions": [
+    "Necessidade de credenciais ou mutação remota.",
+    "Mudança de semântica de negócio além de código de erro.",
+    "Após duas tentativas sem avanço, devolver diagnóstico."
+  ]
+}

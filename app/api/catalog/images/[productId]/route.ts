@@ -12,6 +12,7 @@ import {
 } from "@/lib/catalog-image/process";
 import { parseCatalogRevision } from "@/packages/domain/catalog";
 import { readBoundedMultipart } from "@/lib/catalog-image/form";
+import { isSameOrigin } from "@/lib/catalog-image/origin";
 
 export const runtime = "nodejs";
 const BUCKET = "catalog-private";
@@ -26,7 +27,7 @@ function reply(status: number, message: string) {
 }
 
 function sqlFailure(code: string | undefined) {
-  if (code === "40001")
+  if (code === "PT409")
     return reply(409, "O produto mudou. Recarregue e tente novamente.");
   if (code === "42501" || code === "P0002") return reply(403, "Acesso negado.");
   if (code === "22023" || code === "23514")
@@ -83,9 +84,7 @@ export async function POST(request: Request, { params }: Context) {
   const { productId } = await params;
   if (!z.uuid().safeParse(productId).success)
     return reply(400, "Produto inválido.");
-  const origin = request.headers.get("origin");
-  if (!origin || origin !== new URL(request.url).origin)
-    return reply(403, "Origem inválida.");
+  if (!isSameOrigin(request)) return reply(403, "Origem inválida.");
   const declaredLength = request.headers.get("content-length");
   if (declaredLength !== null) {
     const length = Number(declaredLength);
@@ -224,9 +223,7 @@ export async function DELETE(request: Request, { params }: Context) {
   const { productId } = await params;
   if (!z.uuid().safeParse(productId).success)
     return reply(400, "Produto inválido.");
-  const origin = request.headers.get("origin");
-  if (!origin || origin !== new URL(request.url).origin)
-    return reply(403, "Origem inválida.");
+  if (!isSameOrigin(request)) return reply(403, "Origem inválida.");
   const length = Number(request.headers.get("content-length"));
   if (!Number.isSafeInteger(length) || length < 1 || length > 2048)
     return reply(400, "Solicitação inválida.");

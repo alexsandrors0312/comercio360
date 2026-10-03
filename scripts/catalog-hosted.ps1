@@ -1,6 +1,7 @@
 param(
   [Parameter(Mandatory = $true)]
-  [string]$ConfirmProjectUrl
+  [string]$ConfirmProjectUrl,
+  [switch]$Extended
 )
 
 # Opt-in verification for the H1 disposable project only. Never print API keys,
@@ -10,7 +11,7 @@ $projectRef = 'qiwblpmocldqbijbylwg'
 $projectUrl = "https://$projectRef.supabase.co"
 $environmentNames = @(
   'NEXT_PUBLIC_SUPABASE_URL', 'NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY',
-  'SUPABASE_SECRET_KEY', 'CATALOG_IMAGE_ATTESTATION_KEY'
+  'SUPABASE_SECRET_KEY', 'CATALOG_IMAGE_ATTESTATION_KEY', 'CATALOG_HOSTED_EXTENDED'
 )
 $previous = @{}
 foreach ($name in $environmentNames) {
@@ -34,8 +35,9 @@ try {
   }
   $targetConfirmed = $true
   $preflight = Invoke-SupabaseJson @('db', 'query', '--linked',
-    "select (select count(*) from supabase_migrations.schema_migrations)=6 as migrations_ready, (select count(*) from storage.buckets where id='catalog-private' and public=false)=1 as bucket_ready, (select count(*) from private.catalog_image_attestation_key)=0 as key_absent")
-  if (-not ($preflight.migrations_ready -and $preflight.bucket_ready -and $preflight.key_absent)) {
+    "select (select count(*)=7 and bool_and(version in ('202609070001','202609080001','202609300001','202609300002','202609300003','202610020001','202610030001')) from supabase_migrations.schema_migrations) as migrations_ready, (select count(*) from storage.buckets where id='catalog-private' and public=false)=1 as bucket_ready, (select count(*) from private.catalog_image_attestation_key)=0 as key_absent, (select count(*) from public.catalog_image_objects)=0 as ledger_empty, (select count(*) from storage.objects where bucket_id='catalog-private')=0 as storage_empty, (select count(*) from auth.users where email like 'catalog.hosted.%@example.test')=0 as test_users_absent")
+  if (-not ($preflight.migrations_ready -and $preflight.bucket_ready -and $preflight.key_absent -and
+      $preflight.ledger_empty -and $preflight.storage_empty -and $preflight.test_users_absent)) {
     throw 'Hosted preflight mismatch'
   }
   $listed = Invoke-SupabaseJson @('projects', 'api-keys', '--project-ref', $projectRef)
@@ -56,6 +58,7 @@ try {
     throw 'Attestation key shape mismatch'
   }
   $env:CATALOG_IMAGE_ATTESTATION_KEY = $created.attestation_key
+  $env:CATALOG_HOSTED_EXTENDED = if ($Extended) { 'yes' } else { '' }
   Write-Output 'PASS: preflight e chave temporária em memória'
   & node tests/hosted/catalog-storage.mjs
   if ($LASTEXITCODE -ne 0) { $failed = $true }
@@ -78,6 +81,11 @@ try {
     try {
     $postflight = Invoke-SupabaseJson @('db', 'query', '--linked',
       "select (select count(*) from auth.users where email like 'catalog.hosted.%@example.test') as test_users, (select count(*) from public.products where name like 'Hosted storage probe %' or name like 'Hosted updated %' or name like 'Hosted CAS %') as test_products, (select count(*) from storage.objects where bucket_id='catalog-private') as storage_objects, (select count(*) from public.catalog_image_objects) as image_ledger, (select count(*) from private.catalog_image_attestation_key) as hmac_keys")
+    foreach ($field in @('test_users', 'test_products', 'storage_objects', 'image_ledger', 'hmac_keys')) {
+      if ($null -eq $postflight.$field -or [string]$postflight.$field -notmatch '^\d+$') {
+        throw 'Postflight count shape mismatch'
+      }
+    }
     $snapshot = [ordered]@{
       project_ref = $projectRef
       executed_at = (Get-Date).ToUniversalTime().ToString('o')

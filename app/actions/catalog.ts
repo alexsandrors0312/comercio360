@@ -40,7 +40,7 @@ function failure(
 
 function databaseFailure(code: string): CatalogMutationResult {
   if (code === "42501" || code === "P0002") return failure("denied");
-  if (code === "40001") return failure("conflict");
+  if (code === "PT409") return failure("conflict");
   if (code === "23505") return failure("duplicate");
   if (["22023", "23502", "23503", "23514", "22P02"].includes(code))
     return failure("invalid");

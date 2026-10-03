@@ -4,8 +4,20 @@ import {
   CatalogImageError,
   processCatalogImage,
 } from "../lib/catalog-image/process";
+import { isSameOrigin } from "../lib/catalog-image/origin";
 
 describe("catalog cover processing", () => {
+  it("accepts the received host and rejects a different origin or scheme", () => {
+    const route = "http://localhost:3210/api/catalog/images/product";
+    const request = (origin: string, host = "127.0.0.1:3210") =>
+      new Request(route, { headers: { host, origin } });
+    expect(isSameOrigin(request("http://127.0.0.1:3210"))).toBe(true);
+    expect(isSameOrigin(request("http://evil.example:3210"))).toBe(false);
+    expect(isSameOrigin(request("https://127.0.0.1:3210"))).toBe(false);
+    expect(isSameOrigin(request("http://127.0.0.1:3210", "example.test"))).toBe(
+      false,
+    );
+  });
   it("decodes, reencodes and strips source metadata before storing", async () => {
     const original = await sharp({
       create: {

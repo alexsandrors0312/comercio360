@@ -88,7 +88,10 @@ describe("Catálogo 002 SQL", () => {
       grant select,insert on storage.objects to authenticated;
     `);
     await db.exec(sql("migrations/202609300002_catalog_storage.sql"));
-    await db.exec(sql("migrations/202610020001_catalog_service_role_normalization.sql"));
+    await db.exec(
+      sql("migrations/202610020001_catalog_service_role_normalization.sql"),
+    );
+    await db.exec(sql("migrations/202610030001_catalog_conflict_http.sql"));
   });
   afterAll(async () => {
     await db?.close();
@@ -228,7 +231,7 @@ describe("Catálogo 002 SQL", () => {
             true,
           ],
         ),
-      "40001",
+      "PT409",
     );
     await denied(
       () =>
@@ -247,8 +250,72 @@ describe("Catálogo 002 SQL", () => {
             "aaaaaaaa-0000-4000-8000-000000000001",
           ],
         ),
-      "40001",
+      "PT409",
     );
+  });
+
+  it("raises PT409 for category, variant and price CAS conflicts", async () => {
+    await asUser(managerA);
+    const cat = await category();
+    const created = await product(cat.id);
+    const variant = (
+      await db.query<{ id: string; revision: string }>(
+        "select id,revision from public.product_variants where product_id=$1",
+        [created.id],
+      )
+    ).rows[0];
+    await denied(
+      () =>
+        db.query("select * from public.catalog_set_price($1,$2,$3,$4,$5)", [
+          orgA,
+          storeA,
+          variant.id,
+          "1",
+          "10.00",
+        ]),
+      "PT409",
+    );
+    const price = (
+      await db.query<{ id: string; revision: string }>(
+        "select * from public.catalog_set_price($1,$2,$3,$4,$5)",
+        [orgA, storeA, variant.id, null, "10.00"],
+      )
+    ).rows[0];
+    await denied(
+      () =>
+        db.query(
+          "select * from public.catalog_update_category($1,$2,$3,$4,$5,$6)",
+          [orgA, storeA, cat.id, "2", "Renomeada", true],
+        ),
+      "PT409",
+    );
+    await denied(
+      () =>
+        db.query(
+          "select * from public.catalog_update_variant($1,$2,$3,$4,$5,$6,$7,$8,$9)",
+          [orgA, storeA, variant.id, "2", "SKU-X", "Verde", "M", null, true],
+        ),
+      "PT409",
+    );
+    await denied(
+      () =>
+        db.query("select * from public.catalog_set_price($1,$2,$3,$4,$5)", [
+          orgA,
+          storeA,
+          variant.id,
+          "2",
+          "20.00",
+        ]),
+      "PT409",
+    );
+    const unchanged = (
+      await db.query<{ amount: string; revision: string }>(
+        "select amount,revision from public.product_prices where id=$1",
+        [price.id],
+      )
+    ).rows[0];
+    expect(unchanged.amount).toBe("10.00");
+    expect(unchanged.revision).toBe(price.revision);
   });
 
   it("isolates price by store, preserves decimals and rolls business writes back on audit failure", async () => {
@@ -668,7 +735,7 @@ describe("Catálogo 002 SQL", () => {
           created.revision,
           second.object_id,
         ]),
-      "40001",
+      "PT409",
     );
     await db.query("select * from public.catalog_set_cover($1,$2,$3,$4,$5)", [
       orgA,

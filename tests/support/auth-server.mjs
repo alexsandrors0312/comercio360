@@ -12,6 +12,8 @@ for (const file of [
   "tests/fixtures.sql",
   "tests/context-fixtures.sql",
   "migrations/202609300001_catalog.sql",
+  "migrations/202610020001_catalog_service_role_normalization.sql",
+  "migrations/202610030001_catalog_conflict_http.sql",
 ])
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
@@ -254,10 +256,14 @@ createServer((request, response) => {
         if (clauses.length) query += " where " + clauses.join(" and ");
         return reply(response, 200, (await db.query(query, values)).rows);
       } catch (error) {
-        reply(response, error.code === "42501" ? 403 : 500, {
-          message: error.message,
-          code: error.code,
-        });
+        reply(
+          response,
+          error.code === "42501" ? 403 : error.code === "PT409" ? 409 : 500,
+          {
+            message: error.message,
+            code: error.code,
+          },
+        );
       }
     })
     .catch(() => reply(response, 500, { message: "Fixture failed" }));

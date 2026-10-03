@@ -1,6 +1,6 @@
 # RepoMap — índice estrutural do Comércio 360
 
-Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
+Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
 
 ## Código e símbolos
 
@@ -23,13 +23,13 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L194 export function updateCatalogVariant ( scope variantId input ): Promise<CatalogMutationResult>
 - L217 export function setCatalogPrice ( scope variantId input ): Promise<CatalogMutationResult>
 ### app/api/catalog/images/[productId]/route.ts
-- L16 export const runtime = "nodejs";
-- L21 function reply (status message
-- L28 function sqlFailure (code
-- L37 function accessFailure (error
-- L47 export function GET (request { params }
-- L82 export function POST (request { params }
-- L223 export function DELETE (request { params }
+- L17 export const runtime = "nodejs";
+- L22 function reply (status message
+- L29 function sqlFailure (code
+- L38 function accessFailure (error
+- L48 export function GET (request { params }
+- L83 export function POST (request { params }
+- L222 export function DELETE (request { params }
 ### app/app/[module]/page.tsx
 - L6 export default function Module (
 ### app/app/error.tsx
@@ -73,6 +73,8 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L47 export function signCatalogImageAttestation ( value key ): string
 ### lib/catalog-image/form.ts
 - L3 export function readBoundedMultipart ( request maxBytes ): Promise<FormData>
+### lib/catalog-image/origin.ts
+- L4 export function isSameOrigin (request
 ### lib/catalog-image/process.ts
 - L7 class CatalogImageError
 - L17 export type ProcessedCatalogImage = { bytes: Buffer; mimeType: "image/jpeg" | "image/png" | "im…
@@ -369,6 +371,13 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 ### supabase/migrations/202610020001_catalog_service_role_normalization.sql
 - L6 GRANT usage on schema private to service_role
 - L7 GRANT execute on function private.catalog_whitespace(), private.catal…
+### supabase/migrations/202610030001_catalog_conflict_http.sql
+- L11 CREATE FUNCTION public.catalog_update_category(p_organization_id uuid,p_store_id uuid,p_categor…
+- L27 CREATE FUNCTION public.catalog_create_product(p_organization_id uuid,p_store_id uuid,p_name tex…
+- L62 CREATE FUNCTION public.catalog_update_product(p_organization_id uuid,p_store_id uuid,p_product_…
+- L78 CREATE FUNCTION public.catalog_update_variant(p_organization_id uuid,p_store_id uuid,p_variant_…
+- L99 CREATE FUNCTION public.catalog_set_price(p_organization_id uuid,p_store_id uuid,p_variant_id uu…
+- L130 CREATE FUNCTION public.catalog_set_cover(p_organization_id uuid,p_store_id uuid,p_product_id uu…
 ### supabase/tests/bootstrap.sql
 - L6 CREATE TABLE auth.users
 - L7 CREATE FUNCTION auth.uid() RETURNS …
@@ -378,11 +387,12 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 ## Testes (describe/it/test)
 
 ### tests/catalog-application.test.ts
-- L81 describe('catalog application authorization')
-- L82 it('requires an active member with an explicit active s…')
-- L91 it('keeps read roles from mutating and denies revoked s…')
-- L106 it('does not treat a valid ID from another tenant as pe…')
-- L112 it('does not invoke RPC after revocation and supplies o…')
+- L85 describe('catalog application authorization')
+- L86 it('maps a domain PT409 to conflict without exposing th…')
+- L96 it('requires an active member with an explicit active s…')
+- L105 it('keeps read roles from mutating and denies revoked s…')
+- L120 it('does not treat a valid ID from another tenant as pe…')
+- L126 it('does not invoke RPC after revocation and supplies o…')
 ### tests/catalog-cleanup-guard.test.ts
 - L11 describe('catalog image cleanup preflight')
 - L12 it('requires explicit flag, separate matching origin an…')
@@ -399,27 +409,29 @@ Gerado em 2026-10-02 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L162 it('transports PostgreSQL bigint revisions as bounded d…')
 ### tests/catalog-image-attestation.test.ts
 - L22 describe('Catalog image attestation')
-- L55 it('matches the standard HMAC-SHA256 output')
-- L65 it('rejects forged, stale and unauthorized marks; accep…')
+- L59 it('matches the standard HMAC-SHA256 output')
+- L69 it('rejects forged, stale and unauthorized marks; accep…')
 ### tests/catalog-image.test.ts
-- L8 describe('catalog cover processing')
-- L9 it('decodes, reencodes and strips source metadata befor…')
-- L28 it('rejects unsupported, malformed, oversized and extre…')
-- L60 it('bounds multipart bytes before parsing, including re…')
+- L9 describe('catalog cover processing')
+- L10 it('accepts the received host and rejects a different o…')
+- L21 it('decodes, reencodes and strips source metadata befor…')
+- L40 it('rejects unsupported, malformed, oversized and extre…')
+- L72 it('bounds multipart bytes before parsing, including re…')
 ### tests/catalog-sql.test.ts
 - L68 describe('Catálogo 002 SQL')
-- L103 it('applies incrementally over H1 with RLS on each new …')
-- L113 it('allows service_role to normalize administrative cat…')
-- L138 it('requires role and live store grant for read/write, …')
-- L192 it('normalizes uniqueness, returns same idempotent resu…')
-- L254 it('isolates price by store, preserves decimals and rol…')
-- L322 it('rejects administrative cross-tenant relations and s…')
-- L345 it('keeps existing products under an inactive category …')
-- L382 it('reserves SKU, barcode and option combination after …')
-- L431 it('paginates deterministically with a textual store pr…')
-- L479 it('removes catalog and price visibility immediately af…')
-- L607 it('atomically replaces a validated cover and retires t…')
-- L712 it('rejects a direct cover link after the product is de…')
+- L106 it('applies incrementally over H1 with RLS on each new …')
+- L116 it('allows service_role to normalize administrative cat…')
+- L141 it('requires role and live store grant for read/write, …')
+- L195 it('normalizes uniqueness, returns same idempotent resu…')
+- L257 it('raises PT409 for category, variant and price CAS co…')
+- L321 it('isolates price by store, preserves decimals and rol…')
+- L389 it('rejects administrative cross-tenant relations and s…')
+- L412 it('keeps existing products under an inactive category …')
+- L449 it('reserves SKU, barcode and option combination after …')
+- L498 it('paginates deterministically with a textual store pr…')
+- L546 it('removes catalog and price visibility immediately af…')
+- L674 it('atomically replaces a validated cover and retires t…')
+- L779 it('rejects a direct cover link after the product is de…')
 ### tests/catalog-ui.test.tsx
 - L76 describe('Catálogo: apresentação com escopo de loja')
 - L77 it('mostra ausência de preço sem transformar em zero e …')

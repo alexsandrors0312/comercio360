@@ -1,21 +1,21 @@
 # Comércio 360 — contexto permanente de desenvolvimento
 
-**Atualizado em 02/10/2026.** Leia este arquivo **no início de cada tarefa de desenvolvimento**. Atualize estado, evidências e pendências após mudanças relevantes. Este é um **índice**: confira as afirmações no código, migrações, decisões e relatórios; detalhes extensos ficam nos documentos de módulo.
+**Atualizado em 03/10/2026.** Leia este índice no início de cada tarefa e confirme afirmações no código e relatórios. Atualize decisões, evidências e pendências após mudança relevante.
 
 ## Estado atual e próximo passo
 
 | Item | Estado conferido |
 | --- | --- |
-| Aplicação | **0.1.1**: fundação concluída; Catálogo 002 integrado localmente à árvore principal, ainda sem homologação hospedada |
+| Aplicação | **0.1.1**: fundação e Catálogo 002 integrados; REST, Auth, Storage, Next local e worker testados no Supabase de desenvolvimento |
 | Gate H1 hospedado | **36 PASS / zero FAIL** no Supabase descartável; resultado sanitizado em `docs/H1_RESULTADOS.json` |
 | Revisão arquitetural H1 | **Aprovada com condições** em 26/09/2026; parecer em `docs/REVISAO_ARQUITETURAL_H1.md` |
-| Pacote 002 | **Aceito integralmente em 30/09/2026**; implementado e mesclado. Quatro migrações aplicadas em `comercio360-dev`, Auth/Storage/SQL hospedados testados; REST concorrente recebeu HTTP 504 e segue FAIL. Contrato: `docs/adr/ADR-0010-catalogo-produtos.md`; evidência: `docs/CATALOGO_002_HOSPEDADO.md` |
+| Pacote 002 | **Aceito em 30/09**; cinco migrações aplicadas em `comercio360-dev`. Corretivo `PT409` fechou o 504 REST no ensaio de 03/10. Histórico FAIL de 02/10 preservado. Contrato: ADR-0010; [evidência atual](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md) |
 | Desenvolvimento por IA | H-03 integrado; H-04 sintético encerrado (D1/S1 e U1). U1-V1 original: FAIL Codex, not_run DSH; patch só nos clones. G: captura real DSH validada; custo comparável indisponível |
 | Publicação e dados reais | Ainda não homologados; condições operacionais abertas |
 
-**Próxima ação do harness:** definir telemetria por tarefa da rota Codex, subagentes e custo antes de novos pares ([TELEMETRIA_G.md](docs/ai/TELEMETRIA_G.md)). U1-V5 substitui U1-V1 só em H-04; reparar o runner original à parte. [RELATORIO_H04.md](docs/ai/RELATORIO_H04.md) guarda H-04. Para o Catálogo, investigar HTTP 504 no REST concorrente e completar endpoint Next/limpeza/HTTPS antes de aprovação hospedada integral.
+**Próxima ação do harness:** cobrir telemetria da rota Codex, subagentes e custo antes de novos pares ([TELEMETRIA_G.md](docs/ai/TELEMETRIA_G.md)); reparar o runner U1 original à parte. Para o Catálogo, preparar HTTPS publicado, chave HMAC operacional, agendamento/falha real do worker e condições H1 antes de produção.
 
-**Evidência na árvore combinada (02/10):** `npm ci` e auditoria npm zero vulnerabilidades; lint, tipos e build PASS; Vitest 120/120, Playwright 17/17 e harness 16/16 com seis skills na integração local. Após a corretiva 004, Vitest **121/121** (dois workers), lint e tipos PASS. Revisão CAT-002-SEC-02 sem achados bloqueantes no candidato local. No hospedado: RLS/Storage/atestações e CAS SQL PASS; concorrência REST FAIL HTTP 504. Detalhes em `docs/ENTREGA_CATALOGO_002.md` e `docs/CATALOGO_002_HOSPEDADO.md`.
+**Evidência atual (03/10):** Vitest **124/124**, lint, tipos, build e E2E **17/17**; o E2E precedeu o ajuste de origem, coberto depois com Auth/Storage hospedados. Ensaio final **20 PASS / zero FAIL**, REST simultâneo 200/409 em 97 ms, worker `claimed=2 deleted=2`, cinco contagens finais zero. Três tentativas Next FAIL e os 504 de 02/10 seguem preservados. [Relatório](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md).
 
 ## Produto e decisões já tomadas
 
@@ -37,7 +37,9 @@ Migração incremental: bloqueia atualizações efetivas em `organizations.id`, 
 
 ## Banco, seed e evidência
 
-As duas migrações H1 `202609070001_foundation.sql` e `202609080001_tenant_key_guards.sql` foram confirmadas em Local e Remote no Supabase descartável. Em 02/10, o Catálogo aplicou `202609300001_catalog.sql`, `202609300002_catalog_storage.sql`, `202609300003_catalog_image_attestation.sql` e a corretiva `202610020001_catalog_service_role_normalization.sql` em `comercio360-dev`; seis versões ficaram alinhadas em Local/Remote. A corretiva dá a `service_role` somente acesso às funções puras necessárias ao DML administrativo, sem leitura da tabela HMAC. Não reaplicar, reescrever nem usar `migration repair`; novos módulos exigem migrações incrementais novas e revisão própria.
+As duas migrações H1 e as cinco do Catálogo, de `202609300001_catalog.sql` a `202610030001_catalog_conflict_http.sql`, foram confirmadas em Local/Remote de `comercio360-dev` em 03/10. A corretiva 004 concede a `service_role` somente funções puras de DML, sem leitura HMAC; a 005 usa `PT409` em conflitos de negócio para evitar retry do PostgREST. Não reaplicar, reescrever nem usar `migration repair`; novos módulos exigem migrações incrementais e revisão própria.
+
+O responsável pediu em 03/10 manter o token CLI ativo até segunda ordem. Não revogar ou publicar seu valor. A chave HMAC de cada ensaio foi temporária e teve remoção conferida; chave operacional futura requer provisionamento próprio.
 
 `supabase/seed.sql` usa duas organizações e três lojas fictícias; o seed preparou quatro contas `example.test` preservando senhas. `scripts/seed-users.mjs` exige `ALLOW_DEVELOPMENT_SEED=yes`, confirmação independente da URL e domínio exato `example.test`; `scripts/h1-manual.ps1` solicita chave e senha com entrada oculta e emite só resultados sanitizados. Não reexecutar seed por rotina nem inserir credenciais em código, `.env.example`, relatórios ou conversa.
 
@@ -69,4 +71,4 @@ Comandos locais de referência: `npm ci`, `npm run lint`, `npm run typecheck`, `
 
 Não solicitar nem registrar senha de usuário, chave administrativa, segredo de banco ou JWT pelo chat. `.env.local`, `node_modules`, `.next*`, `.git`, `supabase/.temp` e relatórios de navegador não fazem parte de artefatos limpos. `.env.example` é somente modelo sem credenciais. O acesso administrativo necessário a seed/homologação ocorre no terminal local do operador com entrada oculta. Preservar auditoria e migrações já aplicadas; não usar reset/repair para contornar divergências.
 
-**Estado atual:** H-01 concluída; H-02 parcial; H-03 integrado; H-04 sintético encerrado, runner original pendente; G validou captura DSH real sem custo comparável. Catálogo 002 integrado e testado parcialmente no Supabase real; REST concorrente FAIL HTTP 504, endpoint Next e operação de limpeza completa pendentes. Publicação e dados reais seguem bloqueados pelas condições H1.
+**Estado atual:** H-01 concluída; H-02 parcial; H-03 integrado; H-04 sintético encerrado, runner original pendente; G validou captura DSH real sem custo comparável. Catálogo 002 passou em REST/Storage, Next local e limpeza dirigida no Supabase de desenvolvimento. Publicação e dados reais seguem bloqueados por HTTPS, chave operacional, backup/restauração, separação de ambientes e loja piloto.
