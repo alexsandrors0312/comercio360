@@ -31,12 +31,16 @@ export function validateCatalogCleanupEnv(env) {
   return { url, key: env.SUPABASE_SECRET_KEY };
 }
 
-export async function runCatalogImageCleanup(env = process.env) {
+export async function runCatalogImageCleanup(env = process.env, options = {}) {
   const { url, key } = validateCatalogCleanupEnv(env);
-  const admin = createClient(url, key, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-  const cutoff = new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString();
+  const admin =
+    options.admin ??
+    createClient(url, key, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+  const cutoff = new Date(
+    (options.now ?? Date.now()) - 2 * 60 * 60 * 1000,
+  ).toISOString();
   let deleted = 0;
   let failed = 0;
   let claimed = 0;
@@ -52,19 +56,30 @@ export async function runCatalogImageCleanup(env = process.env) {
     claimed += rows.length;
     for (const row of rows) {
       // The SQL claim already checked age, state and absence of active reference.
-      const removed = await admin.storage
-        .from("catalog-private")
-        .remove([row.object_path]);
+      let removalFailed = false;
+      try {
+        const removed = await admin.storage
+          .from("catalog-private")
+          .remove([row.object_path]);
+        removalFailed = Boolean(removed.error);
+      } catch {
+        // A transient transport error must return the row to the retry queue.
+        removalFailed = true;
+      }
       const finished = await admin.rpc("catalog_finish_image_cleanup", {
         p_object_id: row.object_id,
-        p_deleted: !removed.error,
+        p_deleted: !removalFailed,
       });
       if (finished.error) throw new Error("cleanup finalization failed");
-      if (removed.error) failed++;
+      if (removalFailed) failed++;
       else deleted++;
     }
   }
   return { claimed, deleted, failed };
+}
+
+export function catalogCleanupExitCode(result) {
+  return result.failed > 0 ? 1 : 0;
 }
 
 if (
@@ -76,6 +91,7 @@ if (
     console.log(
       `CATALOG-CLEANUP claimed=${result.claimed} deleted=${result.deleted} failed=${result.failed}`,
     );
+    process.exitCode = catalogCleanupExitCode(result);
   } catch {
     console.error("CATALOG-CLEANUP failed; no paths or credentials logged.");
     process.exitCode = 1;

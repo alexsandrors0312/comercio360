@@ -1,0 +1,10 @@
+{
+  "dependencies": {
+    "vinext": "^1.0.1"
+  },
+  "_npx": {
+    "packages": [
+      "vinext@latest"
+    ]
+  }
+}
