@@ -10,6 +10,7 @@ const SUPABASE = "https://" + PROJECT + ".supabase.co";
 const WORKER = "https://comercio360.alexsandrors-0312.workers.dev";
 const ORG = "10000000-0000-4000-8000-000000000001";
 const STORE = "10000000-0000-4000-8000-000000000011";
+const OTHER_STORE = "10000000-0000-4000-8000-000000000012";
 const BUCKET = "catalog-private";
 console.warn = () => console.log("SDK: aviso sensível omitido.");
 console.error = () => console.log("SDK: diagnóstico sensível omitido.");
@@ -128,6 +129,17 @@ try {
         .select("id")
         .single(),
     );
+    value(
+      await admin
+        .from("user_store_access")
+        .insert({
+          organization_id: ORG,
+          membership_id: fixture.membershipId,
+          store_id: OTHER_STORE,
+        })
+        .select("id")
+        .single(),
+    );
     const product = value(
       await admin
         .from("products")
@@ -172,6 +184,37 @@ try {
       authCookies.length > 0 && authCookies.every((cookie) => cookie.secure),
     );
     check(new URL(page.url()).origin === WORKER);
+  });
+  await stage("Seleção da segunda loja em HTTPS", async () => {
+    await page.getByRole("combobox", { name: "Loja" }).selectOption(OTHER_STORE);
+    await page.getByRole("button", { name: "Aplicar" }).click();
+    await page.waitForURL((url) => url.pathname === "/app/visao-geral", {
+      timeout: 45000,
+    });
+  });
+  await stage("Cookie da loja selecionada emitido", async () => {
+    let selected;
+    for (let attempt = 0; attempt < 100; attempt++) {
+      selected = (await context.cookies(WORKER)).find(
+        (cookie) => cookie.name === "c360-store",
+      );
+      if (selected?.value === OTHER_STORE) break;
+      await page.waitForTimeout(200);
+    }
+    check(selected?.value === OTHER_STORE);
+  });
+  await stage("Cookie de contexto Secure e HttpOnly", async () => {
+    const selected = (await context.cookies(WORKER)).find(
+      (cookie) => cookie.name === "c360-store",
+    );
+    check(selected?.secure && selected.httpOnly);
+  });
+  await stage("Loja persiste após recarga HTTPS", async () => {
+    await page.reload({ waitUntil: "domcontentloaded" });
+    check(
+      (await page.getByRole("combobox", { name: "Loja" }).inputValue()) ===
+        OTHER_STORE,
+    );
   });
   const request = context.request;
   const noRedirect = { maxRedirects: 0, timeout: 45000 };
@@ -351,6 +394,22 @@ try {
       noRedirect,
     );
     check(missing.status() === 404);
+  });
+  await stage("Logout limpa sessão e bloqueia página privada", async () => {
+    await page.getByRole("button", { name: /Sair/ }).click();
+    await page.waitForURL((url) => url.pathname === "/login", {
+      timeout: 45000,
+    });
+    const cookies = await context.cookies(WORKER);
+    check(!cookies.some((cookie) =>
+      cookie.name === "c360-store" ||
+      cookie.name === "c360-org" ||
+      (cookie.name.startsWith("sb-") && cookie.name.includes("auth-token")),
+    ));
+    await page.goto(WORKER + "/app/visao-geral", {
+      waitUntil: "domcontentloaded", timeout: 45000,
+    });
+    check(new URL(page.url()).pathname === "/login");
   });
 } catch {
   failed = true;

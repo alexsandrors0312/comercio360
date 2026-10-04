@@ -11,13 +11,13 @@
 | Revisão arquitetural H1 | **Aprovada com condições** em 26/09/2026; parecer em `docs/REVISAO_ARQUITETURAL_H1.md` |
 | Pacote 002 | **Aceito em 30/09**; cinco migrações aplicadas em `comercio360-dev`. Corretivo `PT409` fechou o 504 REST no ensaio de 03/10. Histórico FAIL de 02/10 preservado. Contrato: ADR-0010; [evidência atual](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md) |
 | Desenvolvimento por IA | H-03 integrado; H-04 sintético encerrado (D1/S1 e U1). U1-V1 original: FAIL Codex, not_run DSH; patch só nos clones. G: captura real DSH validada; custo comparável indisponível |
-| Publicação e dados reais | Homologação Cloudflare Free com `comercio360-dev` em curso; dados reais ainda bloqueados |
+| Publicação e dados reais | Homologação Cloudflare Free publicada com `comercio360-dev`; dados reais ainda bloqueados |
 
-**Próxima ação do harness:** cobrir telemetria da rota Codex, subagentes e custo antes de novos pares ([TELEMETRIA_G.md](docs/ai/TELEMETRIA_G.md)); reparar o runner U1 original à parte. Para o Catálogo, confirmar build Linux da configuração versionada, redirect HTTPS, sessão/upload/Auth/Storage/HMAC publicados e retry remoto do Cron antes de produção.
+**Próxima ação do harness:** cobrir telemetria da rota Codex, subagentes e custo antes de novos pares ([TELEMETRIA_G.md](docs/ai/TELEMETRIA_G.md)); reparar o runner U1 original à parte. Para o Catálogo, ensaiar renovação natural em HTTPS, retry remoto do Cron e condições de produção.
 
 **Evidência atual (03/10):** Vitest **124/124**, lint, tipos, build e E2E **17/17**; o E2E precedeu o ajuste de origem, coberto depois com Auth/Storage hospedados. Ensaio final **20 PASS / zero FAIL**, REST simultâneo 200/409 em 97 ms, worker `claimed=2 deleted=2`, cinco contagens finais zero. Três tentativas Next FAIL e os 504 de 02/10 seguem preservados. [Relatório](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md).
 
-**Evidência nova (04/10):** Images binding remoto 8/8 após FAIL inicial de EXIF retido; sanitização JPEG/PNG/WebP e 16/16 testes direcionados. Integração local: Vitest **143/143**, lint (um aviso histórico), tipos e build Next PASS. E2E local imprimiu 17 casos OK mas travou no teardown; permanece inconclusivo. Chave HMAC operacional no banco dev e secret só no Worker web, sem upload publicado ainda. Cron separado com chave administrativa só nele: 8 eventos Success/0 Errors na última hora às 18h11 BRT, CPU 1 ms na execução das 18h; retry remoto ainda pendente. [Deploy](docs/CLOUDFLARE_DEPLOY.md), [operação](docs/PUBLICACAO_OPERACAO_2026-10-03.md).
+**Evidência nova (04/10):** Images binding remoto 8/8 após FAIL inicial de EXIF retido; sanitização JPEG/PNG/WebP. Vitest **143/143**, lint (aviso H-04), tipos e build Next PASS; E2E local 17 casos OK, teardown travou e permanece inconclusivo. Build Cloudflare `#9a188a00` publicou `9695ffd`: HTTP→HTTPS 308, 16 linhas PASS no ensaio de Auth/loja/Storage/HMAC/capa/logout com fixtures removidas. Chave administrativa só no Cron separado; 8 Success/0 Errors na última hora às 18h11 BRT, CPU 1 ms às 18h. Renovação HTTPS e retry remoto pendentes. [Relatório](docs/CLOUDFLARE_HTTPS_2026-10-04.md).
 
 ## Produto e decisões já tomadas
 
@@ -41,7 +41,7 @@ Migração incremental: bloqueia atualizações efetivas em `organizations.id`, 
 
 As duas migrações H1 e as cinco do Catálogo, de `202609300001_catalog.sql` a `202610030001_catalog_conflict_http.sql`, foram confirmadas em Local/Remote de `comercio360-dev` em 03/10. A corretiva 004 concede a `service_role` somente funções puras de DML, sem leitura HMAC; a 005 usa `PT409` em conflitos de negócio para evitar retry do PostgREST. Não reaplicar, reescrever nem usar `migration repair`; novos módulos exigem migrações incrementais e revisão própria.
 
-O responsável pediu em 03/10 manter o token CLI ativo até segunda ordem. Não revogar ou publicar seu valor. A chave HMAC de cada ensaio anterior foi temporária e teve remoção conferida; a operacional dev foi provisionada em 04/10 e verificada por desafio, ainda sem prova de upload HTTPS.
+O responsável pediu em 03/10 manter o token CLI ativo até segunda ordem. Não revogar ou publicar seu valor. A chave HMAC de cada ensaio anterior foi temporária e teve remoção conferida; a operacional dev foi provisionada em 04/10, verificada por desafio e por upload HTTPS autenticado.
 
 `supabase/seed.sql` usa duas organizações e três lojas fictícias; o seed preparou quatro contas `example.test` preservando senhas. `scripts/seed-users.mjs` exige `ALLOW_DEVELOPMENT_SEED=yes`, confirmação independente da URL e domínio exato `example.test`; `scripts/h1-manual.ps1` solicita chave e senha com entrada oculta e emite só resultados sanitizados. Não reexecutar seed por rotina nem inserir credenciais em código, `.env.example`, relatórios ou conversa.
 
@@ -73,4 +73,4 @@ Comandos locais de referência: `npm ci`, `npm run lint`, `npm run typecheck`, `
 
 Não solicitar nem registrar senha de usuário, chave administrativa, segredo de banco ou JWT pelo chat. `.env.local`, `node_modules`, `.next*`, `.git`, `supabase/.temp` e relatórios de navegador não fazem parte de artefatos limpos. `.env.example` é somente modelo sem credenciais. O acesso administrativo necessário a seed/homologação ocorre no terminal local do operador com entrada oculta. Preservar auditoria e migrações já aplicadas; não usar reset/repair para contornar divergências.
 
-**Estado atual:** H-01 concluída; H-02 parcial; H-03 integrado; H-04 sintético encerrado, runner original pendente; G validou captura DSH real sem custo comparável. Catálogo 002 passou em REST/Storage, Next local, Images binding remoto e Cron dev observado. Publicação funcional depende de build e matriz HTTPS; dados reais ainda dependem de backup/restauração, produção separada e loja piloto.
+**Estado atual:** H-01 concluída; H-02 parcial; H-03 integrado; H-04 sintético encerrado, runner original pendente; G validou captura DSH real sem custo comparável. Catálogo 002 passou em REST/Storage, Next local, Images binding remoto, Cron observado e fluxo funcional HTTPS de homologação. Dados reais dependem de renovação HTTPS, retry remoto, backup/restauração, produção separada e loja piloto.

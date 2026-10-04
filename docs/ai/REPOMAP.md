@@ -1,6 +1,6 @@
 # RepoMap — índice estrutural do Comércio 360
 
-Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
+Gerado em 2026-10-04 por `npm run repomap`. Heurístico de linhas, sem dependências (aproximação deliberada de tree-sitter para não alterar o lockfile); tipos de parâmetros omitidos — leia o arquivo para o contrato completo. Regenerar após mudanças estruturais. Estimativa: ~4 bytes/token. Roteamento de documentos: `context.md` e `docs/ai/H04_RESULTADOS_INDICE.md`.
 
 ## Código e símbolos
 
@@ -23,13 +23,13 @@ Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L194 export function updateCatalogVariant ( scope variantId input ): Promise<CatalogMutationResult>
 - L217 export function setCatalogPrice ( scope variantId input ): Promise<CatalogMutationResult>
 ### app/api/catalog/images/[productId]/route.ts
-- L17 export const runtime = "nodejs";
-- L22 function reply (status message
-- L29 function sqlFailure (code
-- L38 function accessFailure (error
-- L48 export function GET (request { params }
-- L83 export function POST (request { params }
-- L222 export function DELETE (request { params }
+- L19 export const runtime = "nodejs";
+- L24 function reply (status message
+- L31 function sqlFailure (code
+- L40 function accessFailure (error
+- L50 export function GET (request { params }
+- L85 export function POST (request { params }
+- L237 export function DELETE (request { params }
 ### app/app/[module]/page.tsx
 - L6 export default function Module (
 ### app/app/error.tsx
@@ -66,19 +66,44 @@ Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L2 export default function Home ()
 ### app/sem-acesso/page.tsx
 - L2 export default function NoAccess ()
+### lib/catalog-image/animation.ts
+- L6 export function inspectStaticImageContainer ( bytes ): "image/jpeg" | "image/png" | "image/webp"
+- L72 function ascii (bytes offset length
+- L76 function readU32BE (bytes offset
+- L85 function readU32LE (bytes offset
 ### lib/catalog-image/attestation.ts
 - L3 export type CatalogImageAttestation = { organizationId: string; storeId: string; productId: str…
 - L17 export function catalogImageAttestationPayload ( value ): string
 - L36 export function parseCatalogImageKey (encoded
 - L47 export function signCatalogImageAttestation ( value key ): string
+### lib/catalog-image/container-metadata.ts
+- L2 export function stripPngMetadata (input
+- L40 export function stripWebpMetadata (input
+- L83 function concat (parts
+- L94 function ascii (bytes offset length
+- L98 function readU32BE (bytes offset
+- L107 function readU32LE (bytes offset
+### lib/catalog-image/contracts.ts
+- L1 class CatalogImageError
+- L11 export type ProcessedCatalogImage = { bytes: Buffer; mimeType: "image/jpeg" | "image/png" | "im…
 ### lib/catalog-image/form.ts
 - L3 export function readBoundedMultipart ( request maxBytes ): Promise<FormData>
+### lib/catalog-image/jpeg-metadata.ts
+- L7 export function stripJpegMetadata (input
+- L67 function concat (parts
 ### lib/catalog-image/origin.ts
 - L4 export function isSameOrigin (request
+### lib/catalog-image/process-cloudflare.ts
+- L19 export type CatalogImagesBinding = { info(input: ReadableStream<Uint8Array>): Promise<ImageInfo…
+- L30 class CatalogImageServiceError
+- L37 function bytesAsStream (bytes
+- L46 function assertDimensions (info
+- L66 function readBoundedImage (response
+- L96 function serviceError (error
+- L109 export function processCatalogImageCloudflare ( input images ): Promise<ProcessedCatalogImage>
 ### lib/catalog-image/process.ts
-- L7 class CatalogImageError
-- L17 export type ProcessedCatalogImage = { bytes: Buffer; mimeType: "image/jpeg" | "image/png" | "im…
-- L24 export function processCatalogImage ( input ): Promise<ProcessedCatalogImage>
+- L4 export { CatalogImageError }
+- L11 export function processCatalogImage ( input ): Promise<ProcessedCatalogImage>
 ### lib/catalog/server.ts
 - L18 export type CatalogScope = z.input<typeof scopeSchema>; export type CatalogFilters = z.input<ty…
 - L19 export type CatalogFilters = z.input<typeof filtersSchema>; export type CatalogCategory = { id:…
@@ -188,7 +213,8 @@ Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependên
 ### scripts/catalog-image-cleanup.mjs
 - L5 function projectOrigin (value)
 - L23 export function validateCatalogCleanupEnv (env)
-- L34 export function runCatalogImageCleanup (env = process.env)
+- L34 export function runCatalogImageCleanup (env = process.env, options = {})
+- L81 export function catalogCleanupExitCode (result)
 ### scripts/harness/dsh-mcp-telemetry.mjs
 - L42 function telemetryAvailable ()
 - L50 function parseUsage (raw, runId)
@@ -394,8 +420,9 @@ Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L120 it('does not treat a valid ID from another tenant as pe…')
 - L126 it('does not invoke RPC after revocation and supplies o…')
 ### tests/catalog-cleanup-guard.test.ts
-- L11 describe('catalog image cleanup preflight')
-- L12 it('requires explicit flag, separate matching origin an…')
+- L16 describe('catalog image cleanup preflight')
+- L17 it('requires explicit flag, separate matching origin an…')
+- L33 it('returns a failed deletion to the delayed retry queu…')
 ### tests/catalog-domain.test.ts
 - L34 describe('catalog normalization and boundaries')
 - L35 it('preserves category display accents but folds whites…')
@@ -407,10 +434,30 @@ Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependên
 - L128 it('normalizes decimal text without floating point and …')
 - L140 it('aligns the input maximum with numeric(12,2) and rej…')
 - L162 it('transports PostgreSQL bigint revisions as bounded d…')
+### tests/catalog-image-animation.test.ts
+- L5 describe('catalog image container animation boundary')
+- L6 it('accepts ordinary static PNG and WebP')
+- L16 it('rejects APNG declaration before a decoder could fla…')
+- L30 it('rejects WebP animation flag and malformed RIFF leng…')
 ### tests/catalog-image-attestation.test.ts
 - L22 describe('Catalog image attestation')
 - L59 it('matches the standard HMAC-SHA256 output')
 - L69 it('rejects forged, stale and unauthorized marks; accep…')
+### tests/catalog-image-cloudflare.test.ts
+- L49 describe('Cloudflare catalog image adapter')
+- L50 it('returns reencoded JPEG with final orientation and n…')
+- L76 it('rejects unsupported and oversized input before invo…')
+- L89 it('reports binding quota distinctly from invalid input')
+- L101 it('fails closed on mismatched output MIME')
+- L113 it('bounds the encoded output stream before storing')
+### tests/catalog-image-container-metadata.test.ts
+- L25 describe('PNG and WebP metadata sanitizer')
+- L26 it('removes textual, EXIF, XMP and ICC side data from P…')
+- L56 it('removes EXIF, XMP and ICC chunks from static WebP')
+- L81 it('fails closed on truncated containers')
+### tests/catalog-image-jpeg-metadata.test.ts
+- L15 describe('JPEG binding output metadata sanitizer')
+- L35 it('fails closed on truncated or trailing data')
 ### tests/catalog-image.test.ts
 - L9 describe('catalog cover processing')
 - L10 it('accepts the received host and rejects a different o…')
@@ -494,6 +541,10 @@ Gerado em 2026-10-03 por `npm run repomap`. Heurístico de linhas, sem dependên
 ### tests/harness-telemetry.test.mjs
 - L13 test('usage aggregation receives only the complete turn, …')
 - L44 test('bridge captures provider usage, duration and unavai…')
+### tests/https-auth.test.ts
+- L62 describe('HTTPS session cookies')
+- L63 it('marks the real Supabase SSR login cookie Secure in …')
+- L86 it('marks renewed session cookies Secure through the pr…')
 ### tests/seed-diagnostics.test.ts
 - L18 describe('seed sanitized diagnostics with loopback API only')
 ### tests/seed-guard.test.ts

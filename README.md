@@ -117,6 +117,6 @@ O manifesto permite apresentação como aplicativo em navegadores compatíveis. 
 - Nome Comércio 360 e nicho moda/acessórios aprovados; piloto de uma loja, ainda a identificar. [Demais decisões aprovadas](docs/DECISOES_PILOTO.md) orientam etapas futuras e não ampliam o escopo deste gate.
 - O [Catálogo 002](docs/PACOTE_002_CATALOGO_PROPOSTA.md) foi aceito e integrado; o ensaio de 03/10 passou no Supabase de desenvolvimento. O painel confirmou login anônimo desativado em 02/10. Em 04/10, a chave HMAC foi provisionada e o Cron Worker separado foi publicado e observado em homologação; ainda faltam o retry remoto e validar Auth/Storage no aplicativo HTTPS. Backup/restauração, produção separada e loja piloto permanecem condições antes de dados reais.
 - Correção de Vitest e @vitest/mocker para 4.1.11: [H1-DEP-01](docs/CORRECAO_TECNICA_H1.md).
-- O [gate de publicação](docs/PUBLICACAO_OPERACAO_2026-10-03.md) e o [deploy Cloudflare](docs/CLOUDFLARE_DEPLOY.md) registram evidências e pendências. A URL HTTPS atual é somente homologação com `comercio360-dev` e contas fictícias; a operação com dados reais continua pendente.
+- O [gate de publicação](docs/PUBLICACAO_OPERACAO_2026-10-03.md), o [deploy Cloudflare](docs/CLOUDFLARE_DEPLOY.md) e a [prova HTTPS](docs/CLOUDFLARE_HTTPS_2026-10-04.md) registram a homologação publicada com `comercio360-dev` e contas fictícias. A operação com dados reais continua pendente.
 
 Veja [relatório de entrega](docs/ENTREGA.md), [arquitetura atual](docs/architecture/ARQUITETURA.md) e [operação/recuperação](docs/OPERACAO.md).
