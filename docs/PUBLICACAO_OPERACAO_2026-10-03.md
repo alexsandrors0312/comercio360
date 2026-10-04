@@ -1,4 +1,4 @@
-# Publicação e operação — gate iniciado em 03/10/2026
+# Publicação e operação — gate iniciado em 03/10/2026 (atualizado em 04/10)
 
 Este registro acompanha a preparação de HTTPS, chave HMAC e limpeza agendada do Catálogo 002. **Não declara publicação nem autoriza dados reais.** O [ensaio hospedado de 03/10](CATALOGO_002_HOSPEDADO_2026-10-03.md) usou Next em HTTP local e Supabase de desenvolvimento com fixtures temporárias.
 
@@ -6,12 +6,12 @@ Este registro acompanha a preparação de HTTPS, chave HMAC e limpeza agendada d
 
 | Critério | Estado em 03/10 | Evidência exigida para fechar |
 | --- | --- | --- |
-| Plataforma e URL HTTPS do Next | Cloudflare escolhida pelo responsável; nome do Worker e URL final ainda não identificados. O checkout não tem Git remote | Worker publicado identificado; TLS válido e redirecionamento HTTP→HTTPS |
-| Repositório ligado ao build | Build `#bf9bcc96` falhou ao buscar o repositório, antes do build. O repositório GitHub `alexsandrors0312/comercio360` está público, **vazio e sem branch padrão**; falta confirmar que é o vínculo desse build | Vínculo Cloudflare↔Git conferido, acesso SCM válido, branch com o commit do projeto e clone concluído |
-| Runtime Cloudflare | `not_run`; aplicação tem SSR, Server Actions, proxy e rota que reencoda imagem com `sharp` | Adaptador Workers compatível e fluxo privado de imagem verificado no runtime Cloudflare; Pages estático não cobre a aplicação |
+| Plataforma e URL HTTPS do Next | Worker `comercio360` respondeu em `https://comercio360.alexsandrors-0312.workers.dev/login?reason=configuration`; falta configuração e matriz de Auth | TLS, redirecionamento e fluxo autenticado conferidos no domínio final |
+| Repositório ligado ao build | GitHub `alexsandrors0312/comercio360`, branch `main`, vinculados; build `#46e09932` clonou e publicou versão técnica. O clone do build anterior `#bf9bcc96` falhou antes de existir `main` | Verificar hash do build mais recente e configuração versionada de deploy |
+| Runtime Cloudflare | Probe inicial **FAIL** por EXIF retido; adaptador com remoção estrutural JPEG/PNG/WebP passou **8/8** em `wrangler dev --remote` em 04/10. A rota usa o binding no Worker; **143/143** testes, lint, tipos e build Next local passaram. Build Linux da configuração OpenNext versionada ainda `not_run` | Build Git, upload Auth/Storage/HMAC e leitura privada sob HTTPS; Pages estático não cobre a aplicação |
 | Sessão no domínio publicado | `not_run` | Login, seleção de loja, persistência após recarga, renovação, logout e cookies de Auth/contexto com `Secure` sob HTTPS, usando usuário fictício e relatório sanitizado |
-| Chave HMAC operacional | `not_run`; chave temporária do ensaio foi removida | Mesmo segredo de 32 bytes no banco privado e no runtime da aplicação, desafio de consistência sem exibir o valor, upload HTTP publicado e remoção controlada de fixture |
-| Worker agendado | `not_run`; o worker passou somente em execução dirigida | Agenda ativa em processo separado, identidade administrativa protegida, execução observada, falha transitória e retry observados, sem caminhos ou credenciais em logs |
+| Chave HMAC operacional | Script provisionou chave de 32 bytes no banco dev, desafio HMAC consistente e secret `CATALOG_IMAGE_ATTESTATION_KEY` listado somente no Worker web em 04/10. Valor no runtime ainda não provado por upload | Upload HTTPS autenticado com capa e remoção controlada de fixture |
+| Worker agendado | Worker separado `comercio360-catalog-cleanup-dev` publicado em 04/10, versão `989ad952-c9d0-46a4-bb75-aab3a4a29590`, agenda `*/15 * * * *` e secret administrativo listado só nele. Teto 16 por limite Workers Free; revisão independente sem bloqueio estático; 5/5 testes e dry-run passaram. Observability mostrou **8 Success, 0 Errors** na última hora às 18h11 BRT; eventos às 17h15, 17h30, 17h45 e 18h00 BRT; último com `outcome=ok`, CPU 1 ms, wall 977 ms. Primeira execução tinha `claimed=0 deleted=0 failed=0` no log do tail. | Falha transitória e retry remoto ainda `not_run`; observar contagens de backlog após upload HTTPS |
 | Produção isolada | `not_run`; o único projeto identificado nos ensaios é `comercio360-dev` | Projeto de produção distinto, sete migrações alinhadas, Auth/URLs/restrições e segredos conferidos por ambiente |
 | Backup e restauração | `not_run` | Responsável, retenção, RPO/RTO aceitos; backup do banco e dos objetos privados; restauração testada em projeto novo, verificando Auth, dados, auditoria, isolamento e leitura de capa |
 | Piloto com dados reais | `not_run` | Loja participante identificada e aceite operacional do fluxo; sem reutilizar seed fictício |

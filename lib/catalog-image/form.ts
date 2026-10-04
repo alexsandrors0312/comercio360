@@ -1,4 +1,4 @@
-import { CatalogImageError } from "./process";
+import { CatalogImageError } from "./contracts";
 
 export async function readBoundedMultipart(
   request: Request,

@@ -1,5 +1,12 @@
 # Changelog
 
+## 04/10/2026 — Preparação da homologação Cloudflare Free
+
+- O GitHub `main` foi vinculado ao Worker `comercio360`; o build inicial passou do clone e serviu a tela de configuração em HTTPS. Configuração OpenNext, comandos de build/deploy e variáveis públicas do Supabase dev foram preparados; o build Linux do código novo ainda não foi executado.
+- Um probe isolado do Images binding encontrou EXIF retido no primeiro JPEG (**FAIL**). O adaptador passou a remover metadados de JPEG/PNG/WebP após reencodificação; o probe remoto final passou **8/8**, e a suíte local chegou a **143/143**. O upload Auth/Storage/HMAC pelo domínio publicado ainda precisa ser executado.
+- A chave HMAC foi provisionada no banco dev e no secret do Worker web, com desafio consistente e sem expor valor. O Cron Worker separado foi publicado com agenda de 15 minutos e secret administrativo isolado. A revisão independente exigiu reduzir o lote de 100 para 16 objetos pelo limite do Workers Free; após correção, 5/5 testes e revisão delta passaram. Observability mostrou 8 eventos Success/0 Errors na última hora às 18h11 BRT, com CPU 1 ms às 18h. O retry remoto ainda está pendente.
+- Next build e tipos passaram; os 17 cenários E2E imprimiram `ok`, mas o Playwright travou no encerramento no Windows e foi interrompido (exit 1). Este registro não converte a execução em PASS completo. Veja [gate operacional](docs/PUBLICACAO_OPERACAO_2026-10-03.md) e [Cloudflare](docs/CLOUDFLARE_DEPLOY.md).
+
 ## 03/10/2026 — Conflito REST e ensaio real da capa
 
 - A migração incremental `202610030001_catalog_conflict_http.sql` substitui sete erros artificiais `40001` por `PT409` em seis RPCs do Catálogo. A disputa REST real passou com HTTP 200/409 em 97 ms; as três tentativas de 02/10 com 504 permanecem preservadas como FAIL histórico.

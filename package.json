@@ -5,6 +5,10 @@
   "scripts": {
     "dev": "next dev --hostname 127.0.0.1",
     "build": "next build",
+    "build:cloudflare": "opennextjs-cloudflare build",
+    "preview:cloudflare": "opennextjs-cloudflare preview",
+    "deploy:cloudflare": "wrangler deploy --keep-vars",
+    "cf:typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
     "start": "next start --hostname 127.0.0.1",
     "lint": "eslint .",
     "typecheck": "next typegen && tsc --noEmit",
@@ -28,14 +32,17 @@
   },
   "devDependencies": {
     "@electric-sql/pglite": "0.5.8",
+    "@opennextjs/cloudflare": "1.20.8",
     "@playwright/test": "^1.58.0",
     "@types/node": "^24.0.0",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "esbuild": "0.27.0",
     "eslint": "^9.0.0",
     "eslint-config-next": "16.3.8",
     "prettier": "3.9.6",
     "typescript": "^5.9.0",
-    "vitest": "4.1.11"
+    "vitest": "4.1.11",
+    "wrangler": "4.147.0"
   }
 }

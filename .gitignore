@@ -2,6 +2,10 @@ node_modules/
 .npm-cache/
 .next/
 .next-e2e/
+.open-next/
+.wrangler/
+.dev.vars*
+cloudflare-env.d.ts
 .env*
 !.env.example
 coverage/

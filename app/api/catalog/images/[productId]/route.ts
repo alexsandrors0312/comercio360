@@ -6,10 +6,12 @@ import {
   parseCatalogImageKey,
   signCatalogImageAttestation,
 } from "@/lib/catalog-image/attestation";
+import { CatalogImageError } from "@/lib/catalog-image/contracts";
 import {
-  CatalogImageError,
-  processCatalogImage,
-} from "@/lib/catalog-image/process";
+  CatalogImageServiceError,
+  processCatalogImageCloudflare,
+  type CatalogImagesBinding,
+} from "@/lib/catalog-image/process-cloudflare";
 import { parseCatalogRevision } from "@/packages/domain/catalog";
 import { readBoundedMultipart } from "@/lib/catalog-image/form";
 import { isSameOrigin } from "@/lib/catalog-image/origin";
@@ -130,11 +132,24 @@ export async function POST(request: Request, { params }: Context) {
     );
     let processed;
     try {
-      processed = await processCatalogImage(
-        new Uint8Array(await file.arrayBuffer()),
-      );
+      const input = new Uint8Array(await file.arrayBuffer());
+      if (process.env.CATALOG_IMAGE_PROCESSOR === "cloudflare") {
+        const { getCloudflareContext } = await import("@opennextjs/cloudflare");
+        const { IMAGES } = getCloudflareContext().env as unknown as {
+          IMAGES?: CatalogImagesBinding;
+        };
+        if (!IMAGES) throw new CatalogImageServiceError("unavailable");
+        processed = await processCatalogImageCloudflare(input, IMAGES);
+      } else {
+        // Local Next development and the existing Node tests retain Sharp.
+        // The deployed Worker selects IMAGES in wrangler.jsonc.
+        const { processCatalogImage } = await import("@/lib/catalog-image/process");
+        processed = await processCatalogImage(input);
+      }
     } catch (error) {
       if (error instanceof CatalogImageError) return reply(400, error.message);
+      if (error instanceof CatalogImageServiceError)
+        return reply(503, error.message);
       throw error;
     }
 

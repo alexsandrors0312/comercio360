@@ -1,25 +1,12 @@
 import sharp from "sharp";
+import { CatalogImageError, type ProcessedCatalogImage } from "./contracts";
+
+export { CatalogImageError } from "./contracts";
+export type { ProcessedCatalogImage } from "./contracts";
 
 const MAX_BYTES = 5 * 1024 * 1024;
 const MAX_EDGE = 10_000;
 const MAX_PIXELS = 25_000_000;
-
-export class CatalogImageError extends Error {
-  constructor(
-    public readonly code: "invalid" | "too_large" | "dimensions",
-    message: string,
-  ) {
-    super(message);
-    this.name = "CatalogImageError";
-  }
-}
-
-export type ProcessedCatalogImage = {
-  bytes: Buffer;
-  mimeType: "image/jpeg" | "image/png" | "image/webp";
-  width: number;
-  height: number;
-};
 
 export async function processCatalogImage(
   input: Uint8Array,
