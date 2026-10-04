@@ -2,6 +2,8 @@
 
 **Atualizado em 04/10/2026.** Leia este índice no início de cada tarefa e confirme afirmações no código e relatórios. Atualize decisões, evidências e pendências após mudança relevante.
 
+**Passagem para a próxima seção:** [estado, percentual estimado (~20% da visão) e próximos gates](docs/PASSAGEM_DESENVOLVIMENTO_2026-10-04.md). O projeto está na etapa 2 do roteiro (núcleo comercial), com fundação e Catálogo 002 homologado; dados reais ainda bloqueados. O percentual é estimativa de planejamento, não medição de esforço/aceite.
+
 ## Estado atual e próximo passo
 
 | Item | Estado conferido |
@@ -15,9 +17,9 @@
 
 **Próxima ação do harness:** cobrir telemetria da rota Codex, subagentes e custo antes de novos pares ([TELEMETRIA_G.md](docs/ai/TELEMETRIA_G.md)); reparar o runner U1 original à parte. Para o Catálogo, ensaiar renovação natural em HTTPS, retry remoto do Cron e condições de produção.
 
-**Evidência atual (03/10):** Vitest **124/124**, lint, tipos, build e E2E **17/17**; o E2E precedeu o ajuste de origem, coberto depois com Auth/Storage hospedados. Ensaio final **20 PASS / zero FAIL**, REST simultâneo 200/409 em 97 ms, worker `claimed=2 deleted=2`, cinco contagens finais zero. Três tentativas Next FAIL e os 504 de 02/10 seguem preservados. [Relatório](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md).
+**Evidência de 03/10:** 124/124 Vitest, E2E 17/17, ensaio hospedado 20 PASS; tentativas Next FAIL e 504 de 02/10 preservados no [relatório](docs/CATALOGO_002_HOSPEDADO_2026-10-03.md).
 
-**Evidência nova (04/10):** Images binding remoto 8/8 após FAIL inicial de EXIF retido; sanitização JPEG/PNG/WebP. Vitest **143/143**, lint (aviso H-04), tipos e build Next PASS; E2E local 17 casos OK, teardown travou e permanece inconclusivo. Build Cloudflare `#9a188a00` publicou `9695ffd`: HTTP→HTTPS 308, 16 linhas PASS no ensaio de Auth/loja/Storage/HMAC/capa/logout com fixtures removidas. Chave administrativa só no Cron separado; 8 Success/0 Errors na última hora às 18h11 BRT, CPU 1 ms às 18h. Renovação HTTPS e retry remoto pendentes. [Relatório](docs/CLOUDFLARE_HTTPS_2026-10-04.md).
+**Evidência de 04/10:** 143/143 Vitest, lint com aviso histórico, tipos/build PASS; E2E local inconclusivo por teardown. Images remoto 8/8 após FAIL inicial; app HTTPS 16 linhas PASS, fixtures removidas; Cron observado com 8 Success/0 Errors. Renovação natural HTTPS e retry remoto `not_run`. [Detalhes e limites](docs/CLOUDFLARE_HTTPS_2026-10-04.md). O build posterior `#90b80e57` publicou `7c0f95a` segundo a última verificação da sessão anterior; conferir o deploy atual na retomada.
 
 ## Produto e decisões já tomadas
 
@@ -51,7 +53,7 @@ O responsável pediu em 03/10 manter o token CLI ativo até segunda ordem. Não 
 
 Depois da correção H1-DEP-01, Vitest e `@vitest/mocker` estão em **4.1.11**. A revisão de 25–26/09 reproduziu `npm ci`, lint, tipos, **90/90 testes**, build, **11/11 E2E** e `npm audit` com zero vulnerabilidades. Testes locais usam PGlite e Auth simulado; a execução hospedada H1 é evidência separada. Esses números são históricos da fundação, não da suíte atual do Catálogo.
 
-Antes de publicar ou usar dados reais, permanecem condições do parecer: (1) validar login, seleção, persistência, renovação, logout e cookies Secure sob **HTTPS da própria aplicação**; (2) definir e ensaiar backup/restauração em ambiente novo, com responsável, retenção, RPO/RTO, Auth, dados e auditoria; (3) separar produção de desenvolvimento, configurar Auth/URLs/segredos por canal seguro e manter provisionamento rastreável; (4) identificar a loja real do piloto. **Atualização 02/10:** o painel confirmou login anônimo e cadastro público desativados, fechando essa condição específica do H1. As demais bloqueiam prontidão para implantação, não a especificação do Pacote 002. Matriz original em `docs/REVISAO_ARQUITETURAL_H1.md`.
+A homologação HTTPS já comprovou login, seleção/persistência de loja, cookies Secure e logout. Para **dados reais**, ainda faltam renovação natural após expiração no domínio Cloudflare, falha/retry remoto do Cron, backup/restauração em projeto novo incluindo Auth, dados, auditoria e bytes do Storage, produção separada com Auth/URLs/segredos próprios e identificação da loja piloto. O painel confirmou login anônimo e cadastro público desativados em 02/10. Matriz original em `docs/REVISAO_ARQUITETURAL_H1.md`; estado operacional em `docs/PUBLICACAO_OPERACAO_2026-10-03.md`.
 
 ## Harness de desenvolvimento por IA
 
