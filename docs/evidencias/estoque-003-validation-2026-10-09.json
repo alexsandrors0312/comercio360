@@ -1,0 +1,296 @@
+{
+  "schema_version": "0.1",
+  "task_id": "estoque-003",
+  "date": "2026-10-09",
+  "recorded_at_utc": "2026-10-09T11:57:45.0187927Z",
+  "status": "local_checks_passed",
+  "workspace": "C:/Users/Alexs/Desktop/Comercio360",
+  "baseline_ref": "f5eb4e35a4313b7a0ee51f593587265420cc30f2",
+  "authorization": "Responsável pediu desenvolver abas operacionais e deixar ensaio remoto de limpeza pendente. Primeiro recorte Estoque, contrato003/ADR0011.",
+  "evidence_kind": "Resumo dos resultados realmente retornados pelas ferramentas nesta sessão; não é exportação de stdout integral.",
+  "candidate_files": [
+    {
+      "path": "docs/PACOTE_003_ESTOQUE.md",
+      "sha256": "709f29ef346382b91fdf5334d345cf9c13f4a16a84e3ac267a0cd92791959669",
+      "matches_review": true
+    },
+    {
+      "path": "docs/adr/ADR-0011-estoque.md",
+      "sha256": "dc9a39a541c37bb3e2a634509569cc6fc70dc75fb588b2ba2b1c9052c2e087ad",
+      "matches_review": true
+    },
+    {
+      "path": "supabase/migrations/202610090001_inventory.sql",
+      "sha256": "5682475bbb0b5ce2b067e25d82d06e8ccff603b7167d3401c6118dd29c327e5d",
+      "matches_review": true
+    },
+    {
+      "path": "lib/inventory/server.ts",
+      "sha256": "6a10a6fb60097830db199bc91235b7d456a02c81ac87f2797fc5ce5adb12e5e8",
+      "matches_review": true
+    },
+    {
+      "path": "app/actions/inventory.ts",
+      "sha256": "fe6d8ad5c9d255ba6909c45844e605e5103492684b91660ae2ae897309f38df7",
+      "matches_review": true
+    },
+    {
+      "path": "app/app/estoque/page.tsx",
+      "sha256": "35e02309d455170925e76c83321d16b5572afa0c599714b4bba9dfebc140cfdd",
+      "matches_review": true
+    },
+    {
+      "path": "app/app/estoque/loading.tsx",
+      "sha256": "8f3ba818a862ac5dd7e3702360b5de9c55b35a1542d1332af76d2505019d0f43",
+      "matches_review": true
+    },
+    {
+      "path": "app/app/estoque/error.tsx",
+      "sha256": "65a6395bce799b34b363b3a34f7e71b47f62320dc49003a44ecc063eda289fcb",
+      "matches_review": true
+    },
+    {
+      "path": "app/app/estoque/inventory.module.css",
+      "sha256": "d7c1c2689187424cda28b078463255da89989be2049b7ed84382c5a5b4a05cd5",
+      "matches_review": true
+    },
+    {
+      "path": "packages/domain/inventory-contracts.ts",
+      "sha256": "d67aec8d498fd17ec1c1b986a59e9bca83d918d520ea9b18e34ac8c3098ca4be",
+      "matches_review": true
+    },
+    {
+      "path": "packages/domain/inventory.ts",
+      "sha256": "6f0ada9c3679aae6063c4bdcf71e5aed59ff7ee8a28babac36db4efb7c8fa603",
+      "matches_review": true
+    },
+    {
+      "path": "packages/validation/inventory.ts",
+      "sha256": "698df3caae020e8023f66d3e8e4c225a344296b40faa66b261c25e91a33cee5f",
+      "matches_review": true
+    },
+    {
+      "path": "packages/ui/inventory/workspace.tsx",
+      "sha256": "94b5b59c5d83ab4f63d7c0dbfb3da1a3b95ebe46b325d01b97f3adb3cd9d3e90",
+      "matches_review": true
+    },
+    {
+      "path": "tests/inventory-sql.test.ts",
+      "sha256": "7197e1553af5ff6cf281f77c58c990a034c2e067e39ac249c497bab445ee5e3e",
+      "matches_review": true
+    },
+    {
+      "path": "tests/inventory-domain.test.ts",
+      "sha256": "7e32a4a5c42751bfaa357721c064e548586c0a844d2d748ebaf2b70d0200887b",
+      "matches_review": true
+    },
+    {
+      "path": "tests/inventory-application.test.ts",
+      "sha256": "965caec54788d8208bbcfdaa23cb8e56664985c6375c08ed9ea213552b016f98",
+      "matches_review": true
+    },
+    {
+      "path": "tests/inventory-ui.test.ts",
+      "sha256": "76cd5537257be94d60f1a9a7781de56bb922ad58f835cde9ba34ff5f936ac484",
+      "matches_review": true
+    },
+    {
+      "path": "tests/e2e/inventory.spec.ts",
+      "sha256": "5e484bdac9435bdda8464469e30de010b6c348471b513721101b11af33e372c0",
+      "matches_review": true
+    },
+    {
+      "path": "tests/support/auth-server.mjs",
+      "sha256": "76e721f82db506a52c1b063bc781b738f8a28f8cf65bc65b25ac3f1fd616d07c",
+      "matches_review": true
+    },
+    {
+      "path": "vitest.config.ts",
+      "sha256": "b72bb19a25208d5e987d00dfac17069c136d737645a8c71a4feaacb26a9785e8",
+      "matches_review": true
+    },
+    {
+      "path": "playwright.config.ts",
+      "sha256": "458abda5410812d9dbbbb78d5002b4775021b1f6d2e87dc4f37ffabc6c478233",
+      "matches_review": true
+    },
+    {
+      "path": "package.json",
+      "sha256": "2afd9b027b067ce22f75972246a48a9891527a4ba8b03e3cfaca0fea79598846",
+      "matches_review": true
+    }
+  ],
+  "checks": [
+    {
+      "id": "VITEST_FULL",
+      "command": "npm.cmd test",
+      "environment": "local; PGlite real, mocks de servidor",
+      "status": "pass",
+      "exit_code": 0,
+      "session_id": 2961,
+      "test_files": 23,
+      "passed": 226,
+      "new_inventory": {
+        "domain": 21,
+        "ui_static_ssr": 7,
+        "application": 19,
+        "sql": 26
+      }
+    },
+    {
+      "id": "E2E_FULL_FINAL",
+      "command": "node node_modules/@playwright/test/cli.js test",
+      "environment": "Chromium local; Next3001, Auth HTTP simulado54329, PGlite",
+      "status": "pass",
+      "exit_code": 0,
+      "session_id": 68106,
+      "passed": 24,
+      "duration_seconds": 52.8,
+      "existing": 17,
+      "inventory": 7,
+      "scenarios": [
+        "entrada/saída, insuficiência, histórico, busca e isolamento por loja",
+        "caixa lê sem controles de escrita",
+        "dois formulários desatualizados recusam sobrescrita",
+        "perda de resposta após commit e confirmação idempotente",
+        "larguras360/768/1440"
+      ]
+    },
+    {
+      "id": "TYPECHECK",
+      "command": "npm.cmd run typecheck",
+      "status": "pass",
+      "exit_code": 0,
+      "session_id": 89016
+    },
+    {
+      "id": "LINT",
+      "command": "npm.cmd run lint",
+      "status": "pass_with_historical_warning",
+      "exit_code": 0,
+      "session_id": 12105,
+      "errors": 0,
+      "warnings": 1,
+      "warning_file": "docs/ai/evidencias/h04-u1-2026-09-30/playwright-u1-external.config.mjs"
+    },
+    {
+      "id": "LINT_FINAL_TEST_DELTA",
+      "command": "node node_modules/eslint/bin/eslint.js tests/e2e/inventory.spec.ts",
+      "status": "pass",
+      "exit_code": 0,
+      "session_id": 71225
+    },
+    {
+      "id": "BUILD",
+      "command": "npm.cmd run build",
+      "status": "pass",
+      "exit_code": 0,
+      "session_id": 59287,
+      "route": "/app/estoque dynamic"
+    },
+    {
+      "id": "REPOMAP",
+      "command": "npm.cmd run repomap",
+      "status": "pass",
+      "exit_code": 0,
+      "files": 114,
+      "symbols": 656
+    },
+    {
+      "id": "VISUAL_REVIEW",
+      "status": "pass",
+      "environment": "capturas Chromium fictícias locais",
+      "widths_without_overflow": [
+        360,
+        768,
+        1440
+      ],
+      "inspected_widths": [
+        360,
+        1440
+      ],
+      "artifacts": [
+        "test-results/estoque-360.png",
+        "test-results/estoque-768.png",
+        "test-results/estoque-1440.png"
+      ],
+      "note": "Arquivos locais ignorados pelo Git, regeneráveis pelos E2E."
+    },
+    {
+      "id": "INDEPENDENT_REVIEW",
+      "status": "no_blocking_findings",
+      "report": "docs/evidencias/estoque-003-review-2026-10-09.json",
+      "sha256": "9a94b1a82676dff1f3b3c4aca408c233f2d083520937ba1bc57b0eaf2c631f83",
+      "candidate_matches": "22/22",
+      "independently_rerun_sql_passed": 26
+    }
+  ],
+  "attempts": [
+    {
+      "id": "E2E_INVENTORY_INITIAL",
+      "status": "fail",
+      "exit_code": 1,
+      "session_id": 23029,
+      "passed": 5,
+      "failed": 2,
+      "reason": "Seletores genéricos alert também encontravam __next-route-announcer__. Corrigido somente seletor."
+    },
+    {
+      "id": "E2E_FULL_INITIAL",
+      "status": "fail",
+      "exit_code": 1,
+      "session_id": 89337,
+      "passed": 23,
+      "failed": 1,
+      "reason": "Teste navegava antes de confirmar troca de loja/cookie/redirect. Passou a aguardar Loja Jardim no main, padrão dos testes existentes."
+    },
+    {
+      "id": "SQL_INITIAL_COLLECTED",
+      "status": "fail",
+      "passed": 24,
+      "failed": 2,
+      "reason": "Fixture administrativo mantinha app.catalog_store_id da loja B; contexto limpo, SQL26/26 e integração posterior226/226 PASS."
+    },
+    {
+      "id": "WINDOWS_SANDBOX_TEST_STARTUP",
+      "status": "failed_before_collection",
+      "reason": "require/Vite no carregador e EPERM rename cache temporário; zero testes iniciados. Execuções locais autorizadas posteriores passaram."
+    },
+    {
+      "id": "WINDOWS_SANDBOX_TYPEGEN",
+      "status": "failed_before_typecheck",
+      "reason": "SWC canonicalização de raiz/access denied; execução local autorizada posterior passou."
+    }
+  ],
+  "limits": [
+    {
+      "criterion": "real_postgresql_multisession",
+      "status": "not_run",
+      "reason": "PGlite possui uma sessão. CAS sequencial e dois formulários não demonstram locking entre conexões reais."
+    },
+    {
+      "criterion": "hosted_supabase_postgrest_inventory",
+      "status": "not_run",
+      "reason": "Migração202610090001 não aplicada remotamente."
+    },
+    {
+      "criterion": "cloudflare_inventory_publication",
+      "status": "not_run",
+      "reason": "Pacote local; homologação publicada anterior ainda não contém Estoque."
+    },
+    {
+      "criterion": "remote_cleanup_retry",
+      "status": "not_run",
+      "reason": "Deixado pendente pelo responsável; duas tentativas06/10 inconclusivas preservadas."
+    }
+  ],
+  "remote_mutations_performed": false,
+  "seed_rerun": false,
+  "auth_or_secret_changes": false,
+  "metrics": {
+    "tokens": null,
+    "cost": null,
+    "reason": "Telemetria indisponível; não inferida."
+  },
+  "next_step": "Compras/Fornecedores e recebimento integrado, com contrato/ADR e critérios próprios; homologar Estoque antes de publicar."
+}

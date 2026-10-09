@@ -1,0 +1,485 @@
+{
+  "schema_version": "0.1",
+  "review_id": "C360-COMPRAS-004-SEC-2026-10-09-R1",
+  "task_id": "compras-004",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "mode": "Segurança/Arquitetura",
+  "recorded_at_utc": "2026-10-09T20:40:50.527Z",
+  "workspace": "C:/Users/Alexs/Desktop/Comercio360",
+  "baseline_ref": "f5eb4e35a4313b7a0ee51f593587265420cc30f2",
+  "candidate": {
+    "kind": "dirty_worktree_sha256",
+    "baseline_commit": "f5eb4e35a4313b7a0ee51f593587265420cc30f2",
+    "files": [
+      {
+        "path": "docs/PACOTE_004_COMPRAS.md",
+        "sha256": "72fd8535c5bb3db5e55f834d6b2c429f57685a2d06a7fd4a1117b2948d373c5e"
+      },
+      {
+        "path": "docs/adr/ADR-0012-compras.md",
+        "sha256": "857a2637152e8026c3edcdc7a97979d5cff68975f85f4c19eb55d6beba5812a2"
+      },
+      {
+        "path": "supabase/migrations/202610090002_procurement.sql",
+        "sha256": "8fe13c7f72d121deca3612adccee16790b469d098d5b665979a01e8d3766db7e"
+      },
+      {
+        "path": "lib/procurement/server.ts",
+        "sha256": "29cf2123bf222ef5d811b9d2a2937d3a57f267a62f2a73ca8c37e8fa3b214e50"
+      },
+      {
+        "path": "app/actions/procurement.ts",
+        "sha256": "ea04865830b227e514136c87948ff83a37fed067e04cbbc9cfcd84a491ede494"
+      },
+      {
+        "path": "app/app/compras/page.tsx",
+        "sha256": "d6f4580324271acc535c6c888ecd78e764a893eb0fbad2b96176103b895531d7"
+      },
+      {
+        "path": "app/app/compras/loading.tsx",
+        "sha256": "34643084af8394aa773db8a5fd85d10458a6d50b7d6c791bce39e2b1f42b18bf"
+      },
+      {
+        "path": "app/app/compras/error.tsx",
+        "sha256": "745e40875f569a21de72db9d5bcf356907945da564c0f44deeb2a306dceae93c"
+      },
+      {
+        "path": "app/app/compras/procurement.module.css",
+        "sha256": "f2ba22eb133f1e35af654eefa7524d04f21140b3f326785d0f65368dc8cc7045"
+      },
+      {
+        "path": "packages/domain/procurement-contracts.ts",
+        "sha256": "aa833babc03ebc2b2de38375303e8f078b1b3288d8229feabb6a4373819d5365"
+      },
+      {
+        "path": "packages/domain/procurement.ts",
+        "sha256": "69a90c56b4f8d2c11f2e1c0f17f097a27b9a5714e7924aec44ead3083d08d1cc"
+      },
+      {
+        "path": "packages/validation/procurement.ts",
+        "sha256": "367b3fe1ffc3da123decee4d864a606d260f00b4b970f1a045d2cd41c9c8169b"
+      },
+      {
+        "path": "packages/ui/procurement/workspace.tsx",
+        "sha256": "835436a92befcd9f4b3bad92723525c30e3f19eaff9f199853069e8295da7e2b"
+      },
+      {
+        "path": "tests/procurement-sql.test.ts",
+        "sha256": "2285931d0e5aaf547dd8a71731631e4b86172fb0965a92cde369639d9de21782"
+      },
+      {
+        "path": "tests/procurement-application.test.ts",
+        "sha256": "aad9088978c42fa1afcafbfd19750f563877d349696275ea4d46ea1ae8de2aef"
+      },
+      {
+        "path": "tests/procurement-domain.test.ts",
+        "sha256": "4a55206b8ff9189168568e7010ef5db297b212cb282ad942b3cd3b60624a5f45"
+      },
+      {
+        "path": "tests/procurement-ui.test.ts",
+        "sha256": "986762d6b1f932b9ca8c2141e9ed0b4d55df77b8ff9d598b9fbd16aa852c5107"
+      },
+      {
+        "path": "tests/e2e/procurement.spec.ts",
+        "sha256": "5f9369ed20aa90f41ad884bafb68be9c35ac5c93f4b0b04a61a50e67f79c31c0"
+      },
+      {
+        "path": "tests/support/auth-server.mjs",
+        "sha256": "0138f0043835df95ff54531525230855caf4bdd25f52beff2866da353cade649"
+      },
+      {
+        "path": "tests/hosted/operations.mjs",
+        "sha256": "71310d15f875b48fc27cf75e92d83837d5d4ba21f8c05658cbde95f9398261e6"
+      },
+      {
+        "path": "scripts/operations-hosted.ps1",
+        "sha256": "f60aefd1f5a39bd07f4f456d7b0500346df1eda38362a3b9b6adb0510ae10b6c"
+      },
+      {
+        "path": "tests/operations-hosted.test.ts",
+        "sha256": "383b3a4c7e7ac1c075f0acfcf499b240b80f11706e1ecfe5e8b8dd96c08d2e3b"
+      },
+      {
+        "path": "supabase/migrations/202610090001_inventory.sql",
+        "sha256": "5682475bbb0b5ce2b067e25d82d06e8ccff603b7167d3401c6118dd29c327e5d"
+      },
+      {
+        "path": "lib/inventory/server.ts",
+        "sha256": "6a10a6fb60097830db199bc91235b7d456a02c81ac87f2797fc5ce5adb12e5e8"
+      },
+      {
+        "path": "app/actions/inventory.ts",
+        "sha256": "fe6d8ad5c9d255ba6909c45844e605e5103492684b91660ae2ae897309f38df7"
+      },
+      {
+        "path": "vitest.config.ts",
+        "sha256": "b72bb19a25208d5e987d00dfac17069c136d737645a8c71a4feaacb26a9785e8"
+      },
+      {
+        "path": "playwright.config.ts",
+        "sha256": "458abda5410812d9dbbbb78d5002b4775021b1f6d2e87dc4f37ffabc6c478233"
+      },
+      {
+        "path": "package.json",
+        "sha256": "2afd9b027b067ce22f75972246a48a9891527a4ba8b03e3cfaca0fea79598846"
+      },
+      {
+        "path": "docs/guias/OPERACOES_HOMOLOGACAO.md",
+        "sha256": "dd16e84d5dbf3b688d5886db06f298f94c38b762fbd70647eaa286b46b3879de"
+      }
+    ]
+  },
+  "authorization": {
+    "source": "Tarefa do orquestrador baseada na autorização humana de 09/10 para desenvolver Compras e homologar/publicar no dev existente.",
+    "scope": "Revisão local independente de produto e instrumento hospedado; nenhum acesso remoto ou publicação pelo revisor. Escrita exclusiva deste JSON."
+  },
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null,
+    "source": "Modelo efetivo, esforço e telemetria não expostos."
+  },
+  "summary": "Sem achados bloqueantes pendentes no candidato local de Compras004 e no instrumento de homologação examinado. SQL real PGlite34/34 e helpers puros do instrumento4/4 reproduzidos independentemente. A revisão identificou a adoção silenciosa de revisão nova em rascunho antigo de fornecedor; o autor corrigiu o vínculo da revisão ao rascunho, com regressão E2E relatada. Também foram corrigidos envelope CLI, prazos/cancelamento e prova de preservação dos eventos prévios de auditoria. A conclusão permite seguir aos gates dev já autorizados; não comprova execução hospedada, publicação, concorrência PostgreSQL entre sessões ou produção.",
+  "scope_examined": [
+    "Contrato004/ADR0012/DTOs; SQL completo, RLS e privilégios, helpers/RPCs, transação multiline, snapshots, dinheiro inteiro, idempotência e auditoria.",
+    "Servidor/action/página/estados/CSS/domínio/validação/UI completos; reautorização por operação, revisão e recuperação de resultado ambíguo.",
+    "Dependências pertinentes de Foundation/Catálogo/Estoque, incluindo regras de concessão explícita, auditoria existente e ordem de locks produto→variante→saldo.",
+    "Testes SQL/aplicação/domínio/UI/E2E e fixture HTTP/Auth fictícios; instrumento Node/PowerShell, helpers puros e guia operacional.",
+    "Outras alterações anteriores da árvore compartilhada ficam fora da revisão. Estoque003R1 e evidências históricas não foram editados."
+  ],
+  "checks": [
+    {
+      "id": "R-SOURCE",
+      "procedure": "Inspeção independente das fontes e contratos relevantes e captura/conferência SHA-256.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "local, leitura de código",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": null,
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "lib/procurement/server.ts",
+        "app/actions/procurement.ts",
+        "packages/ui/procurement/workspace.tsx",
+        "scripts/operations-hosted.ps1",
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "Sem bloqueio pendente no candidato final identificado; correções originadas da revisão preservadas abaixo."
+    },
+    {
+      "id": "R-SQL",
+      "command": "node node_modules/vitest/vitest.mjs run tests/procurement-sql.test.ts --configLoader native",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "runner_started_at": "17:30:49 America/Sao_Paulo",
+      "environment": "Windows, executor local autorizado fora do sandbox que bloqueava cache; PGlite em memória",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "tests_passed": 34,
+      "tests_failed": 0,
+      "evidence_refs": [
+        "tests/procurement-sql.test.ts",
+        "supabase/migrations/202610090002_procurement.sql"
+      ],
+      "summary": "34/34. Migração8fe13c7f72d121deca3612adccee16790b469d098d5b665979a01e8d3766db7e. Oito perfis SQL, tenant/loja/reauth, CAS/replay/payload, snapshots, limites Unicode/dinheiro/50linhas, estoque atual, rollback integral/auditoria, FKs, privilégios e imutabilidade. Sessão única."
+    },
+    {
+      "id": "R-HOSTED-HELPERS",
+      "command": "node node_modules/vitest/vitest.mjs run tests/operations-hosted.test.ts --configLoader native",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "runner_started_at": "17:37:43 America/Sao_Paulo",
+      "environment": "Windows local; import de helpers puros sem I/O remoto",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "tests_passed": 4,
+      "tests_failed": 0,
+      "evidence_refs": [
+        "tests/operations-hosted.test.ts",
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "4/4. Distintas chaves exigem um HTTP200 e um HTTP409/PT409; mesma chave exige dois resultados iguais. Sanitização remove campos não permitidos e não aceita PASS incompleto."
+    },
+    {
+      "id": "R-NODE-SYNTAX",
+      "command": "node --check tests/hosted/operations.mjs",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "local, parse apenas",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "evidence_refs": [
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "Parse final válido; não invoca runHostedOperations."
+    },
+    {
+      "id": "R-PS-PARSER",
+      "procedure": "System.Management.Automation.Language.Parser.ParseFile de scripts/operations-hosted.ps1; falhar se parseErrors.Count>0.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "PowerShell local, AST sem executar script",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1"
+      ],
+      "summary": "Parser final PASS; nenhuma CLI remota, leitura de credencial ou processo real do instrumento iniciado."
+    },
+    {
+      "id": "R-HOSTED-EXECUTION",
+      "procedure": "Aplicação das migrações003/004, REST/browser HTTPS, fixtures/compensação e publicação dev.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "Supabase/Cloudflare dev",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Somente desenho/código do instrumento revisado. Homologação/publicação serão evidências posteriores do orquestrador na autorização dev existente."
+    },
+    {
+      "id": "R-MULTISESSION",
+      "procedure": "Interleaving controlado de sessões PostgreSQL independentes, revogação concorrente, primeira entrada e deadlocks.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "PostgreSQL multi-session",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "PGlite e fixture HTTP serializada não comprovam corrida real. Locks examinados estaticamente; o instrumento prevê requisições REST paralelas, sem capturar backend PIDs."
+    },
+    {
+      "id": "R-GLOBAL",
+      "procedure": "Tipos/lint/build/suíte global/E2E.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "local",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Execução canônica do orquestrador, não duplicada pelo revisor; resultados recebidos identificados separadamente."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SEC-AUTH",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "lib/procurement/server.ts",
+        "app/actions/procurement.ts",
+        "tests/procurement-sql.test.ts"
+      ],
+      "summary": "Leitura owner/manager/buyer/stockist; gestão owner/manager/buyer; recebimento owner/manager/stockist. Cashier/outros negados. Sessão/loja/grant/membership ativos e explícitos inclusive owner; reauth antes do replay; ator auth.uid."
+    },
+    {
+      "id": "SEC-TENANT",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "tests/procurement-sql.test.ts"
+      ],
+      "summary": "Fornecedor organizacional e pedidos/linhas por loja; FKs compostas, RLS direta e autorização explícita nos RPCs SECDEF/search_path fixo; custos e audit correspondentes indisponíveis a caixa."
+    },
+    {
+      "id": "SEC-CAS-REPLAY",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "packages/ui/procurement/workspace.tsx",
+        "tests/procurement-sql.test.ts",
+        "tests/e2e/procurement.spec.ts"
+      ],
+      "summary": "CAS no fornecedor/pedido; lock da primeira inserção do UUID; namespace de replay por org/loja/ator/chave com operação+payload normalizado/ordenado, resultado original e reauth. Revisão do rascunho fixada até sucesso próprio."
+    },
+    {
+      "id": "SEC-TRANSACTION-LOCKS",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "supabase/migrations/202610090001_inventory.sql",
+        "tests/procurement-sql.test.ts"
+      ],
+      "summary": "Pedido FOR UPDATE disputa receber/cancelar. Locks de autorização, chaves de estoque, produtos/variantes e saldos ordenados antecedem inventory_move. Revisão atual sob lock evita sobrescrita. Falha de linha/audit reverte todas as entradas, pedido e ledger. Nenhuma inversão reproduzível identificada nos RPCs de uma operação; não equivale a prova multi-session."
+    },
+    {
+      "id": "SEC-SNAPSHOTS-MONEY",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "packages/domain/procurement.ts",
+        "packages/validation/procurement.ts",
+        "tests/procurement-sql.test.ts"
+      ],
+      "summary": "Snapshots imutáveis de fornecedor/produto/SKU/custo; 1–50 variantes distintas; quantidade1–1mi, custo1–100mi centavos, total até100bi centavos calculado no banco; deferred constraints asseguram total/contagem; produto/variante ativos e fornecedor ativo para novos pedidos."
+    },
+    {
+      "id": "SEC-AUDIT-PRIVILEGES",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090002_procurement.sql",
+        "tests/procurement-sql.test.ts"
+      ],
+      "summary": "Audit transacional e leitura restritiva adicional preservam regras anteriores; snapshots/linhas/ledger/terminal append-only, sem DML direto para authenticated/service/anon e sem EXECUTE privado; auditoria não publica UUID interno de estoque."
+    },
+    {
+      "id": "SEC-UI-AMBIGUITY",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/ui/procurement/workspace.tsx",
+        "app/actions/procurement.ts",
+        "tests/e2e/procurement.spec.ts"
+      ],
+      "summary": "Tentativa preserva operação/payload/revisão/chave em indisponibilidade; edição bloqueada, retry explícito e lock de double-submit. OrderDetail mantém identidade após status terminal e confirma tentativa fora do bloco open. Mensagens sanitizadas, React escapa texto."
+    },
+    {
+      "id": "SEC-HOSTED-INSTRUMENT",
+      "status": "pass",
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1",
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "summary": "Alvos dev fixos e confirmação explícita; CLI nativa pinned; segredo administrativo não chega ao browser/relatório; SSR/REST/Admin com20s e redirects error, CLI120s/Node600s, teardown restrito e flag incerta impede PASS. Fixtures próprias identificadas exatamente, cancelamento/compensação/arquivamento por RPC, sem apagar histórico. Hash do conjunto exato de eventos prévios, IDs só em memória; relatório CreateNew e whitelist. Isto é revisão local do instrumento, não resultado remoto."
+    }
+  ],
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "PUR004-F1",
+      "severity": "medium",
+      "status": "resolved",
+      "file": "packages/ui/procurement/workspace.tsx",
+      "line": 177,
+      "condition": "Antes do delta: editar contato/nome do fornecedor; outro operador salva nova revisão; operação não relacionada dispara router.refresh. Inputs defaultValue editados permanecem antigos, enquanto submit adotava supplier.revision nova.",
+      "impact": "CAS poderia aceitar sobrescrita de alteração concorrente sem revisar o rascunho original.",
+      "evidence_refs": [
+        "packages/ui/procurement/workspace.tsx",
+        "tests/e2e/procurement.spec.ts"
+      ],
+      "expected_behavior": "Vincular revisão ao rascunho apresentado, conservar tentativa ambígua e só avançar após sucesso próprio ou revisão explícita.",
+      "resolution": "useState(expectedRevision) inicial e avanço apenas por result.revision; regressão duas páginas/refresh examinada e relatada PASS pelo executor no35/35."
+    },
+    {
+      "id": "PUR004-F2",
+      "severity": "medium",
+      "status": "resolved",
+      "file": "scripts/operations-hosted.ps1",
+      "line": 57,
+      "condition": "Versão inicial assumia resultado dbquery direto, sem extrair envelope CLI rows.",
+      "impact": "Preflight falhava fechado com CLI2.119, impedindo homologação.",
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1"
+      ],
+      "expected_behavior": "Ler somente shape conhecido de uma linha e validar campos/booleanos reais.",
+      "resolution": "Extração de rows e validação de uma linha, booleanos, hashes e contagens; compatibilidade real ainda será comprovada na execução do executor."
+    },
+    {
+      "id": "PUR004-F3",
+      "severity": "medium",
+      "status": "resolved",
+      "file": "scripts/operations-hosted.ps1",
+      "line": 71,
+      "condition": "Chamadas iniciais de CLI/Node e verifyOtp não tinham prazo; saídas anômalas pós-spawn não confirmavam término.",
+      "impact": "Hangs impediam finally/relatório e poderiam deixar fixtures sem compensação.",
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1",
+        "tests/hosted/operations.mjs"
+      ],
+      "expected_behavior": "Delimitar espera, encerrar somente filho conhecido e rejeitar PASS quando encerramento é incerto.",
+      "resolution": "Admin/SSR/REST20s, CLI120s, Node600s; finally encerra árvore ainda conhecida, fallback e process_termination_confirmed fail-closed; proprietário relatou teste local próprio de timeout. Não promete compensação após interrupção abrupta."
+    },
+    {
+      "id": "PUR004-F4",
+      "severity": "medium",
+      "status": "resolved",
+      "file": "scripts/operations-hosted.ps1",
+      "line": 237,
+      "condition": "Versão inicial declarava audit_preserved apenas com contagem posterior>=anterior.",
+      "impact": "Remoção/alteração de linha anterior compensada por novos eventos poderia produzir falsa prova de preservação.",
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "expected_behavior": "Comparar conteúdo/identidade do conjunto existente antes da execução, permitindo novos eventos.",
+      "resolution": "Captura IDs prévios em memória e compara SHA256 do JSON ordenado desse conjunto exato; limita preflight a500 para não ultrapassar argv Windows."
+    }
+  ],
+  "author_evidence_received": [
+    {
+      "source": "Orquestrador, mensagens de09/10; independente da execução do revisor",
+      "environment": "local",
+      "result": "318/318 Vitest em28files,35/35E2E (24anteriores+11novos), tipos/buildPASS e lint0erros/1aviso histórico. Inclui regressão SupplierCAS e resposta perdida após route.fetch/commit com replay sem segunda entrada. Devem ser vinculados a logs/hash no relatório de validação."
+    },
+    {
+      "source": "Proprietário do instrumento, mensagem de09/10; não repetido pelo revisor",
+      "environment": "local",
+      "result": "tsc/eslintPASS; parser/argvSQLmultiline/quotes/trailing-backslashPASS e timeout100ms de Node próprio com término confirmado. Helpers4/4 após ajustar TEMPcache; duas falhas ambientais EPERM anteriores preservadas como falhas pré-teste. Ensaio preliminar sem Stop produziu falsoPASS fora do harness e foi descartado, seguido de rerun validado."
+    }
+  ],
+  "conclusion": "no_blocking_findings",
+  "product_conclusion": "no_blocking_findings",
+  "hosted_instrument_local_conclusion": "no_blocking_findings",
+  "remote_gates": {
+    "migration_application": "not_run",
+    "supabase_rest": "not_run",
+    "browser_https": "not_run",
+    "postgresql_multisession": "not_run",
+    "cloudflare_publication": "not_run",
+    "cleanup_retry": "not_run"
+  },
+  "risks": [
+    {
+      "id": "LOCAL-ONLY",
+      "description": "Revisão local não substitui homologação/versionamento/postflight remotos. Autorização dev existente cabe ao orquestrador; produção/dados reais não fazem parte da conclusão."
+    },
+    {
+      "id": "CONCURRENCY",
+      "description": "PGlite/fixtureHTTP serializada não exercitam sessões PostgreSQL independentes nem interleavings de revogação. Instrumento prevê REST paralelo com contagens/HTTPreais; ainda não executado pelo revisor e não mede backendPIDs."
+    },
+    {
+      "id": "ABRUPT-STOP",
+      "description": "Timeout extremo/interrupção de Node/máquina pode impedir compensação. Falha/termination_unconfirmed impedem PASS; marcador FICTICIO HOMOLOG004+UUID permite reconciliação manual. Não executar nova tentativa presumindo que a anterior foi compensada sem postflight."
+    },
+    {
+      "id": "BOUNDED-INSTRUMENT",
+      "description": "Preflight com mais de500eventos prévios falha fechado; limitesCLI/output e compensação exigem capacidade do dev conferida pelo executor. Não é instrumento geral de produção."
+    },
+    {
+      "id": "VERSIONED-SCOPE",
+      "description": "Mudanças posteriores nas fontes do manifesto exigem revisão proporcional. Demais mudanças dirty da árvore não são aprovadas por esta revisão; evidências003/cleanup históricas permanecem intactas."
+    }
+  ],
+  "assumptions": [
+    "Autorização humana dev do pacote004 informada pelo orquestrador e documentada no contrato/ADR; contexto consolidado será atualizado por ele.",
+    "Fixtures fictícias do ensaio não devem receber operações alheias; saldo inesperado aborta compensação, preservando histórico."
+  ],
+  "artifacts": [],
+  "changed_files": [
+    {
+      "path": "docs/evidencias/compras-004-review-2026-10-09.json",
+      "operation": "added",
+      "purpose": "Único arquivo atribuído: revisão independente de produto e instrumento local."
+    }
+  ],
+  "candidate_changed_by_reviewer": [],
+  "context_requests": [],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Orquestrador vincular gates locais aos hashes finais, conferir baseline/target, aplicar somente incrementais003/004 e realizar os gates dev já autorizados; registrar resultados reais e falhas sem reclassificar not_run. Limpeza retry permanece pendente."
+}

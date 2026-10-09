@@ -14,11 +14,21 @@ for (const file of [
   "migrations/202609300001_catalog.sql",
   "migrations/202610020001_catalog_service_role_normalization.sql",
   "migrations/202610030001_catalog_conflict_http.sql",
+  "migrations/202610090001_inventory.sql",
+  "migrations/202610090002_procurement.sql",
 ])
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
   );
 await db.exec(`
+  insert into auth.users(id) values ('80000000-0000-4000-8000-000000000001'),('90000000-0000-4000-8000-000000000001');
+  insert into public.profiles(id,display_name) values ('80000000-0000-4000-8000-000000000001','Estoquista fictício'),('90000000-0000-4000-8000-000000000001','Comprador fictício');
+  insert into public.memberships(id,organization_id,user_id,role) values
+    ('80000000-0000-4000-8000-000000000011','10000000-0000-4000-8000-000000000001','80000000-0000-4000-8000-000000000001','stockist'),
+    ('90000000-0000-4000-8000-000000000011','10000000-0000-4000-8000-000000000001','90000000-0000-4000-8000-000000000001','buyer');
+  insert into public.user_store_access(organization_id,membership_id,store_id) values
+    ('10000000-0000-4000-8000-000000000001','80000000-0000-4000-8000-000000000011','10000000-0000-4000-8000-000000000011'),
+    ('10000000-0000-4000-8000-000000000001','90000000-0000-4000-8000-000000000011','10000000-0000-4000-8000-000000000011');
   insert into public.product_categories(id,organization_id,name) values
    ('10000000-0000-4000-8000-000000000101','10000000-0000-4000-8000-000000000001','Blusas');
   insert into public.products(id,organization_id,category_id,name,description) values
@@ -39,6 +49,8 @@ const identities = {
   "sem.vinculo@example.test": "d",
   "multiempresa@example.test": "e",
   "sem.loja@example.test": "f",
+  "estoquista.aurora@example.test": "8",
+  "comprador.aurora@example.test": "9",
 };
 let queue = Promise.resolve();
 const reply = (response, status, data) => {
@@ -122,6 +134,31 @@ createServer((request, response) => {
           return reply(response, 200, null);
         }
         const catalogRpcArguments = {
+          inventory_stock: [
+            "p_organization_id",
+            "p_store_id",
+            "p_query",
+            "p_limit",
+            "p_offset",
+            "p_variant_id",
+          ],
+          inventory_history: [
+            "p_organization_id",
+            "p_store_id",
+            "p_variant_id",
+            "p_limit",
+            "p_offset",
+          ],
+          inventory_move: [
+            "p_organization_id",
+            "p_store_id",
+            "p_variant_id",
+            "p_kind",
+            "p_quantity",
+            "p_reason",
+            "p_expected_revision",
+            "p_idempotency_key",
+          ],
           catalog_search_products: [
             "p_organization_id",
             "p_store_id",
@@ -195,12 +232,63 @@ createServer((request, response) => {
           ],
         };
         const rpcName = url.pathname.replace("/rest/v1/rpc/", "");
+        const scopeArgs = ["p_organization_id", "p_store_id"];
+        Object.assign(catalogRpcArguments, {
+          procurement_suppliers: [
+            ...scopeArgs,
+            "p_query",
+            "p_limit",
+            "p_offset",
+            "p_supplier_id",
+          ],
+          procurement_orders: [
+            ...scopeArgs,
+            "p_query",
+            "p_status",
+            "p_limit",
+            "p_offset",
+            "p_order_id",
+          ],
+          procurement_order_items: [...scopeArgs, "p_order_id"],
+          procurement_save_supplier: [
+            ...scopeArgs,
+            "p_supplier_id",
+            "p_name",
+            "p_contact",
+            "p_active",
+            "p_expected_revision",
+            "p_idempotency_key",
+          ],
+          procurement_create_order: [
+            ...scopeArgs,
+            "p_supplier_id",
+            "p_items",
+            "p_idempotency_key",
+          ],
+          procurement_receive_order: [
+            ...scopeArgs,
+            "p_order_id",
+            "p_expected_revision",
+            "p_idempotency_key",
+          ],
+          procurement_cancel_order: [
+            ...scopeArgs,
+            "p_order_id",
+            "p_expected_revision",
+            "p_reason",
+            "p_idempotency_key",
+          ],
+        });
         const argumentNames = catalogRpcArguments[rpcName];
         if (url.pathname.startsWith("/rest/v1/rpc/") && argumentNames) {
           const placeholders = argumentNames
             .map((_, index) => "$" + (index + 1))
             .join(",");
-          const values = argumentNames.map((name) => body[name] ?? null);
+          const values = argumentNames.map((name) =>
+            name === "p_items"
+              ? JSON.stringify(body[name] ?? null)
+              : (body[name] ?? null),
+          );
           const result = await db.query(
             "select * from public." + rpcName + "(" + placeholders + ")",
             values,

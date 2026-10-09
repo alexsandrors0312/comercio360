@@ -1,0 +1,353 @@
+{
+  "schema_version": "0.1",
+  "review_id": "C360-ESTOQUE-003-SEC-2026-10-09-R1",
+  "task_id": "estoque-003",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "mode": "Segurança/Arquitetura",
+  "recorded_at_utc": "2026-10-09T11:54:39.925Z",
+  "workspace": "C:/Users/Alexs/Desktop/Comercio360",
+  "baseline_ref": "f5eb4e35a4313b7a0ee51f593587265420cc30f2",
+  "candidate": {
+    "kind": "dirty_worktree_sha256",
+    "baseline_commit": "f5eb4e35a4313b7a0ee51f593587265420cc30f2",
+    "files": [
+      {
+        "path": "docs/PACOTE_003_ESTOQUE.md",
+        "sha256": "709f29ef346382b91fdf5334d345cf9c13f4a16a84e3ac267a0cd92791959669"
+      },
+      {
+        "path": "docs/adr/ADR-0011-estoque.md",
+        "sha256": "dc9a39a541c37bb3e2a634509569cc6fc70dc75fb588b2ba2b1c9052c2e087ad"
+      },
+      {
+        "path": "supabase/migrations/202610090001_inventory.sql",
+        "sha256": "5682475bbb0b5ce2b067e25d82d06e8ccff603b7167d3401c6118dd29c327e5d"
+      },
+      {
+        "path": "lib/inventory/server.ts",
+        "sha256": "6a10a6fb60097830db199bc91235b7d456a02c81ac87f2797fc5ce5adb12e5e8"
+      },
+      {
+        "path": "app/actions/inventory.ts",
+        "sha256": "fe6d8ad5c9d255ba6909c45844e605e5103492684b91660ae2ae897309f38df7"
+      },
+      {
+        "path": "app/app/estoque/page.tsx",
+        "sha256": "35e02309d455170925e76c83321d16b5572afa0c599714b4bba9dfebc140cfdd"
+      },
+      {
+        "path": "app/app/estoque/loading.tsx",
+        "sha256": "8f3ba818a862ac5dd7e3702360b5de9c55b35a1542d1332af76d2505019d0f43"
+      },
+      {
+        "path": "app/app/estoque/error.tsx",
+        "sha256": "65a6395bce799b34b363b3a34f7e71b47f62320dc49003a44ecc063eda289fcb"
+      },
+      {
+        "path": "app/app/estoque/inventory.module.css",
+        "sha256": "d7c1c2689187424cda28b078463255da89989be2049b7ed84382c5a5b4a05cd5"
+      },
+      {
+        "path": "packages/domain/inventory-contracts.ts",
+        "sha256": "d67aec8d498fd17ec1c1b986a59e9bca83d918d520ea9b18e34ac8c3098ca4be"
+      },
+      {
+        "path": "packages/domain/inventory.ts",
+        "sha256": "6f0ada9c3679aae6063c4bdcf71e5aed59ff7ee8a28babac36db4efb7c8fa603"
+      },
+      {
+        "path": "packages/validation/inventory.ts",
+        "sha256": "698df3caae020e8023f66d3e8e4c225a344296b40faa66b261c25e91a33cee5f"
+      },
+      {
+        "path": "packages/ui/inventory/workspace.tsx",
+        "sha256": "94b5b59c5d83ab4f63d7c0dbfb3da1a3b95ebe46b325d01b97f3adb3cd9d3e90"
+      },
+      {
+        "path": "tests/inventory-sql.test.ts",
+        "sha256": "7197e1553af5ff6cf281f77c58c990a034c2e067e39ac249c497bab445ee5e3e"
+      },
+      {
+        "path": "tests/inventory-domain.test.ts",
+        "sha256": "7e32a4a5c42751bfaa357721c064e548586c0a844d2d748ebaf2b70d0200887b"
+      },
+      {
+        "path": "tests/inventory-application.test.ts",
+        "sha256": "965caec54788d8208bbcfdaa23cb8e56664985c6375c08ed9ea213552b016f98"
+      },
+      {
+        "path": "tests/inventory-ui.test.ts",
+        "sha256": "76cd5537257be94d60f1a9a7781de56bb922ad58f835cde9ba34ff5f936ac484"
+      },
+      {
+        "path": "tests/e2e/inventory.spec.ts",
+        "sha256": "5e484bdac9435bdda8464469e30de010b6c348471b513721101b11af33e372c0"
+      },
+      {
+        "path": "tests/support/auth-server.mjs",
+        "sha256": "76e721f82db506a52c1b063bc781b738f8a28f8cf65bc65b25ac3f1fd616d07c"
+      },
+      {
+        "path": "vitest.config.ts",
+        "sha256": "b72bb19a25208d5e987d00dfac17069c136d737645a8c71a4feaacb26a9785e8"
+      },
+      {
+        "path": "playwright.config.ts",
+        "sha256": "458abda5410812d9dbbbb78d5002b4775021b1f6d2e87dc4f37ffabc6c478233"
+      },
+      {
+        "path": "package.json",
+        "sha256": "2afd9b027b067ce22f75972246a48a9891527a4ba8b03e3cfaca0fea79598846"
+      }
+    ]
+  },
+  "authorization": {
+    "source": "Tarefa do orquestrador de 09/10/2026, baseada no pedido humano para continuar operações e deixar retry pendente.",
+    "scope": "Revisão local somente leitura do pacote Estoque 003; escrita exclusiva deste relatório."
+  },
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null,
+    "model_source": "Identificador efetivo/telemetria não expostos pelo executor desta revisão."
+  },
+  "summary": "Nenhum achado bloqueante reproduzível no candidato local de Estoque. Revisados SQL, RLS, autorização por sessão/loja, locks, CAS, idempotência, auditoria, validação, adaptador servidor e reenvio ambíguo na interface. Reprodução independente de 26 testes SQL passou em PGlite; tentativa anterior falhou por EPERM do ambiente antes de executar testes. Evidência local e análise de locks não comprovam concorrência entre sessões, Auth real ou Supabase hospedado. Resultados do autor ficam separados da execução independente.",
+  "scope_examined": [
+    "Arquivos de contrato e candidato identificados no manifesto; leitura integral do SQL de estoque e das camadas de domínio, validação, servidor, action e interface.",
+    "Dependências pertinentes de Foundation/Catálogo: regras de loja/membership, FKs, RLS, auditoria append-only e ordem de locks produto/variante.",
+    "Testes SQL/aplicação/domínio/UI e E2E de estoque; delta do servidor HTTP fictício e configuração de testes.",
+    "Árvore compartilhada contém mudanças anteriores de limpeza/HTTPS/documentação fora deste escopo; não foram revertidas nem aprovadas por esta revisão."
+  ],
+  "checks": [
+    {
+      "id": "R-SOURCE",
+      "procedure": "Inspeção independente do contrato, código completo relevante e dependências SQL; conferência dos hashes SHA-256 ao persistir a revisão.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "local; leitura de fontes",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": null,
+      "evidence_refs": [
+        "docs/PACOTE_003_ESTOQUE.md",
+        "docs/adr/ADR-0011-estoque.md",
+        "supabase/migrations/202610090001_inventory.sql",
+        "lib/inventory/server.ts",
+        "app/actions/inventory.ts",
+        "app/app/estoque/page.tsx",
+        "app/app/estoque/loading.tsx",
+        "app/app/estoque/error.tsx",
+        "app/app/estoque/inventory.module.css",
+        "packages/domain/inventory-contracts.ts",
+        "packages/domain/inventory.ts",
+        "packages/validation/inventory.ts",
+        "packages/ui/inventory/workspace.tsx",
+        "tests/inventory-sql.test.ts",
+        "tests/inventory-domain.test.ts",
+        "tests/inventory-application.test.ts",
+        "tests/inventory-ui.test.ts",
+        "tests/e2e/inventory.spec.ts",
+        "tests/support/auth-server.mjs"
+      ],
+      "summary": "Sem achado bloqueante reproduzível; detalhes das invariantes nos critérios."
+    },
+    {
+      "id": "R-SQL-ATTEMPT-1",
+      "command": "node node_modules/vitest/vitest.mjs run tests/inventory-sql.test.ts --configLoader native",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "sandbox Windows; PGlite em memória",
+      "executed_by": "reviewer",
+      "status": "fail",
+      "exit_code": 1,
+      "tests_executed": 0,
+      "evidence_refs": [
+        "tests/inventory-sql.test.ts"
+      ],
+      "summary": "EPERM ao renomear arquivo temporário do cache SSR em AC/Temp do sandbox, antes dos testes. Falha ambiental histórica preservada; não representa falha de asserção SQL."
+    },
+    {
+      "id": "R-SQL-ATTEMPT-2",
+      "command": "node node_modules/vitest/vitest.mjs run tests/inventory-sql.test.ts --configLoader native",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "runner_started_at": "08:47:58 America/Sao_Paulo",
+      "environment": "executor local Windows, escalada específica aprovada; PGlite em memória, sem serviço remoto",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "tests_passed": 26,
+      "tests_failed": 0,
+      "evidence_refs": [
+        "tests/inventory-sql.test.ts",
+        "supabase/migrations/202610090001_inventory.sql"
+      ],
+      "summary": "26/26. Tenant/loja, oito perfis, concessão explícita inclusive owner, revogação/reautorização de replay, inicialização zero, CAS sequencial, payload idempotente, limites, produto inativo, rollback/auditoria/FKs e DML/imutabilidade. Migração SHA5682475b e teste SHA7197e155 no manifesto; sem alteração semântica posterior examinada."
+    },
+    {
+      "id": "R-REMOTE",
+      "procedure": "Supabase hospedado, JWT/refresh reais, implantação e aplicação remota da migração.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "remote",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Fora da autorização local; nenhum acesso remoto, segredo ou credencial."
+    },
+    {
+      "id": "R-MULTISESSION",
+      "procedure": "Revogação concorrente e primeira entrada em sessões PostgreSQL independentes.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "PostgreSQL multi-session",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "PGlite e fixture HTTP serializada não oferecem essa prova; ordem de locks e transações foi examinada estaticamente."
+    },
+    {
+      "id": "R-OTHER-DYNAMIC",
+      "procedure": "Suíte global, lint, tipos, build e navegador.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "local",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Não repetidos pelo revisor: execução canônica pertence ao orquestrador. Relatos recebidos ficam separados abaixo e devem ser vinculados ao relatório de integração."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SEC-AUTH",
+      "status": "pass",
+      "evidence_refs": [
+        "lib/inventory/server.ts",
+        "app/actions/inventory.ts",
+        "supabase/migrations/202610090001_inventory.sql",
+        "tests/inventory-sql.test.ts"
+      ],
+      "summary": "Cinco papéis de leitura/três de escrita, membership e loja ativos com grant explícito; ator derivado de auth.uid; ação e RPC reautorizam inclusive replay. Sem service role na aplicação."
+    },
+    {
+      "id": "SEC-TENANT",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090001_inventory.sql",
+        "tests/inventory-sql.test.ts"
+      ],
+      "summary": "FKs compostas de organização/loja/variante, RLS de leitura, privilégios DML revogados e consultas escopadas impedem cruzamento testado entre tenants e lojas."
+    },
+    {
+      "id": "SEC-TRANSACTION",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090001_inventory.sql",
+        "tests/inventory-sql.test.ts"
+      ],
+      "summary": "Lock de autorização compartilhado; ordem produto/variante; insert-on-conflict e lock de saldo; CAS e aritmética bigint antes do update; saldo/movimento/auditoria na mesma transação. CAS e rollback reproduzidos em uma sessão; sessões concorrentes permanecem not_run."
+    },
+    {
+      "id": "SEC-IDEMPOTENCY",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090001_inventory.sql",
+        "packages/ui/inventory/workspace.tsx",
+        "tests/inventory-sql.test.ts",
+        "tests/e2e/inventory.spec.ts"
+      ],
+      "summary": "Advisory lock e unicidade por org/loja/ator/chave; replay compara payload normalizado e devolve original após reautorização. Interface retém chave, revisão e payload em resultado indisponível; impede novo envio simultâneo e permite confirmar o anterior."
+    },
+    {
+      "id": "SEC-BOUNDS",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/domain/inventory.ts",
+        "packages/validation/inventory.ts",
+        "lib/inventory/server.ts",
+        "supabase/migrations/202610090001_inventory.sql"
+      ],
+      "summary": "Inteiros positivos até 1.000.000, saldo não negativo até int32, revisão bigint preservada como texto, rejeição de números inseguros e motivos normalizados com limite Unicode; novas movimentações exigem produto/variante ativos."
+    },
+    {
+      "id": "SEC-AUDIT",
+      "status": "pass",
+      "evidence_refs": [
+        "supabase/migrations/202610090001_inventory.sql",
+        "tests/inventory-sql.test.ts"
+      ],
+      "summary": "Histórico e audit append-only; DML direto/UPDATE/DELETE/TRUNCATE negados inclusive serviço; auditoria deriva ator/escopo e rollback falho não deixa saldo ou movimento parcial."
+    },
+    {
+      "id": "SEC-BOUNDARIES",
+      "status": "pass",
+      "evidence_refs": [
+        "app/actions/inventory.ts",
+        "lib/inventory/server.ts",
+        "packages/ui/inventory/workspace.tsx",
+        "app/app/estoque/error.tsx"
+      ],
+      "summary": "Erros e indisponibilidade sanitizados; validação runtime do RPC; React escapa texto; sem arquivos/uploads/Storage adicionados pelo pacote."
+    }
+  ],
+  "author_evidence_received": [
+    {
+      "source": "Mensagens do orquestrador; não executado pelo revisor",
+      "date": "2026-10-09",
+      "environment": "local",
+      "result": "Orquestrador relatou tipos, lint, suíte global 226/226 e build exit0. Vinculação dos logs/hashes cabe ao relatório de validação da integração; não são execuções independentes deste revisor."
+    },
+    {
+      "source": "Mensagens do orquestrador e leitura do E2E",
+      "date": "2026-10-09",
+      "environment": "Navegador local + HTTP/Auth fictícios + SQL PGlite real",
+      "result": "E2E estoque inicial 5/7, duas falhas de locator alert; após correção, full24 23/24, uma falha de sincronização da troca de loja. Corrigido somente teste para aguardar loja confirmada. Execução final relatada pelo orquestrador: full24 24/24 PASS, exit0, 52.8s; 17 anteriores + 7 novos, incluindo isolamento de loja, CAS, resposta perdida após route.fetch/commit com reenvio e saldo6/histórico único e larguras. Falhas anteriores permanecem históricas; produto não alterado entre essas execuções."
+    }
+  ],
+  "findings": [],
+  "conclusion": "no_blocking_findings",
+  "risks": [
+    {
+      "id": "LIMIT-LOCAL",
+      "description": "Resultado permite seguir à integração local do candidato identificado; não aprova produção, migração remota, dados reais, Auth/JWT reais nem Supabase hospedado."
+    },
+    {
+      "id": "LIMIT-CONCURRENCY",
+      "description": "Locks e ordem de serialização são plausíveis pela inspeção; PGlite é sessão única e a fixture HTTP enfileira requests. Corridas entre transações e revogação concorrente exigem ensaio PostgreSQL multi-session antes de alegar comprovação real."
+    },
+    {
+      "id": "LIMIT-IDENTITY",
+      "description": "Mudança posterior nos arquivos do manifesto exige reavaliação proporcional do delta; esta revisão não cobre outras alterações da árvore compartilhada."
+    },
+    {
+      "id": "PENDING-INTEGRATION",
+      "description": "Tipos/lint/build/suíte e navegador final foram relatados pelo orquestrador; os logs/hashes devem constar da validação integrada. Esses relatos não são execução independente deste revisor. Cleanup retry continua pendente/not_run."
+    }
+  ],
+  "assumptions": [
+    "Contrato novo de 09/10 e autorização humana informada pelo orquestrador prevalecem sobre a pendência antiga de novo módulo em context.md; o orquestrador atualizará o contexto consolidado."
+  ],
+  "artifacts": [],
+  "changed_files": [
+    {
+      "path": "docs/evidencias/estoque-003-review-2026-10-09.json",
+      "operation": "added",
+      "purpose": "Relatório independente, único arquivo atribuído ao revisor."
+    }
+  ],
+  "candidate_changed_by_reviewer": [],
+  "context_requests": [],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Orquestrador vincular resultado final do E2E e checagens globais à integração local, concluir documentação/contexto e conservar gates remotos e retry como não executados."
+}

@@ -1,0 +1,266 @@
+.workspace {
+  display: grid;
+  gap: 20px;
+  max-width: 1500px;
+  margin: auto;
+  min-width: 0;
+}
+.heading h1 {
+  margin: 0 0 8px;
+}
+.heading p {
+  color: #526965;
+  line-height: 1.5;
+}
+.heading .eyebrow {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin: 0 0 8px;
+}
+.filters {
+  display: flex;
+  align-items: end;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.filters .field {
+  flex: 1 1 240px;
+}
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.field input,
+.field textarea,
+.field select {
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid #a7beb5;
+  border-radius: 7px;
+  padding: 11px;
+  font: inherit;
+  font-weight: 400;
+  color: #172f32;
+  background: white;
+}
+.field textarea {
+  resize: vertical;
+}
+.field small {
+  font-weight: 400;
+  color: #526965;
+  line-height: 1.5;
+}
+.primary,
+.secondary {
+  min-height: 44px;
+  padding: 11px 16px;
+  border-radius: 7px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.primary {
+  background: #08685f;
+  color: white;
+  border: 1px solid #08685f;
+}
+.secondary {
+  background: #f4faf7;
+  color: #075b52;
+  border: 1px solid #bdd8cc;
+}
+.workspace button:disabled {
+  opacity: 0.65;
+  cursor: default;
+}
+.workspace :focus-visible {
+  outline: 3px solid #1171ba;
+  outline-offset: 3px;
+}
+.columns {
+  display: grid;
+  grid-template-columns: minmax(240px, 0.85fr) minmax(0, 1.3fr);
+  gap: 18px;
+  align-items: start;
+  min-width: 0;
+}
+.card {
+  min-width: 0;
+  border: 1px solid #dce7e1;
+  border-radius: 10px;
+  padding: 22px;
+  background: white;
+  overflow-wrap: anywhere;
+}
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 1.2rem;
+}
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+}
+.sectionHead > span,
+.sectionHead time {
+  color: #526965;
+  font-size: 0.8rem;
+}
+.stockList,
+.historyList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.stockList li + li {
+  border-top: 1px solid #e0e9e5;
+}
+.itemLink,
+.selectedItem {
+  display: grid;
+  gap: 7px;
+  padding: 14px 10px;
+  border-radius: 7px;
+}
+.selectedItem,
+.itemLink:hover {
+  background: #eaf7ef;
+}
+.selectedItem {
+  box-shadow: inset 3px 0 #08685f;
+}
+.meta {
+  color: #526965;
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+.balance {
+  color: #075b52;
+  font-weight: 700;
+}
+.active,
+.inactive {
+  font-size: 0.76rem;
+}
+.active {
+  color: #075b52;
+}
+.inactive {
+  color: #8a4221;
+}
+.currentBalance {
+  padding: 12px;
+  background: #f3f8f5;
+  border-radius: 7px;
+  line-height: 1.5;
+}
+.notice {
+  margin: 0;
+  background: #fff8e9;
+  color: #62400e;
+  border: 1px solid #e3cf9e;
+  border-radius: 8px;
+  padding: 12px;
+  line-height: 1.5;
+  overflow-wrap: anywhere;
+}
+.notice p {
+  margin-bottom: 0;
+}
+.notice a,
+.empty a,
+.pagination a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.movementForm {
+  display: grid;
+  gap: 14px;
+  margin-top: 16px;
+}
+.movementForm fieldset {
+  display: grid;
+  gap: 14px;
+  min-width: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.movementForm legend {
+  padding: 0 0 12px;
+  font-weight: 700;
+}
+.movementForm > button {
+  justify-self: start;
+}
+.fieldGrid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.history {
+  border-top: 1px solid #e0e9e5;
+  margin-top: 24px;
+  padding-top: 8px;
+}
+.historyList li {
+  padding: 14px 0;
+  border-bottom: 1px solid #e0e9e5;
+}
+.historyList li p {
+  white-space: pre-wrap;
+  line-height: 1.5;
+}
+.historyList small {
+  color: #526965;
+}
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  align-items: center;
+  justify-content: space-between;
+  border-top: 1px solid #e0e9e5;
+  margin-top: 14px;
+  padding-top: 14px;
+  font-size: 0.85rem;
+}
+.empty {
+  text-align: center;
+  padding: 25px 8px;
+  color: #526965;
+  line-height: 1.5;
+}
+@media (max-width: 980px) {
+  .columns {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+@media (max-width: 480px) {
+  .card {
+    padding: 16px;
+  }
+  .fieldGrid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .filters {
+    align-items: stretch;
+  }
+  .filters > button,
+  .filters > a {
+    flex: 1 1 auto;
+  }
+}
