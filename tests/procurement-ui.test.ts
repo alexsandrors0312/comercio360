@@ -68,6 +68,47 @@ const render = (
   );
 
 describe("Compras: apresentação estática, não comprova interação", () => {
+  it("desabilita campos e envios de fornecedor, pedido e transições antes da hidratação", () => {
+    const html = render();
+    const forms = Array.from(
+      html.matchAll(/<form\b[^>]*>[\s\S]*?<\/form>/g),
+      (match) => match[0],
+    );
+    const clientForms = forms.filter((form) => !form.includes('method="get"'));
+    expect(clientForms).toHaveLength(6);
+    for (const form of clientForms) {
+      const buttons = Array.from(
+        form.matchAll(/<button\b[^>]*>/g),
+        (match) => match[0],
+      );
+      expect(buttons.length).toBeGreaterThan(0);
+      expect(buttons.every((button) => button.includes('disabled=""'))).toBe(
+        true,
+      );
+      if (form.includes('name="variantQuery"')) {
+        expect(form).toMatch(
+          /<input\b(?=[^>]*name="variantQuery")(?=[^>]*disabled="")[^>]*>/,
+        );
+      } else {
+        expect(form).toMatch(/<fieldset\b[^>]*\bdisabled=""/);
+      }
+    }
+    const supplier = clientForms.find((form) =>
+      form.includes('aria-label="Editar fornecedor Fornecedor Ágil"'),
+    );
+    expect(supplier).toContain('value="Contato livre"');
+    expect(supplier).toMatch(
+      /<fieldset\b[^>]*disabled=""[\s\S]*name="contact"/,
+    );
+    expect(html).toMatch(
+      /<button\b[^>]*disabled=""[^>]*>Novo pedido<\/button>/,
+    );
+    const filters = forms.find((form) => form.includes('method="get"'));
+    expect(filters).toBeDefined();
+    expect(filters).not.toContain('disabled=""');
+    expect(html).toContain("<noscript>");
+    expect(html).toContain("Ative o JavaScript para cadastrar fornecedores");
+  });
   it("apresenta fornecedor, snapshot, custo e recebimento explícito", () => {
     const html = render();
     for (const text of [

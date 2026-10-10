@@ -1,0 +1,151 @@
+{
+    "schema_version":  1,
+    "started_at":  "2026-10-09T20:59:39.9469093Z",
+    "finished_at":  "2026-10-09T21:00:08.8752823Z",
+    "status":  "passed",
+    "failed_phase":  null,
+    "checks":  [
+                   {
+                       "name":  "database_preflight",
+                       "status":  "PASS"
+                   }
+               ],
+    "postflight":  {
+                       "confirmed":  true,
+                       "identities_preserved":  true,
+                       "passwords_preserved":  true,
+                       "hmac_preserved":  true,
+                       "images_preserved":  true,
+                       "audit_preserved":  true,
+                       "audit_events_added":  32,
+                       "migration_count":  9,
+                       "bucket_private":  true
+                   },
+    "cleanup_retry":  "not_run",
+    "probe":  {
+                  "schema_version":  1,
+                  "run_id":  "9dbfe58c-e32b-4736-b93b-372c2c6dd9b4",
+                  "started_at":  "2026-10-09T20:59:48.373Z",
+                  "finished_at":  "2026-10-09T21:00:04.813Z",
+                  "status":  "passed",
+                  "failed_phase":  null,
+                  "failed_substep":  null,
+                  "browser_supplier_steps":  [
+                                                 {
+                                                     "name":  "page_status",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "heading",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "store",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "open",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "fields",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "submit",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "rpc",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "cookies",
+                                                     "status":  "PASS"
+                                                 }
+                                             ],
+                  "browser_supplier_page":  {
+                                                "http_200":  true,
+                                                "route_compras":  true,
+                                                "route_login":  false,
+                                                "access_denied":  false,
+                                                "unavailable":  false,
+                                                "native_form_query":  false
+                                            },
+                  "browser_supplier_submit":  {
+                                                  "notice":  "success",
+                                                  "notice_present":  true,
+                                                  "post_observed":  true,
+                                                  "post_http_status":  "200",
+                                                  "screenshot_saved":  false
+                                              },
+                  "checks":  [
+                                 {
+                                     "name":  "configuration",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "existing_login",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "catalog_fixtures",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_supplier",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_order",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_receive",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_inventory",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "rest_replay",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "rest_payload_conflict",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "rest_parallel_cas",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "rest_parallel_replay",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "rest_isolation",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_cashier",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "postflight_compensation",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "postflight_archive",
+                                     "status":  "PASS"
+                                 }
+                             ],
+                  "compensated":  true,
+                  "archived":  true,
+                  "fixture_marker":  "FICTICIO HOMOLOG004",
+                  "business_history":  "preserved",
+                  "cleanup_retry":  "not_run"
+              },
+    "process_termination_confirmed":  true
+}

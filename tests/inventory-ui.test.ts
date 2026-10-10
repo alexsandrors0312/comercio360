@@ -40,6 +40,27 @@ const render = (
   );
 
 describe("Estoque: apresentação estática (não comprova interação)", () => {
+  it("mantém os campos e o envio da movimentação inertes no HTML anterior à hidratação", () => {
+    const html = render();
+    const forms = Array.from(
+      html.matchAll(/<form\b[^>]*>[\s\S]*?<\/form>/g),
+      (match) => match[0],
+    );
+    const movement = forms.find((form) => form.includes('name="quantity"'));
+    expect(movement).toBeDefined();
+    expect(movement).toMatch(/<fieldset\b[^>]*\bdisabled=""/);
+    expect(movement).toMatch(
+      /<button\b[^>]*\bdisabled=""[^>]*>Registrar movimentação<\/button>/,
+    );
+    const filters = forms.find((form) => form.includes('method="get"'));
+    expect(filters).toBeDefined();
+    expect(filters).toContain('name="q"');
+    expect(filters).not.toContain('disabled=""');
+    expect(html).toContain("<noscript>");
+    expect(html).toContain(
+      "Ative o JavaScript para registrar movimentações de estoque",
+    );
+  });
   it("identifica loja, SKU, atributos e saldo zero real", () => {
     const html = render();
     for (const text of [

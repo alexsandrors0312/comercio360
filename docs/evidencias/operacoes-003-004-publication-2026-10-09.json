@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "recorded_at_utc": "2026-10-09T20:49:02.297Z",
+  "status": "passed",
+  "environment": "development_homologation",
+  "project_ref": "qiwblpmocldqbijbylwg",
+  "worker": "comercio360",
+  "url": "https://comercio360.alexsandrors-0312.workers.dev",
+  "commit": "2c11de0dbd0598f7a6feeb3bc0dfdba1d3ba70cc",
+  "build": {
+    "id": "3c0ce214-53e1-45de-824e-0608aa78ba01",
+    "status": "completed",
+    "conclusion": "success",
+    "url": "https://dash.cloudflare.com/41004f5611c7e9a6597a750f3ed55c6e/workers/services/view/comercio360/production/builds/3c0ce214-53e1-45de-824e-0608aa78ba01"
+  },
+  "deployment": {
+    "id": "138be0ff-f29a-4a5b-80e7-0e90b08b521e",
+    "created_on": "2026-10-09T20:45:11.720519Z",
+    "version_id": "ee6dc2f6-3182-4f67-9e6c-068c1dbfc670",
+    "percentage": 100
+  },
+  "secrets_changed": false,
+  "cleanup_worker_deployed": false,
+  "cleanup_retry": "not_run",
+  "scope": "Publication metadata only. Functional homologation is recorded in separate hosted reports."
+}

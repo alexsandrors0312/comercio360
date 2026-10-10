@@ -38,6 +38,7 @@ import {
   parsePurchaseUnitCost,
 } from "@/packages/domain/procurement";
 import { parseInventoryQuantity } from "@/packages/domain/inventory";
+import { useHydrated } from "@/packages/ui/use-hydrated";
 import styles from "@/app/app/compras/procurement.module.css";
 
 type Props = {
@@ -74,6 +75,7 @@ function hrefFor(
 }
 
 function useMutation<T>(task: (input: T) => Promise<ProcurementResult>) {
+  const hydrated = useHydrated();
   const [pending, startTransition] = useTransition();
   const [notice, setNotice] = useState<ProcurementResult | null>(null);
   const [ambiguous, setAmbiguous] = useState(false);
@@ -87,7 +89,7 @@ function useMutation<T>(task: (input: T) => Promise<ProcurementResult>) {
       result: Extract<ProcurementResult, { status: "success" }>,
     ) => void,
   ) {
-    if (locked.current || blocked) return;
+    if (!hydrated || locked.current || blocked) return;
     if (attempt.current === null) attempt.current = factory();
     const input = attempt.current;
     locked.current = true;
@@ -116,11 +118,12 @@ function useMutation<T>(task: (input: T) => Promise<ProcurementResult>) {
     if (previousInput !== null) run(() => previousInput, success);
   }
   return {
+    hydrated,
     pending,
     notice,
     ambiguous,
     blocked,
-    disabled: pending || ambiguous || blocked,
+    disabled: !hydrated || pending || ambiguous || blocked,
     noticeRef,
     run,
     retry,
@@ -250,7 +253,7 @@ function SupplierEditor({
       </fieldset>
       <button
         className={styles.primary}
-        disabled={mutation.pending || mutation.blocked}
+        disabled={!mutation.hydrated || mutation.pending || mutation.blocked}
         type="submit"
       >
         {mutation.pending
@@ -537,7 +540,12 @@ function OrderBuilder({
         <button
           className={styles.primary}
           type="submit"
-          disabled={mutation.pending || mutation.blocked || !lines.length}
+          disabled={
+            !mutation.hydrated ||
+            mutation.pending ||
+            mutation.blocked ||
+            !lines.length
+          }
         >
           {mutation.pending
             ? "Criando pedido…"
@@ -672,7 +680,9 @@ function OrderDetail({
                 <button
                   type="submit"
                   className={styles.primary}
-                  disabled={mutation.pending || mutation.blocked}
+                  disabled={
+                    !mutation.hydrated || mutation.pending || mutation.blocked
+                  }
                 >
                   {mutation.pending
                     ? "Processando pedido…"
@@ -706,7 +716,9 @@ function OrderDetail({
                 <button
                   type="submit"
                   className={styles.danger}
-                  disabled={mutation.pending || mutation.blocked}
+                  disabled={
+                    !mutation.hydrated || mutation.pending || mutation.blocked
+                  }
                 >
                   {mutation.pending ? "Processando pedido…" : "Cancelar pedido"}
                 </button>
@@ -718,7 +730,7 @@ function OrderDetail({
       {mutation.ambiguous && (
         <button
           className={styles.primary}
-          disabled={mutation.pending || mutation.blocked}
+          disabled={!mutation.hydrated || mutation.pending || mutation.blocked}
           onClick={() => mutation.retry(() => router.refresh())}
         >
           Confirmar envio anterior
@@ -739,6 +751,7 @@ export function ProcurementWorkspace({
   status,
 }: Props) {
   const router = useRouter();
+  const hydrated = useHydrated();
   const [showBuilder, setShowBuilder] = useState(false);
   const orderPages = Math.max(1, Math.ceil(orders.total / orders.pageSize));
   const supplierPages = Math.max(
@@ -765,6 +778,7 @@ export function ProcurementWorkspace({
         {permissions.canManage && (
           <button
             className={styles.primary}
+            disabled={!hydrated}
             onClick={() => setShowBuilder((current) => !current)}
             aria-expanded={showBuilder}
             aria-controls="purchase-builder"
@@ -773,6 +787,13 @@ export function ProcurementWorkspace({
           </button>
         )}
       </header>
+      <noscript>
+        <p className={styles.notice}>
+          Ative o JavaScript para cadastrar fornecedores, criar pedidos e
+          registrar recebimentos ou cancelamentos. A consulta e os filtros
+          continuam disponíveis.
+        </p>
+      </noscript>
       <form
         method="get"
         action="/app/compras"

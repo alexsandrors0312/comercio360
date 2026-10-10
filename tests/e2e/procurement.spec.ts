@@ -301,6 +301,73 @@ test("buyer creates an order but cannot receive it", async ({ page }) => {
     page.getByRole("button", { name: "Cancelar pedido", exact: true }),
   ).toBeVisible();
 });
+test("operational mutation forms wait for delayed client hydration", async ({
+  page,
+  browser,
+  baseURL,
+}) => {
+  await signIn(page);
+  test.setTimeout(60000);
+  await page.goto("/app/estoque?q=CAM-AZ-P");
+  await page.getByRole("link", { name: /Camiseta básica/ }).click();
+  await expect(page.getByLabel("Motivo da movimentação")).toBeVisible();
+  const inventoryUrl = new URL(page.url());
+  const inventoryPath = inventoryUrl.pathname + inventoryUrl.search;
+  for (const kind of ["supplier", "inventory"] as const) {
+    const context = await browser.newContext({ baseURL });
+    let releaseScripts!: () => void;
+    const scriptsReady = new Promise<void>((resolve) => {
+      releaseScripts = resolve;
+    });
+    let blockedScripts = 0;
+    try {
+      await context.addCookies(await page.context().cookies());
+      await context.route("**/_next/static/**/*.js*", async (route) => {
+        blockedScripts++;
+        await scriptsReady;
+        await route.continue().catch(() => {});
+      });
+      const delayedPage = await context.newPage();
+      await delayedPage.goto(
+        kind === "supplier" ? "/app/compras" : inventoryPath,
+        { waitUntil: "commit" },
+      );
+      const form =
+        kind === "supplier"
+          ? delayedPage.getByRole("form", {
+              name: "Cadastrar fornecedor",
+              includeHidden: true,
+            })
+          : delayedPage
+              .locator("form")
+              .filter({ has: delayedPage.getByLabel("Quantidade (unidades)") });
+      const input = form.getByLabel(
+        kind === "supplier" ? "Contato (opcional)" : "Motivo da movimentação",
+      );
+      const submit = form.getByRole("button", {
+        name:
+          kind === "supplier"
+            ? "Cadastrar fornecedor"
+            : "Registrar movimentação",
+        exact: true,
+        includeHidden: true,
+      });
+      await expect(input).toBeDisabled();
+      await expect(submit).toBeDisabled();
+      expect(blockedScripts).toBeGreaterThan(0);
+      expect(new URL(delayedPage.url()).searchParams.has("contact")).toBe(
+        false,
+      );
+      releaseScripts();
+      await expect(input).toBeEnabled();
+      await expect(submit).toBeEnabled();
+    } finally {
+      releaseScripts();
+      await context.close();
+    }
+  }
+});
+
 for (const width of [360, 768, 1440]) {
   test(`procurement forms fit ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });

@@ -1,6 +1,7 @@
 // Explicit opt-in through scripts/operations-hosted.ps1. All credentials,
 // cookies, fixture IDs and provider bodies remain in this parent process.
 import { randomUUID } from "node:crypto";
+import { mkdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { createClient } from "@supabase/supabase-js";
 import { createServerClient } from "@supabase/ssr";
@@ -13,8 +14,37 @@ const STORE = "10000000-0000-4000-8000-000000000011";
 const FOREIGN_STORE = "20000000-0000-4000-8000-000000000011";
 const SCOPE = { p_organization_id: ORG, p_store_id: STORE };
 const PHASES = ["configuration", "existing_login", "catalog_fixtures", "browser_supplier", "browser_order", "browser_receive", "browser_inventory", "rest_replay", "rest_payload_conflict", "rest_parallel_cas", "rest_parallel_replay", "rest_isolation", "browser_cashier", "postflight_compensation", "postflight_archive"];
+const SUPPLIER_STEPS = ["page_status", "heading", "store", "open", "fields", "submit", "rpc", "cookies"];
+const PAGE_FLAGS = ["http_200", "route_compras", "route_login", "access_denied", "unavailable", "native_form_query"];
+const NOTICES = ["invalid", "denied", "conflict", "duplicate", "unavailable", "ambiguous", "success", "none"];
+const POST_STATUSES = ["not_observed", "200", "400", "401", "403", "404", "409", "422", "500", "502", "503", "504", "other"];
 const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/;
 const check = (condition) => { if (!condition) throw new Error("operations probe failed"); };
+
+export function classifySupplierNotice(text, ambiguous = false) {
+  if (ambiguous === true) return "ambiguous";
+  const mappings = [
+    ["invalid", "Confira o fornecedor, os itens, as quantidades e os custos informados."],
+    ["denied", "Você não tem permissão para esta operação de compras nesta loja."],
+    ["conflict", "O pedido ou fornecedor mudou, ou esta chave já foi usada com outros dados."],
+    ["duplicate", "Já existe um fornecedor com este nome na empresa."],
+    ["unavailable", "Não foi possível confirmar a operação."],
+    ["unavailable", "Não foi possível confirmar o resultado."],
+    ["success", "Fornecedor salvo."],
+  ];
+  return mappings.find(([, message]) => typeof text === "string" && text.includes(message))?.[0] ?? "none";
+}
+export function classifySupplierPostStatus(status) {
+  return POST_STATUSES.includes(String(status)) ? String(status) : "other";
+}
+
+export async function runBrowserSupplierSteps(operations, record) {
+  check(typeof record === "function" && operations && SUPPLIER_STEPS.every((step) => typeof operations[step] === "function"));
+  for (const step of SUPPLIER_STEPS) {
+    try { await operations[step](); record({ name: step, status: "PASS" }); }
+    catch { record({ name: step, status: "FAIL" }); throw new Error("operations probe failed"); }
+  }
+}
 
 /** Classify real concurrent REST responses without exposing payloads. */
 export function assessParallelReceipts(responses, sameKey) {
@@ -34,10 +64,23 @@ export function sanitizeOperationsReport(report) {
   check(Array.isArray(report.checks) && report.checks.length <= PHASES.length && new Set(report.checks.map((entry) => entry.name)).size === report.checks.length);
   check(report.checks.every((entry) => PHASES.includes(entry.name) && ["PASS", "FAIL"].includes(entry.status)));
   check(typeof report.compensated === "boolean" && typeof report.archived === "boolean");
+  const supplierSteps = report.browser_supplier_steps ?? [];
+  check(Array.isArray(supplierSteps) && supplierSteps.length <= SUPPLIER_STEPS.length && new Set(supplierSteps.map((entry) => entry.name)).size === supplierSteps.length);
+  check(supplierSteps.every((entry, index) => entry.name === SUPPLIER_STEPS[index] && ["PASS", "FAIL"].includes(entry.status)));
+  const failedSubstep = report.failed_substep ?? null;
+  check(failedSubstep === null || (report.failed_phase === "browser_supplier" && SUPPLIER_STEPS.includes(failedSubstep) && supplierSteps.at(-1)?.name === failedSubstep && supplierSteps.at(-1)?.status === "FAIL"));
+  check(report.status !== "passed" || (supplierSteps.length === SUPPLIER_STEPS.length && supplierSteps.every((entry) => entry.status === "PASS")));
+  const pageFlags = { ...Object.fromEntries(PAGE_FLAGS.map((name) => [name, false])), ...report.browser_supplier_page };
+  check(PAGE_FLAGS.every((name) => typeof pageFlags[name] === "boolean"));
+  const submit = report.browser_supplier_submit ?? { notice: "none", notice_present: false, post_observed: false, post_http_status: "not_observed", screenshot_saved: false };
+  check(NOTICES.includes(submit.notice) && POST_STATUSES.includes(submit.post_http_status) && [submit.notice_present, submit.post_observed, submit.screenshot_saved].every((value) => typeof value === "boolean"));
   check(report.status !== "passed" || (report.failed_phase === null && report.checks.length === PHASES.length && report.checks.every((entry) => entry.status === "PASS") && report.compensated && report.archived));
   return {
     schema_version: 1, run_id: report.run_id, started_at: report.started_at, finished_at: report.finished_at,
-    status: report.status, failed_phase: report.failed_phase,
+    status: report.status, failed_phase: report.failed_phase, failed_substep: failedSubstep,
+    browser_supplier_steps: supplierSteps.map(({ name, status }) => ({ name, status })),
+    browser_supplier_page: Object.fromEntries(PAGE_FLAGS.map((name) => [name, pageFlags[name]])),
+    browser_supplier_submit: { notice: submit.notice, notice_present: submit.notice_present, post_observed: submit.post_observed, post_http_status: submit.post_http_status, screenshot_saved: submit.screenshot_saved },
     checks: report.checks.map(({ name, status }) => ({ name, status })),
     compensated: report.compensated, archived: report.archived,
     fixture_marker: "FICTICIO HOMOLOG004", business_history: "preserved", cleanup_retry: "not_run",
@@ -45,7 +88,7 @@ export function sanitizeOperationsReport(report) {
 }
 
 export async function runHostedOperations() {
-  const report = { run_id: randomUUID(), started_at: new Date().toISOString(), finished_at: null, status: "failed", failed_phase: null, checks: [], compensated: false, archived: false };
+  const report = { run_id: randomUUID(), started_at: new Date().toISOString(), finished_at: null, status: "failed", failed_phase: null, failed_substep: null, browser_supplier_steps: [], browser_supplier_page: Object.fromEntries(PAGE_FLAGS.map((name) => [name, false])), browser_supplier_submit: { notice: "none", notice_present: false, post_observed: false, post_http_status: "not_observed", screenshot_saved: false }, checks: [], compensated: false, archived: false };
   const marker = `FICTICIO HOMOLOG004 ${report.run_id}`;
   const fixture = { productId: null, supplierId: null, variants: [], supplierName: marker, productName: marker, skus: [`H004-${report.run_id}-A`, `H004-${report.run_id}-B`] };
   let admin;
@@ -146,20 +189,75 @@ export async function runHostedOperations() {
     page.setDefaultTimeout(30000);
     page.setDefaultNavigationTimeout(45000);
     await stage("browser_supplier", async () => {
-      const response = await page.goto(`${WORKER}/app/compras`, { waitUntil: "domcontentloaded" });
-      check(response?.status() === 200);
-      await expect(page.getByRole("heading", { name: "Compras", exact: true })).toBeVisible();
-      await expect(page.getByLabel("Loja", { exact: true })).toHaveValue(STORE);
-      await page.getByText("Cadastrar novo fornecedor", { exact: true }).click();
       const form = page.getByRole("form", { name: "Cadastrar fornecedor" });
-      await form.getByLabel("Nome do fornecedor").fill(fixture.supplierName);
-      await form.getByLabel("Contato (opcional)").fill("FICTICIO sem comunicação externa");
-      await form.getByRole("button", { name: "Cadastrar fornecedor", exact: true }).click();
-      await expect(form.getByRole("status")).toContainText("Fornecedor salvo.");
-      const suppliers = rows(await rpc(manager, "procurement_suppliers", { p_query: fixture.supplierName, p_limit: 100, p_offset: 0, p_supplier_id: null }));
-      check(suppliers.length === 1 && suppliers[0].name === fixture.supplierName);
-      fixture.supplierId = suppliers[0].id;
-      check((await context.cookies(WORKER)).filter((cookie) => cookie.name.includes("auth-token")).every((cookie) => cookie.secure));
+      const classifyPage = async () => {
+        const url = new URL(page.url());
+        report.browser_supplier_page.route_compras = url.origin === WORKER && url.pathname === "/app/compras";
+        report.browser_supplier_page.route_login = url.origin === WORKER && url.pathname === "/login";
+        report.browser_supplier_page.native_form_query = url.searchParams.has("name") || url.searchParams.has("contact");
+        report.browser_supplier_page.access_denied = await page.getByRole("heading", { name: "Acesso não permitido", exact: true }).count() > 0;
+        report.browser_supplier_page.unavailable = await page.getByRole("heading", { name: "Compras indisponíveis", exact: true }).count() > 0;
+      };
+      await runBrowserSupplierSteps({
+        page_status: async () => {
+          const response = await page.goto(`${WORKER}/app/compras`, { waitUntil: "domcontentloaded" });
+          report.browser_supplier_page.http_200 = response?.status() === 200;
+          await classifyPage();
+          check(response?.status() === 200);
+        },
+        heading: async () => {
+          try { await expect(page.getByRole("heading", { name: "Compras", exact: true })).toBeVisible(); }
+          catch { await classifyPage(); throw new Error("operations probe failed"); }
+        },
+        store: async () => { await expect(page.getByLabel("Loja", { exact: true })).toHaveValue(STORE); },
+        open: async () => { await page.getByText("Cadastrar novo fornecedor", { exact: true }).click(); },
+        fields: async () => {
+          await form.getByLabel("Nome do fornecedor").fill(fixture.supplierName);
+          await form.getByLabel("Contato (opcional)").fill("FICTICIO sem comunicação externa");
+        },
+        submit: async () => {
+          const isSupplierPost = (request) => {
+            const url = new URL(request.url());
+            return request.method() === "POST" && url.origin === WORKER && url.pathname === "/app/compras";
+          };
+          const requestSeen = (request) => { if (isSupplierPost(request)) report.browser_supplier_submit.post_observed = true; };
+          const responseSeen = (response) => { if (isSupplierPost(response.request())) report.browser_supplier_submit.post_http_status = classifySupplierPostStatus(response.status()); };
+          const notice = async () => {
+            const text = (await form.locator('[role="alert"], [role="status"]').allTextContents()).join(" ");
+            const ambiguous = await form.getByRole("button", { name: "Confirmar envio anterior", exact: true }).count() > 0;
+            report.browser_supplier_submit.notice_present = text.trim().length > 0;
+            report.browser_supplier_submit.notice = classifySupplierNotice(text, ambiguous);
+          };
+          page.on("request", requestSeen);
+          page.on("response", responseSeen);
+          try {
+            await form.getByRole("button", { name: "Cadastrar fornecedor", exact: true }).click();
+            await expect(form.getByRole("status")).toContainText("Fornecedor salvo.");
+            await notice();
+          } catch {
+            try { await classifyPage(); } catch { /* Fixed flags only. */ }
+            try { await notice(); } catch { /* No free-form diagnostics. */ }
+            try {
+              await mkdir("test-results", { recursive: true });
+              await page.screenshot({ path: "test-results/operations-supplier-failure.png", timeout: 5000 });
+              report.browser_supplier_submit.screenshot_saved = true;
+            } catch { /* Screenshot absence stays explicit and never replaces failure. */ }
+            throw new Error("operations probe failed");
+          } finally {
+            page.off("request", requestSeen);
+            page.off("response", responseSeen);
+          }
+        },
+        rpc: async () => {
+          const suppliers = rows(await rpc(manager, "procurement_suppliers", { p_query: fixture.supplierName, p_limit: 100, p_offset: 0, p_supplier_id: null }));
+          check(suppliers.length === 1 && suppliers[0].name === fixture.supplierName);
+          fixture.supplierId = suppliers[0].id;
+        },
+        cookies: async () => { check((await context.cookies(WORKER)).filter((cookie) => cookie.name.includes("auth-token")).every((cookie) => cookie.secure)); },
+      }, (entry) => {
+        report.browser_supplier_steps.push(entry);
+        if (entry.status === "FAIL") report.failed_substep = entry.name;
+      });
     });
     let browserOrder;
     await stage("browser_order", async () => {

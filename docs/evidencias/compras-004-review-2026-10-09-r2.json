@@ -1,0 +1,239 @@
+{
+  "schema_version": "0.1",
+  "review_id": "C360-COMPRAS-004-SEC-2026-10-09-R2",
+  "task_id": "compras-004",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "mode": "Segurança/Arquitetura",
+  "recorded_at_utc": "2026-10-09T20:53:21.679Z",
+  "workspace": "C:/Users/Alexs/Desktop/Comercio360",
+  "baseline_ref": "2c11de0dbd0598f7a6feeb3bc0dfdba1d3ba70cc",
+  "candidate": {
+    "kind": "git_plus_dirty_delta_sha256",
+    "baseline_commit": "2c11de0dbd0598f7a6feeb3bc0dfdba1d3ba70cc",
+    "files": [
+      {
+        "path": "tests/hosted/operations.mjs",
+        "sha256": "c68f12371c7b731b30f564d2f69aea5f32c1da5388a12f7cf2763afa8015e61a"
+      },
+      {
+        "path": "tests/operations-hosted.test.ts",
+        "sha256": "d26cfe2f01312048b54df8e5820c9d6441269804a2b248caa8dcb6e98c323658"
+      },
+      {
+        "path": "docs/guias/OPERACOES_HOMOLOGACAO.md",
+        "sha256": "2c9d93177c68cd9db7fa070ceaaf0880326b065e732498daf29080b06a01470e"
+      },
+      {
+        "path": "scripts/operations-hosted.ps1",
+        "sha256": "f60aefd1f5a39bd07f4f456d7b0500346df1eda38362a3b9b6adb0510ae10b6c"
+      }
+    ],
+    "comparison_to_r1": {
+      "total_files": 29,
+      "unchanged": 26,
+      "changed": 3,
+      "changed_paths": [
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "product_files_changed": false,
+      "wrapper_changed": false
+    }
+  },
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null,
+    "source": "Configuração efetiva/telemetria não expostas."
+  },
+  "authorization": {
+    "source": "Tarefa do orquestrador para revisar diagnóstico após o primeiro ensaio hospedado falhar; autorização dev humana09/10 preservada.",
+    "scope": "Somente revisão local do delta instrumental; escrita exclusiva desta R2. Sem login, credenciais, chamadas remotas ou alterações de produto."
+  },
+  "summary": "Delta instrumental sem achado bloqueante: subetapas fixas registram a primeira falha de browser_supplier, e flags booleanas classificam somente HTTP200/rotaCompras/rotaLogin/acesso negado/indisponibilidade. Sanitização omite texto livre, URL, HTML, provider, cookies e segredos; asserções funcionais, alvo e teardown/compensação permanecem. Testes puros6/6 reproduzidos pelo revisor. Produto/SQL e wrapper não mudaram frente àR1. O primeiro ensaio real continua failed/browser_supplier; causa desconhecida. Esta revisão local permite coletar novo diagnóstico dentro do escopo dev autorizado, sem transformar o ensaio anterior ou a homologação incompleta em PASS.",
+  "scope_examined": [
+    "Diff completo de operations.mjs/testes/guia versus HEAD; helper e sanitizer atuais e integração no fluxo browser_supplier.",
+    "Conferência SHA dos29 arquivos daR1: somente3 arquivos instrumentais mudaram,26 idênticos.",
+    "Releitura pertinente da action de fornecedor, editor, adaptador SSR, requireAccess/proxy e relatório hospedado sanitizado; não há falha óbvia de produto identificável a partir desse relatório.",
+    "Sem reexecuçãoSQL/E2E/global por ausência de delta no produto; provas anteriores permanecem históricas, com seus limites."
+  ],
+  "checks": [
+    {
+      "id": "R2-DIFF",
+      "procedure": "Inspeção do diff e comparação SHA256 dos29 arquivos daR1 com o candidato atual.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "local leitura",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "evidence_refs": [
+        "docs/evidencias/compras-004-review-2026-10-09.json",
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "summary": "26/29 idênticos;3 alterados somente no instrumento/testes/guia. Wrapper f60aefd1 e produto inalterados. R1 e JSON hospedado históricos preservados byte a byte."
+    },
+    {
+      "id": "R2-HELPERS",
+      "command": "node node_modules/vitest/vitest.mjs run tests/operations-hosted.test.ts --configLoader native",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "runner_started_at": "17:51:15 America/Sao_Paulo",
+      "environment": "Windows executor local autorizado; helpers puros, sem I/O remoto",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "tests_passed": 6,
+      "tests_failed": 0,
+      "evidence_refs": [
+        "tests/operations-hosted.test.ts",
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "6/6: classificaçãoCAS/replay mantida; whitelist de campos/subetapas/booleans; descarte de erro/URL privados; propagação de erro sanitizado após registrar exatamente o passo que falhou e não executar os posteriores."
+    },
+    {
+      "id": "R2-REMOTE",
+      "procedure": "Nova execução do instrumento em Supabase/Cloudflare dev.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "remote",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Nenhuma chamada remota pelo revisor. O próximo diagnóstico real terá evidência própria do executor."
+    },
+    {
+      "id": "R2-PRODUCT-DYNAMIC",
+      "procedure": "SQL, domínio, aplicação, navegador e build do produto.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "local",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [
+        "docs/evidencias/compras-004-review-2026-10-09.json"
+      ],
+      "summary": "Não repetidos por produto idêntico; R1 possuiSQL34/34 independente e limitesmulti-session. Testes globais320/320 pósdelta relatados pelo orquestrador, separados abaixo."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "R2-PRIVACY",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts"
+      ],
+      "summary": "Apenas nomes de oito passos fixos/PASS-FAIL e cinco booleans fixos; erros são substituídos por mensagem constante. Não serializa texto de página, HTML, URLs, cookies, corpos ou dados livres."
+    },
+    {
+      "id": "R2-DIAGNOSTIC",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts"
+      ],
+      "summary": "Helper executa passos em ordem e para na primeira falha; registra antes de propagar; failed_substep permitido somente no contexto browser_supplier e consistente com último passoFAIL. Flags não autorizam PASS por si."
+    },
+    {
+      "id": "R2-ASSERTIONS",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "ConservaHTTP200,headingCompras,lojaesperada,abertura/preenchimento/envio,confirmaçãoFornecedorSalvo,consultaRPC única e cookiesSecure; PASS global exige todas fases e oito passosPASS com compensação/arquivo. Preferência de loja já existia na versão publicada; não é correção nova."
+    },
+    {
+      "id": "R2-SCOPE",
+      "status": "pass",
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1",
+        "tests/hosted/operations.mjs",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "summary": "Alvos, credenciais em memória, prazos, teardown restrito, CreateNew e compensação/arquivamento/audit postflight daR1 permanecem. Nenhuma nova mutação de produto e nenhum gate remoto fechado."
+    }
+  ],
+  "findings": [],
+  "conclusion": "no_blocking_findings",
+  "historical_artifacts": [
+    {
+      "path": "docs/evidencias/compras-004-review-2026-10-09.json",
+      "type": "prior_independent_review",
+      "sha256": "9beda0342031d4e035b4e99b4d75cd08329ca2e23c40f4c76cb88460d09fd0e4",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/operacoes-004-hosted-2026-10-09T20-46-48-066Z.json",
+      "type": "failed_hosted_execution",
+      "sha256": "ea5fe48205a4a5794c79343db0f67bc5e04d483a4a477bf4d5060e71471d1ca7",
+      "preserved": true
+    }
+  ],
+  "observed_historical_execution": {
+    "source": "Leitura de JSON sanitizado produzido pelo executor; não execução do revisor.",
+    "status": "failed",
+    "failed_phase": "browser_supplier",
+    "cause": "unknown",
+    "run_id": "b9ef0833-b608-4ef2-a295-48eda4968034",
+    "probe_started_at": "2026-10-09T20:46:29.910Z",
+    "probe_finished_at": "2026-10-09T20:46:44.044Z",
+    "compensated": true,
+    "archived": true,
+    "postflight_confirmed": true,
+    "process_termination_confirmed": true,
+    "audit_events_added": 4,
+    "migration_count": 9,
+    "cleanup_retry": "not_run",
+    "interpretation": "Login e fixtures deCatálogoPASS não comprovam fornecedor/pedido/recebimento. Duração e4eventos não permitem atribuir causa à loja, sessão, SQL ou UI; fases posteriores não foram alcançadas."
+  },
+  "author_evidence_received": [
+    {
+      "source": "Proprietário, mensagem09/10",
+      "result": "Helpers6/6,lint/tsc/nodecheckPASS; nenhuma chamada remota pelo proprietário nesse delta."
+    },
+    {
+      "source": "Orquestrador, mensagem09/10",
+      "result": "Vitest global320/320 em28arquivosPASS pósdelta; comparação confirma produto inalterado. Publicação/migrações já realizadas pelo executor terão evidência remota separada."
+    }
+  ],
+  "risks": [
+    {
+      "id": "CAUSE-UNKNOWN",
+      "description": "Instrumentação aumenta observabilidade; não corrige nem identifica por si a falha hospedada original. Nova execução pode continuar falhando e deve preservar sua fase/status."
+    },
+    {
+      "id": "GATE-INCOMPLETE",
+      "description": "Homologação funcional continua failed/incompleta até execução real demonstrar todas as fases e postflight. R2 local não é PASS remoto nem aprovação geral."
+    },
+    {
+      "id": "INHERITED-LIMITS",
+      "description": "Limites daR1 permanecem: sem prova PostgreSQLmulti-session pelo revisor; interrupção abrupta pode exigir reconciliação manual; apenasdevfictício, sem produção/dados reais ou retrylimpeza."
+    }
+  ],
+  "assumptions": [],
+  "context_requests": [],
+  "artifacts": [],
+  "changed_files": [
+    {
+      "path": "docs/evidencias/compras-004-review-2026-10-09-r2.json",
+      "operation": "added",
+      "purpose": "R2 independente do delta instrumental, preservando R1 e ensaio failed."
+    }
+  ],
+  "candidate_changed_by_reviewer": [],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Executor pode repetir o diagnóstico dev autorizado com nova evidência exclusiva; preservar primeiroFAIL e investigar a subetapa observada antes de alegar homologação concluída."
+}

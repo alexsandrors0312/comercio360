@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-09T20:42:51.7334997Z",
+  "project_ref": "qiwblpmocldqbijbylwg",
+  "status": "passed",
+  "phase": "completed",
+  "applied": [
+    "202610090001_inventory.sql",
+    "202610090002_procurement.sql"
+  ],
+  "cleanup_retry": "not_run",
+  "before": {
+    "migration_count": 7,
+    "audit_count": 385,
+    "auth_count": 4,
+    "image_ledger": 0,
+    "storage_objects": 0,
+    "cover_count": 0
+  },
+  "after": {
+    "migration_count": 9,
+    "audit_count": 385,
+    "auth_count": 4,
+    "image_ledger": 0,
+    "storage_objects": 0,
+    "cover_count": 0
+  },
+  "preservation": {
+    "identities": true,
+    "passwords": true,
+    "access_grants": true,
+    "hmac": true,
+    "audit_content": true,
+    "images": true,
+    "bucket_private": true
+  },
+  "finished_at": "2026-10-09T20:43:02.6176128Z"
+}

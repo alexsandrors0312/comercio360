@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useRef, useState, useTransition, type FormEvent } from "react";
 import { recordInventoryMovement } from "@/app/actions/inventory";
+import { useHydrated } from "@/packages/ui/use-hydrated";
 import type {
   InventoryHistoryPage,
   InventoryItem,
@@ -49,6 +50,7 @@ function MovementForm({
   reloadHref: string;
 }) {
   const router = useRouter();
+  const hydrated = useHydrated();
   const [pending, startTransition] = useTransition();
   const [notice, setNotice] = useState<InventoryMutationResult | null>(null);
   const [ambiguous, setAmbiguous] = useState(false);
@@ -60,7 +62,7 @@ function MovementForm({
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (locked.current || blocked) return;
+    if (!hydrated || locked.current || blocked) return;
     const form = event.currentTarget;
     if (!attempt.current) {
       const data = new FormData(form);
@@ -129,7 +131,7 @@ function MovementForm({
         aria-busy={pending}
         className={styles.movementForm}
       >
-        <fieldset disabled={pending || ambiguous || blocked}>
+        <fieldset disabled={!hydrated || pending || ambiguous || blocked}>
           <legend>Nova movimentação</legend>
           <div className={styles.fieldGrid}>
             <label className={styles.field}>
@@ -168,7 +170,7 @@ function MovementForm({
         <button
           className={styles.primary}
           type="submit"
-          disabled={pending || blocked}
+          disabled={!hydrated || pending || blocked}
         >
           {pending
             ? "Registrando movimentação…"
@@ -204,6 +206,12 @@ export function InventoryWorkspace({
           nesta loja.
         </p>
       </header>
+      <noscript>
+        <p className={styles.notice}>
+          Ative o JavaScript para registrar movimentações de estoque. A consulta
+          de saldos, histórico e filtros continua disponível.
+        </p>
+      </noscript>
       <form
         method="get"
         action="/app/estoque"

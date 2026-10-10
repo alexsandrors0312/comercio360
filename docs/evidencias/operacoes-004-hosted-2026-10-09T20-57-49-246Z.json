@@ -1,0 +1,106 @@
+{
+    "schema_version":  1,
+    "started_at":  "2026-10-09T20:57:23.4787127Z",
+    "finished_at":  "2026-10-09T20:57:49.2427881Z",
+    "status":  "failed",
+    "failed_phase":  "hosted_probe",
+    "checks":  [
+                   {
+                       "name":  "database_preflight",
+                       "status":  "PASS"
+                   }
+               ],
+    "postflight":  {
+                       "confirmed":  true,
+                       "identities_preserved":  true,
+                       "passwords_preserved":  true,
+                       "hmac_preserved":  true,
+                       "images_preserved":  true,
+                       "audit_preserved":  true,
+                       "audit_events_added":  4,
+                       "migration_count":  9,
+                       "bucket_private":  true
+                   },
+    "cleanup_retry":  "not_run",
+    "probe":  {
+                  "schema_version":  1,
+                  "run_id":  "0545dcc7-7fc3-427f-9c46-a45676a588db",
+                  "started_at":  "2026-10-09T20:57:31.523Z",
+                  "finished_at":  "2026-10-09T20:57:45.089Z",
+                  "status":  "failed",
+                  "failed_phase":  "browser_supplier",
+                  "failed_substep":  "submit",
+                  "browser_supplier_steps":  [
+                                                 {
+                                                     "name":  "page_status",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "heading",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "store",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "open",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "fields",
+                                                     "status":  "PASS"
+                                                 },
+                                                 {
+                                                     "name":  "submit",
+                                                     "status":  "FAIL"
+                                                 }
+                                             ],
+                  "browser_supplier_page":  {
+                                                "http_200":  true,
+                                                "route_compras":  true,
+                                                "route_login":  false,
+                                                "access_denied":  false,
+                                                "unavailable":  false
+                                            },
+                  "browser_supplier_submit":  {
+                                                  "notice":  "none",
+                                                  "notice_present":  false,
+                                                  "post_observed":  false,
+                                                  "post_http_status":  "not_observed",
+                                                  "screenshot_saved":  false
+                                              },
+                  "checks":  [
+                                 {
+                                     "name":  "configuration",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "existing_login",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "catalog_fixtures",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_supplier",
+                                     "status":  "FAIL"
+                                 },
+                                 {
+                                     "name":  "postflight_compensation",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "postflight_archive",
+                                     "status":  "PASS"
+                                 }
+                             ],
+                  "compensated":  true,
+                  "archived":  true,
+                  "fixture_marker":  "FICTICIO HOMOLOG004",
+                  "business_history":  "preserved",
+                  "cleanup_retry":  "not_run"
+              },
+    "process_termination_confirmed":  true
+}

@@ -1,0 +1,65 @@
+{
+    "schema_version":  1,
+    "started_at":  "2026-10-09T20:46:20.4512900Z",
+    "finished_at":  "2026-10-09T20:46:48.0636226Z",
+    "status":  "failed",
+    "failed_phase":  "hosted_probe",
+    "checks":  [
+                   {
+                       "name":  "database_preflight",
+                       "status":  "PASS"
+                   }
+               ],
+    "postflight":  {
+                       "confirmed":  true,
+                       "identities_preserved":  true,
+                       "passwords_preserved":  true,
+                       "hmac_preserved":  true,
+                       "images_preserved":  true,
+                       "audit_preserved":  true,
+                       "audit_events_added":  4,
+                       "migration_count":  9,
+                       "bucket_private":  true
+                   },
+    "cleanup_retry":  "not_run",
+    "probe":  {
+                  "schema_version":  1,
+                  "run_id":  "b9ef0833-b608-4ef2-a295-48eda4968034",
+                  "started_at":  "2026-10-09T20:46:29.910Z",
+                  "finished_at":  "2026-10-09T20:46:44.044Z",
+                  "status":  "failed",
+                  "failed_phase":  "browser_supplier",
+                  "checks":  [
+                                 {
+                                     "name":  "configuration",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "existing_login",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "catalog_fixtures",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "browser_supplier",
+                                     "status":  "FAIL"
+                                 },
+                                 {
+                                     "name":  "postflight_compensation",
+                                     "status":  "PASS"
+                                 },
+                                 {
+                                     "name":  "postflight_archive",
+                                     "status":  "PASS"
+                                 }
+                             ],
+                  "compensated":  true,
+                  "archived":  true,
+                  "fixture_marker":  "FICTICIO HOMOLOG004",
+                  "business_history":  "preserved",
+                  "cleanup_retry":  "not_run"
+              },
+    "process_termination_confirmed":  true
+}

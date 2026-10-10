@@ -1,0 +1,374 @@
+{
+  "schema_version": "0.1",
+  "review_id": "C360-COMPRAS-004-SEC-2026-10-09-R3",
+  "task_id": "compras-004",
+  "contract_revision": 1,
+  "status": "ready_for_review",
+  "mode": "Segurança/Arquitetura",
+  "workspace": "C:/Users/Alexs/Desktop/Comercio360",
+  "baseline_ref": "2c11de0dbd0598f7a6feeb3bc0dfdba1d3ba70cc",
+  "candidate": {
+    "kind": "git_plus_dirty_delta_sha256",
+    "baseline_commit": "2c11de0dbd0598f7a6feeb3bc0dfdba1d3ba70cc",
+    "files": [
+      {
+        "path": "packages/ui/use-hydrated.ts",
+        "sha256": "8ed04cf6f4121a0bc63054defd2d76b1fea9f04f828da1150885a250cfad4a25"
+      },
+      {
+        "path": "packages/ui/inventory/workspace.tsx",
+        "sha256": "8950d2b74e8f8f4034e55ba677f2bf9233d8dff0a311b783b86266a8f63abe2e"
+      },
+      {
+        "path": "packages/ui/procurement/workspace.tsx",
+        "sha256": "bf84590994c1413cfee3ea0691dc8250dd617d4460752c9033b99b86ee8b61ed"
+      },
+      {
+        "path": "tests/inventory-ui.test.ts",
+        "sha256": "c12e086dfd5a3073c0e317c9838ae2c8d1c04798fa6ebfadacd6c2351c10984a"
+      },
+      {
+        "path": "tests/procurement-ui.test.ts",
+        "sha256": "5f746e1d6b10e7a9e25cc634ee143104e08d8cd3e9bc11347f0866681b0f84f7"
+      },
+      {
+        "path": "tests/e2e/procurement.spec.ts",
+        "sha256": "7cfc5f3ffd94bbfbf6d97d47bad8daa523dcefce11e4ed35a4376103704ddf4f"
+      },
+      {
+        "path": "scripts/operations-hosted.ps1",
+        "sha256": "f60aefd1f5a39bd07f4f456d7b0500346df1eda38362a3b9b6adb0510ae10b6c"
+      },
+      {
+        "path": "tests/hosted/operations.mjs",
+        "sha256": "f0fcf44124c7388252a1e95da633675b36d042964a9d08244fecb286603b7070"
+      },
+      {
+        "path": "tests/operations-hosted.test.ts",
+        "sha256": "34c7fd1fb00d4dcff9a0520b51f601e99a6269d5daea5531c77d5c8d4d663744"
+      },
+      {
+        "path": "docs/guias/OPERACOES_HOMOLOGACAO.md",
+        "sha256": "a9487223f953cde6caa6656946b7e3e7f99bc6a8aed9bd9b85653b852ea3d680"
+      }
+    ],
+    "comparison_to_r1": {
+      "total_files": 29,
+      "unchanged": 23,
+      "changed": 6,
+      "changed_paths": [
+        "packages/ui/procurement/workspace.tsx",
+        "tests/procurement-ui.test.ts",
+        "tests/e2e/procurement.spec.ts",
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "sql_server_actions_contracts_wrapper_unchanged": true
+    }
+  },
+  "authorization": {
+    "source": "Tarefa do orquestrador, continuidade da autorização humana de 09/10 para desenvolver/homologar/publicar operações em dev.",
+    "scope": "Revisão independente local por delta; escrita exclusiva deste JSON. Sem serviço remoto, credenciais, publicação ou edição de produto pelo revisor."
+  },
+  "actual_execution": {
+    "runtime": "codex-native",
+    "model": null,
+    "reasoning": null,
+    "source": "Modelo efetivo, esforço e métricas não expostos."
+  },
+  "summary": "Sem achados bloqueantes pendentes no delta local de hidratação das interfaces Estoque/Compras e no diagnóstico hospedado. Campos e botões que dependem de onSubmit permanecem desabilitados no HTML e na primeira hidratação; filtros GET continuam disponíveis. CAS e tentativa ambígua permanecem intactos. Reproduzidos22/22 testes direcionados de SSR/helpers; sintaxe Node e parser PowerShell válidos. Os três ensaios hospedados FAIL e o quarto PASS permanecem históricos distintos; o PASS anterior não comprova a nova UI nem explica as falhas anteriores.",
+  "scope_examined": [
+    "Hook useHydrated e diff completo dos dois workspaces, formulários/fieldset/botões, guardas de execução, filtros e aviso noscript; invariantes CAS/replay pertinentes.",
+    "Testes SSR e regressão E2E que atrasa apenas scripts externos do Next, permitindo revelar o HTML por streaming; não confundir com navegador totalmente sem JavaScript.",
+    "Delta do instrumento de subetapas/booleans/enums/POST, screenshot local do viewport e guia; mudanças anteriores da árvore compartilhada ficam fora do escopo.",
+    "Contratos004/ADR0012, revisõesR1/R2 e quatro evidências hospedadas anteriores; hashes conferidos sem reescrever históricos."
+  ],
+  "checks": [
+    {
+      "id": "R3-SOURCE",
+      "procedure": "Inspeção independente do delta identificado, contratos, fontes pertinentes e conferênciaSHA-256 contraR1/R2.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "Windows local, leitura",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": null,
+      "evidence_refs": [
+        "packages/ui/use-hydrated.ts",
+        "packages/ui/inventory/workspace.tsx",
+        "packages/ui/procurement/workspace.tsx",
+        "tests/e2e/procurement.spec.ts",
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "Sem bloqueios pendentes. SQL 003/004, servidores/actions, contrato/ADR e wrapper sem delta material porhash. Demais alterações preexistentes não aprovadas."
+    },
+    {
+      "id": "R3-TARGETED",
+      "command": "node node_modules/vitest/vitest.mjs run tests/inventory-ui.test.ts tests/procurement-ui.test.ts tests/operations-hosted.test.ts --configLoader native",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "runner_started_at": "22:22:33 America/Sao_Paulo",
+      "environment": "Windows local autorizado; SSR React real e helpers puros, sem I/O remoto",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "tests_passed": 22,
+      "tests_failed": 0,
+      "evidence_refs": [
+        "tests/inventory-ui.test.ts",
+        "tests/procurement-ui.test.ts",
+        "tests/operations-hosted.test.ts"
+      ],
+      "summary": "3 arquivos/22 testes,1.77 s. HTML de todas as operações desabilitado, filtros GET ativos/noscript; identidade/roles/apresentação anteriores e sanitização fixa/falha por subetapa. Não comprova interação hospedada. Aviso MODULE_TYPELESS_PACKAGE_JSON não impede execução."
+    },
+    {
+      "id": "R3-SYNTAX",
+      "command": "node --check tests/hosted/operations.mjs",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "Node local, somente parse",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "evidence_refs": [
+        "tests/hosted/operations.mjs"
+      ],
+      "summary": "Sem invocar runHostedOperations."
+    },
+    {
+      "id": "R3-PS-PARSER",
+      "procedure": "Parser.ParseFile de scripts/operations-hosted.ps1 e exigência parseErrors.Count=0.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": "2026-10-09",
+      "environment": "PowerShell local, AST sem executar script",
+      "executed_by": "reviewer",
+      "status": "pass",
+      "exit_code": 0,
+      "evidence_refs": [
+        "scripts/operations-hosted.ps1"
+      ],
+      "summary": "Wrapper inalterado e parser válido; nenhuma CLI/credencial/remoto."
+    },
+    {
+      "id": "R3-E2E-GLOBAL",
+      "procedure": "E2E completo, tipos/lint/build e suíte global canônicos do orquestrador.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "local",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Não duplicados. Evidências recebidas do executor registradas separadamente; revisor conferiu o teste novo e executou apenas fatiaSSR/helpers."
+    },
+    {
+      "id": "R3-NEW-UI-HOSTED",
+      "procedure": "Publicar candidato com gating e executar ensaio HTTPS/REST completo com compensação/postflight.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "Cloudflare/Supabase dev",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Fora da execução local do revisor. Quarto ensaio histórico PASS aplica à versão anterior daUI."
+    },
+    {
+      "id": "R3-MULTISESSION",
+      "procedure": "Interleaving controlado de sessões PostgreSQL independentes e revogação concorrente.",
+      "cwd": "C:/Users/Alexs/Desktop/Comercio360",
+      "date": null,
+      "environment": "PostgreSQL multi-session",
+      "executed_by": "reviewer",
+      "status": "not_run",
+      "exit_code": null,
+      "evidence_refs": [],
+      "summary": "Delta não altera SQL. Revisão R1 continua aplicável; REST paralelo histórico não identifica backend PIDs nem prova interleavings específicos."
+    }
+  ],
+  "criteria": [
+    {
+      "id": "SEC-HYDRATION",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/ui/use-hydrated.ts",
+        "packages/ui/inventory/workspace.tsx",
+        "packages/ui/procurement/workspace.tsx",
+        "tests/inventory-ui.test.ts",
+        "tests/procurement-ui.test.ts"
+      ],
+      "summary": "getServerSnapshot false igual noSSR/primeira hidratação e getSnapshot true após commit do cliente; fieldsets/botões e guardas impedem envio antes de onSubmit React. Inclui fornecedor, pedido, recebimento/cancelamento, estoque e busca SKU."
+    },
+    {
+      "id": "SEC-READ-ACCESSIBILITY",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/ui/inventory/workspace.tsx",
+        "packages/ui/procurement/workspace.tsx",
+        "tests/inventory-ui.test.ts",
+        "tests/procurement-ui.test.ts"
+      ],
+      "summary": "Desabilitação nativa, aviso noscript ptBR e filtros GET disponíveis. Não promete interface Next totalmente funcional semscripts: streamingSSR pode depender de JavaScript inline."
+    },
+    {
+      "id": "SEC-CAS-AMBIGUITY",
+      "status": "pass",
+      "evidence_refs": [
+        "packages/ui/procurement/workspace.tsx",
+        "packages/ui/inventory/workspace.tsx"
+      ],
+      "summary": "expectedRevision do rascunho fornecedor avança só após sucesso próprio; ref da tentativa/payload/key e reenvio explícito após unavailable preservados. OrderDetail mantém retry após terminal. Novo bloqueio de hidratação não limpa tentativa."
+    },
+    {
+      "id": "SEC-DIAGNOSTIC",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/hosted/operations.mjs",
+        "tests/operations-hosted.test.ts"
+      ],
+      "summary": "Subetapas/booleans/notices/HTTP em whitelist, native_form_query somente booleano, POST somente origin/path/method fixos. Sem persistir textoUI, URL/valores, headers, payload/body ouprovider; listeners removidos em finally. AsserçõesPASS continuam exigindo15 fases e compensação/arquivamento."
+    },
+    {
+      "id": "SEC-LOCAL-SCREENSHOT",
+      "status": "pass",
+      "evidence_refs": [
+        "tests/hosted/operations.mjs",
+        ".gitignore",
+        "docs/guias/OPERACOES_HOMOLOGACAO.md"
+      ],
+      "summary": "Screenshot em falha de submit captura viewport da página dev, podendo conter dados fictícios visíveis; arquivo test-results ignoradoGit, não incorporadoJSON nem autorizado para publicação. Falha de captura mantém screenshot_savedfalse e errooriginal."
+    },
+    {
+      "id": "SEC-HISTORY",
+      "status": "pass",
+      "evidence_refs": [
+        "docs/evidencias/compras-004-review-2026-10-09.json",
+        "docs/evidencias/compras-004-review-2026-10-09-r2.json",
+        "docs/evidencias/operacoes-004-hosted-2026-10-09T21-00-08-881Z.json"
+      ],
+      "summary": "Históricos congelados e hashes conferidos. FAILanteriores não convertidos; quarto PASS é evidência da versão publicada antes da nova UI; retry de limpeza permanece not_run."
+    }
+  ],
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "PUR004-R3-F1",
+      "severity": "medium",
+      "status": "resolved_locally",
+      "file": "packages/ui/procurement/workspace.tsx",
+      "line": 207,
+      "related_files": [
+        "packages/ui/inventory/workspace.tsx:128",
+        "packages/ui/use-hydrated.ts:10"
+      ],
+      "condition": "Antes do delta, formulários com onSubmit apenasJavaScript tinham campos e botões habilitados noSSR. Com React ainda não hidratado, envio nativo podia usar método GET padrão e serializar nome/contato/motivo na URL.",
+      "impact": "Dados de formulário podiam aparecer emURL/histórico/log de acesso; operação não seguia o fluxo de ServerAction. Não representa bypass de autorização do banco.",
+      "evidence_refs": [
+        "packages/ui/procurement/workspace.tsx",
+        "packages/ui/inventory/workspace.tsx",
+        "tests/procurement-ui.test.ts",
+        "tests/inventory-ui.test.ts",
+        "tests/e2e/procurement.spec.ts"
+      ],
+      "expected_behavior": "Manter campos e envios de operações inertes até os handlers estarem instalados, habilitar após hidratação e preservar consultas/CAS/replay.",
+      "resolution": "Hook useSyncExternalStore false no SSR/true no cliente, disabled nativo e guardas de execução. SSR/helpers 22/22 reproduzidos; regressão interativa local relatada pelo executor. Correção local não prova causa dosFAIL remotos anteriores."
+    }
+  ],
+  "conclusion": "no_blocking_findings",
+  "product_delta_conclusion": "no_blocking_findings",
+  "hosted_instrument_local_conclusion": "no_blocking_findings",
+  "remote_gates": {
+    "new_ui_cloudflare_publication": "not_run",
+    "new_ui_browser_https": "not_run",
+    "postgresql_controlled_multisession": "not_run",
+    "cleanup_retry": "not_run"
+  },
+  "risks": [
+    {
+      "id": "CAUSE-NOT-PROVEN",
+      "description": "Os FAIL anteriores não provam corrida de hidratação como causa comum. Primeiro registra só fase; segundo só submit; terceiro registra sem POST/sem notice. A falha nativaSSR determinística é uma borda independente corrigida localmente."
+    },
+    {
+      "id": "LOCAL-SCREENSHOT",
+      "description": "Screenshot é viewport autenticado de dev, não uma prova pública sanitizada. Restrito a dados fictícios; não publicar arquivo nem tratar arquivo ignorado pelo Git como sanitização."
+    },
+    {
+      "id": "VERSIONED-REMOTE",
+      "description": "Novo candidatoUI requer publicação/ensaio próprios. Revisão sem bloqueios não é homologação remota/produção e não autoriza dados reais."
+    },
+    {
+      "id": "SHARED-DIRTY-TREE",
+      "description": "Somente fontes identificadas foram revisadas; alterações anteriores decleanup/HTTPS/documentos fora do delta não recebem aprovação. Mudança posterior dehash exige revalidação proporcional."
+    }
+  ],
+  "assumptions": [
+    "Autorização dev e escopo de escrita exclusivos transmitidos pelo orquestrador; integração/contexto e gates canônicos pertencem a ele.",
+    "Screenshots/ensaios restritos ao dev e dados fictícios do instrumento."
+  ],
+  "artifacts": [],
+  "changed_files": [
+    {
+      "path": "docs/evidencias/compras-004-review-2026-10-09-r3.json",
+      "operation": "added",
+      "purpose": "Único arquivo atribuído: revisão R3 independente local por delta."
+    }
+  ],
+  "candidate_changed_by_reviewer": [],
+  "context_requests": [],
+  "metrics": {
+    "elapsed_seconds": null,
+    "input_tokens": null,
+    "output_tokens": null,
+    "cost": null,
+    "source": "unavailable"
+  },
+  "next_action": "Orquestrador vincular gates locais ao manifesto, integrar/publicar novo delta UI na autorização dev existente e registrar novo ensaio hospedado separado. Preservar três FAIL/quarto PASS e retry de limpeza not_run.",
+  "recorded_at_utc": "2026-10-10T01:26:46Z",
+  "author_evidence_received": [
+    {
+      "source": "Orquestrador, mensagem de 09/10; execução canônica separada da revisão",
+      "environment": "Windows local",
+      "result": "Vitest 323/323, E2E 36/36 exit0 sessão 25711(2.0min), target delayed hydration 1/1 exit0(13.6s); tipos pós-E2E/build exit0 sessão 1895; lint 0 erros/1 aviso histórico, diffcheck PASS/avisos CRLF.",
+      "scope": "E2E atrasa scripts externos, verifica disabled antes da hidratação e enabled após; demais regressões deCAS/replay continuam executadas. Logs/manifesto canônico devem ser vinculados pelo orquestrador."
+    },
+    {
+      "source": "Orquestrador, estado transitório preservado",
+      "environment": "Windows local",
+      "result": "Tentativa inicial deE2E com javaScriptEnabled=false sofreu timeout porque inline streaming não revelou Suspense; teste substituído por atraso de JS externo. Tipos iniciais falharam com .next-e2e/dev/types/routes durante E2E ativo; tipos pós-E2E PASS. Warning dev destination stream closed early do Catálogo emnavegação não causou falha de asserção nem teardown;36/36 exit0.",
+      "scope": "Estes estados não são reclassificados comoPASS nem comprovam aplicação sem JavaScript."
+    }
+  ],
+  "historical_evidence": [
+    {
+      "path": "docs/evidencias/compras-004-review-2026-10-09.json",
+      "sha256": "9beda0342031d4e035b4e99b4d75cd08329ca2e23c40f4c76cb88460d09fd0e4",
+      "result": "R1 local no_blocking_findings; SQL 34/34 independentes, helpers 4/4; congelado."
+    },
+    {
+      "path": "docs/evidencias/compras-004-review-2026-10-09-r2.json",
+      "sha256": "14bf13a6eb7bcbb84f24ace15c81485b631ca759b33f72d11da0f293af0520d6",
+      "result": "R2 local instrumento;6/6 independentes; congelado."
+    },
+    {
+      "path": "docs/evidencias/operacoes-004-hosted-2026-10-09T20-46-48-066Z.json",
+      "sha256": "ea5fe48205a4a5794c79343db0f67bc5e04d483a4a477bf4d5060e71471d1ca7",
+      "result": "FAIL browser_supplier, sem substep/POST;compensated/archived/postflight=true."
+    },
+    {
+      "path": "docs/evidencias/operacoes-004-hosted-2026-10-09T20-52-57-253Z.json",
+      "sha256": "dc814573e4e4548025451b232f28ddd9603fffd310068921dffca61f134960ba",
+      "result": "FAIL submit, sem métrica POST;compensated/archived/postflight=true."
+    },
+    {
+      "path": "docs/evidencias/operacoes-004-hosted-2026-10-09T20-57-49-246Z.json",
+      "sha256": "416bfb042b7aa55369e94d03cdc653252e0232f49b72aaeeda8dbfdfcbf46c94",
+      "result": "FAIL submit,post_observed=false/notice=none;compensated/archived/postflight=true."
+    },
+    {
+      "path": "docs/evidencias/operacoes-004-hosted-2026-10-09T21-00-08-881Z.json",
+      "sha256": "728703c54e63d58ed741fc43cfac82fb0a1642009cfb69d17ed2b85355ad23bb",
+      "result": "PASS 15 fases,+32 audit;postflight/compensated/archived=true. Candidato publicado ANTES do novo gating UI; não comprova delta R3."
+    }
+  ]
+}
