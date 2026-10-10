@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-10T18:45:53.0116443Z",
+  "finished_at": "2026-10-10T18:46:00.5854712Z",
+  "status": "failed",
+  "failed_phase": "database_preflight",
+  "checks": [
+    {
+      "name": "deployment_preflight",
+      "status": "PASS"
+    },
+    {
+      "name": "database_preflight",
+      "status": "FAIL"
+    }
+  ],
+  "postflight": {
+    "confirmed": false
+  },
+  "cleanup_retry": "not_run",
+  "web_version": "59211b24-4408-45a1-955d-93ce6fdcd0a1",
+  "process_termination_confirmed": true
+}

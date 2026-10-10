@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-10T18:46:55.8385743Z",
+  "finished_at": "2026-10-10T18:47:33.2636862Z",
+  "status": "failed",
+  "failed_phase": "database_postflight",
+  "checks": [
+    {
+      "name": "deployment_preflight",
+      "status": "PASS"
+    },
+    {
+      "name": "database_preflight",
+      "status": "PASS"
+    }
+  ],
+  "postflight": {
+    "confirmed": false
+  },
+  "cleanup_retry": "not_run",
+  "web_version": "59211b24-4408-45a1-955d-93ce6fdcd0a1",
+  "mode": "probe",
+  "run_id": "305323df-932b-43c5-83d0-de3607fc80c9",
+  "probe": {
+    "schema_version": 1,
+    "run_id": "305323df-932b-43c5-83d0-de3607fc80c9",
+    "started_at": "2026-10-10T18:47:08.358Z",
+    "finished_at": "2026-10-10T18:47:31.903Z",
+    "status": "passed",
+    "failed_phase": null,
+    "checks": [
+      {
+        "name": "configuration",
+        "status": "PASS"
+      },
+      {
+        "name": "existing_login",
+        "status": "PASS"
+      },
+      {
+        "name": "catalog_purchase_fixtures",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_create_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_cas_parallel",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_parallel_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_authorization",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_customer",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_sale",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_inventory",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_snapshot_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_customer_snapshot",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_price_conflict",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_multiline_rollback",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_parallel_last_item",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_parallel_same_key",
+        "status": "PASS"
+      },
+      {
+        "name": "legacy_null_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_isolation",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_cashier",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_cancel",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_parallel_cancel",
+        "status": "PASS"
+      },
+      {
+        "name": "postflight_compensation",
+        "status": "PASS"
+      },
+      {
+        "name": "postflight_archive",
+        "status": "PASS"
+      }
+    ],
+    "parallel": {
+      "customer_cas": {
+        "successful_responses": 1,
+        "same_result": false
+      },
+      "customer_same_key": {
+        "successful_responses": 2,
+        "same_result": true
+      },
+      "last_item": {
+        "successful_responses": 1,
+        "same_result": false
+      },
+      "same_key": {
+        "successful_responses": 2,
+        "same_result": true
+      },
+      "cancel": {
+        "successful_responses": 2,
+        "same_result": true
+      }
+    },
+    "compensated": true,
+    "archived": true,
+    "unresolved_mutation": false,
+    "cleanup_retry": "not_run"
+  },
+  "process_termination_confirmed": true
+}

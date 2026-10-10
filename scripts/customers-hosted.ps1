@@ -69,6 +69,18 @@ function Invoke-SupabaseJson {
   if ($captured.ExitCode -ne 0) { throw 'Native CLI failure' }
   return ($captured.Output | ConvertFrom-Json)
 }
+function Invoke-SupabaseQueryFile {
+  param([string]$Sql)
+  # The audit baseline can exceed Windows' command-line limit after many runs.
+  $directory = Join-Path (Get-Location).Path 'test-results/clientes-006'
+  [void][IO.Directory]::CreateDirectory($directory)
+  $path = Join-Path $directory ('baseline-' + [guid]::NewGuid().ToString('N') + '.sql')
+  $bytes = [Text.UTF8Encoding]::new($false).GetBytes($Sql)
+  $stream = [IO.File]::Open($path, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::None)
+  try { $stream.Write($bytes, 0, $bytes.Length) } finally { $stream.Dispose() }
+  try { return (Invoke-SupabaseJson -Arguments @('db','query','--linked','--file',$path)) }
+  finally { Remove-Item -LiteralPath $path -Force }
+}
 function ConvertTo-NativeArgument {
   param([string]$Value)
   # Windows CommandLineToArgvW escaping, preserving SQL newlines and quotes.
@@ -182,7 +194,7 @@ select
   if ($ExpectedCount -notin @(10,11)) { throw 'Baseline mismatch' }
   $customersVersion = if ($ExpectedCount -eq 11) { ",'202610100001'" } else { '' }
   $sql = $sql.Replace('__AUDIT_PREFIX__', $auditPrefix).Replace('__EXPECTED_COUNT__',[string]$ExpectedCount).Replace('__CUSTOMERS_VERSION__',$customersVersion)
-  $result = Invoke-SupabaseJson -Arguments @('db','query','--linked',$sql)
+  $result = Invoke-SupabaseQueryFile -Sql $sql
   if ($null -ne $result.rows) {
     if (@($result.rows).Count -ne 1) { throw 'Baseline mismatch' }
     $result = $result.rows[0]

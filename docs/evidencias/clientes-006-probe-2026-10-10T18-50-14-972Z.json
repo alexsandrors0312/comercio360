@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "started_at": "2026-10-10T18:49:35.8534375Z",
+  "finished_at": "2026-10-10T18:50:14.9702221Z",
+  "status": "passed",
+  "failed_phase": null,
+  "checks": [
+    {
+      "name": "deployment_preflight",
+      "status": "PASS"
+    },
+    {
+      "name": "database_preflight",
+      "status": "PASS"
+    },
+    {
+      "name": "deployment_postflight",
+      "status": "PASS"
+    }
+  ],
+  "postflight": {
+    "confirmed": true,
+    "identities_preserved": true,
+    "passwords_preserved": true,
+    "hmac_preserved": true,
+    "images_preserved": true,
+    "audit_preserved": true,
+    "audit_events_added": 60,
+    "migration_count": 11,
+    "bucket_private": true
+  },
+  "cleanup_retry": "not_run",
+  "web_version": "59211b24-4408-45a1-955d-93ce6fdcd0a1",
+  "mode": "probe",
+  "run_id": "5737e11b-ddd7-4ed7-a8b5-83d6f0706e78",
+  "probe": {
+    "schema_version": 1,
+    "run_id": "5737e11b-ddd7-4ed7-a8b5-83d6f0706e78",
+    "started_at": "2026-10-10T18:49:48.85Z",
+    "finished_at": "2026-10-10T18:50:06.18Z",
+    "status": "passed",
+    "failed_phase": null,
+    "checks": [
+      {
+        "name": "configuration",
+        "status": "PASS"
+      },
+      {
+        "name": "existing_login",
+        "status": "PASS"
+      },
+      {
+        "name": "catalog_purchase_fixtures",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_create_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_cas_parallel",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_parallel_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "customer_authorization",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_customer",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_sale",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_inventory",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_snapshot_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_customer_snapshot",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_price_conflict",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_multiline_rollback",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_parallel_last_item",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_parallel_same_key",
+        "status": "PASS"
+      },
+      {
+        "name": "legacy_null_replay",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_isolation",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_cashier",
+        "status": "PASS"
+      },
+      {
+        "name": "browser_cancel",
+        "status": "PASS"
+      },
+      {
+        "name": "rest_parallel_cancel",
+        "status": "PASS"
+      },
+      {
+        "name": "postflight_compensation",
+        "status": "PASS"
+      },
+      {
+        "name": "postflight_archive",
+        "status": "PASS"
+      }
+    ],
+    "parallel": {
+      "customer_cas": {
+        "successful_responses": 1,
+        "same_result": false
+      },
+      "customer_same_key": {
+        "successful_responses": 2,
+        "same_result": true
+      },
+      "last_item": {
+        "successful_responses": 1,
+        "same_result": false
+      },
+      "same_key": {
+        "successful_responses": 2,
+        "same_result": true
+      },
+      "cancel": {
+        "successful_responses": 2,
+        "same_result": true
+      }
+    },
+    "compensated": true,
+    "archived": true,
+    "unresolved_mutation": false,
+    "cleanup_retry": "not_run"
+  },
+  "process_termination_confirmed": true
+}
