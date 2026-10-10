@@ -32,6 +32,7 @@ export function parseSaleAttempt(value: unknown): SaleAttempt {
             })
             .strict(),
         ),
+        customerId: z.uuid().nullable().optional(),
         idempotencyKey: z.string(),
       })
       .strict()

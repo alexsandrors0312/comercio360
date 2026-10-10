@@ -20,6 +20,9 @@ vi.mock("../app/actions/sales", () => ({
   cancelSale: vi.fn(),
   findSaleVariants: vi.fn(),
 }));
+vi.mock("../app/actions/customers", () => ({
+  findCustomers: vi.fn(),
+}));
 const id = "00000000-0000-4000-8000-000000000001",
   user = "00000000-0000-4000-8000-000000000002";
 const detail: SaleDetail = {
@@ -41,6 +44,7 @@ const detail: SaleDetail = {
       unitPriceCents: 1999,
     },
   ],
+  customer: null,
 };
 const base = {
   scope: { organizationId: id, storeId: id },
@@ -58,7 +62,7 @@ describe("PDV SSR presentation, not interaction evidence", () => {
     const html = render();
     const forms = html.match(/<form\b[\s\S]*?<\/form>/g) ?? [];
     const client = forms.filter((form) => !form.includes('method="get"'));
-    expect(client).toHaveLength(3);
+    expect(client).toHaveLength(4);
     for (const form of client) {
       const buttons = form.match(/<button\b[^>]*>/g) ?? [];
       expect(buttons.length).toBeGreaterThan(0);

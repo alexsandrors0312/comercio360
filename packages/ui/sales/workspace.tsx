@@ -9,6 +9,8 @@ import {
   type FormEvent,
 } from "react";
 import { confirmSale, cancelSale, findSaleVariants } from "@/app/actions/sales";
+import { findCustomers } from "@/app/actions/customers";
+import type { Customer } from "@/packages/domain/customers-contracts";
 import type {
   SalesScope,
   SalesPermissions,
@@ -175,6 +177,14 @@ function SaleBuilder({
   const [searched, setSearched] = useState(false);
   const [searchPending, startSearch] = useTransition();
   const searchLocked = useRef(false);
+  const [customerResults, setCustomerResults] = useState<Customer[]>([]);
+  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(
+    null,
+  );
+  const [customerSearched, setCustomerSearched] = useState(false);
+  const [customerNotice, setCustomerNotice] = useState("");
+  const [customerPending, startCustomerSearch] = useTransition();
+  const customerSearchLocked = useRef(false);
   const total = calculateSaleTotal(
     lines.map((line) => ({
       quantity: parseInventoryQuantity(line.units) ?? 0,
@@ -217,8 +227,34 @@ function SaleBuilder({
           quantity: line.units,
           expectedUnitPriceCents: line.unitPriceCents!,
         })),
+        ...(selectedCustomer ? { customerId: selectedCustomer.id } : {}),
         idempotencyKey: crypto.randomUUID(),
       },
+    });
+  }
+  function searchCustomer(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!mutation.ready || customerSearchLocked.current) return;
+    const query = String(
+      new FormData(event.currentTarget).get("customerQuery") ?? "",
+    );
+    customerSearchLocked.current = true;
+    setCustomerNotice("");
+    startCustomerSearch(async () => {
+      try {
+        const result = await findCustomers(scope, query);
+        if (result.status === "success") {
+          setCustomerResults(result.items.filter((item) => item.active));
+          setCustomerSearched(true);
+        } else {
+          setCustomerResults([]);
+          setCustomerNotice(result.message);
+        }
+      } catch {
+        setCustomerResults([]);
+        setCustomerNotice("Não foi possível buscar clientes. Tente novamente.");
+      }
+      customerSearchLocked.current = false;
     });
   }
   return (
@@ -296,6 +332,67 @@ function SaleBuilder({
           </ul>
         </>
       )}
+      <div className={styles.stack}>
+        <h3>Cliente da venda (opcional)</h3>
+        <p>Você pode confirmar a venda sem cliente.</p>
+        <form
+          onSubmit={searchCustomer}
+          role="search"
+          aria-label="Buscar cliente para venda"
+          className={styles.filters}
+          aria-busy={customerPending}
+        >
+          <label className={styles.field}>
+            <span>Buscar cliente por nome, telefone ou e-mail</span>
+            <input
+              name="customerQuery"
+              maxLength={200}
+              disabled={!mutation.ready || customerPending}
+            />
+          </label>
+          <button
+            className={styles.secondary}
+            disabled={!mutation.ready || customerPending}
+          >
+            {customerPending ? "Buscando…" : "Buscar cliente"}
+          </button>
+        </form>
+        {customerNotice && <p role="alert">{customerNotice}</p>}
+        {customerSearched && !customerResults.length && (
+          <p role="status">Nenhum cliente ativo encontrado.</p>
+        )}
+        {customerResults.length > 0 && (
+          <ul className={styles.variantList}>
+            {customerResults.map((customer) => (
+              <li key={customer.id}>
+                <strong>{customer.name}</strong>
+                <button
+                  type="button"
+                  className={styles.secondary}
+                  disabled={mutation.disabled}
+                  onClick={() => setSelectedCustomer(customer)}
+                  aria-label={`Selecionar cliente ${customer.name}`}
+                >
+                  Selecionar
+                </button>
+              </li>
+            ))}
+          </ul>
+        )}
+        {selectedCustomer && (
+          <p className={styles.total}>
+            Cliente selecionado: <strong>{selectedCustomer.name}</strong>{" "}
+            <button
+              type="button"
+              className={styles.linkButton}
+              disabled={mutation.disabled}
+              onClick={() => setSelectedCustomer(null)}
+            >
+              Remover cliente
+            </button>
+          </p>
+        )}
+      </div>
       <form
         onSubmit={submit}
         aria-label="Confirmar venda"
@@ -415,6 +512,7 @@ function SaleDetails({
           timeZone: "America/Sao_Paulo",
         })}
       </p>
+      <p>Cliente registrado: {detail.customer?.name ?? "Não informado"}</p>
       <ul className={styles.orderLines}>
         {items.map((item) => (
           <li key={item.variantId}>
@@ -546,14 +644,21 @@ export function SalesWorkspace({
               loja. Confirme a mesma tentativa antes de iniciar outra.
             </p>
             {mutation.attempt.kind === "confirm" ? (
-              <ul>
-                {mutation.attempt.payload.items.map((line) => (
-                  <li key={line.variantId}>
-                    {line.variantId}: {line.quantity} unidades ×{" "}
-                    {formatSaleMoney(line.expectedUnitPriceCents)}
-                  </li>
-                ))}
-              </ul>
+              <>
+                {mutation.attempt.payload.customerId && (
+                  <p>
+                    Cliente selecionado: {mutation.attempt.payload.customerId}
+                  </p>
+                )}
+                <ul>
+                  {mutation.attempt.payload.items.map((line) => (
+                    <li key={line.variantId}>
+                      {line.variantId}: {line.quantity} unidades ×{" "}
+                      {formatSaleMoney(line.expectedUnitPriceCents)}
+                    </li>
+                  ))}
+                </ul>
+              </>
             ) : (
               <p>
                 Cancelamento da venda {mutation.attempt.payload.saleId}:{" "}

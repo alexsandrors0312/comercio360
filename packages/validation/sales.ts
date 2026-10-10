@@ -44,6 +44,7 @@ export const saleSchema = z.object({
       [...items].sort((a, b) => a.variantId.localeCompare(b.variantId)),
     ),
   idempotencyKey: uuid,
+  customerId: uuid.nullish(),
 });
 export const saleCancelSchema = z.object({
   saleId: uuid,

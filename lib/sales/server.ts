@@ -65,6 +65,14 @@ const itemRow = z.object({
   quantity: integer.pipe(z.number().min(1).max(1000000)),
   unit_price_cents: integer.pipe(z.number().max(MAX_SALE_UNIT_PRICE_CENTS)),
 });
+const saleCustomerRow = z
+  .object({
+    customer_id: z.uuid().nullable(),
+    customer_name_snapshot: z.string().nullable(),
+  })
+  .refine(
+    (value) => (value.customer_id === null) === (value.customer_name_snapshot === null),
+  );
 export class SalesAccessError extends Error {
   constructor(public readonly kind: "invalid" | "denied" | "unavailable") {
     super(
@@ -272,15 +280,25 @@ export async function getSale(
   if (!rows.success || (rows.data[0] && rows.data[0].id !== saleId))
     throw new SalesAccessError("unavailable");
   if (!rows.data[0]) return null;
-  const items = z
-    .array(itemRow)
-    .min(1)
-    .max(50)
-    .safeParse(await readRows(scope, "sales_items", { p_sale_id: saleId }));
+  const [itemData, customerData] = await Promise.all([
+    readRows(scope, "sales_items", { p_sale_id: saleId }),
+    readRows(scope, "sales_customer", { p_sale_id: saleId }),
+  ]);
+  const items = z.array(itemRow).min(1).max(50).safeParse(itemData);
+  const customerRows = z.array(saleCustomerRow).length(1).safeParse(customerData);
   if (
     !items.success ||
+    !customerRows.success ||
     new Set(items.data.map((v) => v.variant_id)).size !== items.data.length
   )
     throw new SalesAccessError("unavailable");
-  return { sale: sale(rows.data[0]), items: items.data.map(item) };
+  const snapshot = customerRows.data[0];
+  return {
+    sale: sale(rows.data[0]),
+    items: items.data.map(item),
+    customer:
+      snapshot.customer_id === null
+        ? null
+        : { id: snapshot.customer_id, name: snapshot.customer_name_snapshot! },
+  };
 }

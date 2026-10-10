@@ -79,13 +79,14 @@ export async function confirmSale(
     "confirm",
     saleSchema,
     input,
-    "sales_confirm",
+    "sales_confirm_v2",
     (v) => ({
       p_items: v.items.map((i) => ({
         variant_id: i.variantId,
         quantity: i.quantity,
         expected_unit_price_cents: i.expectedUnitPriceCents,
       })),
+      p_customer_id: v.customerId ?? null,
       p_idempotency_key: v.idempotencyKey,
     }),
     "Venda confirmada. Estoque atualizado.",

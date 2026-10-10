@@ -42,13 +42,21 @@ export type SalePage = {
   pageSize: number;
   total: number;
 };
-export type SaleDetail = { sale: Sale; items: SaleItem[] };
+export type SaleDetail = {
+  sale: Sale;
+  items: SaleItem[];
+  customer: { id: string; name: string } | null;
+};
 export type SaleLineInput = {
   variantId: string;
   quantity: string;
   expectedUnitPriceCents: number;
 };
-export type SaleInput = { items: SaleLineInput[]; idempotencyKey: string };
+export type SaleInput = {
+  items: SaleLineInput[];
+  idempotencyKey: string;
+  customerId?: string | null;
+};
 export type SaleCancelInput = {
   saleId: string;
   expectedRevision: string;

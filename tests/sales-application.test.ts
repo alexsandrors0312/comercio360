@@ -119,7 +119,7 @@ describe("PDV live authorization and mutation contracts", () => {
       state.role = role;
       expect((await confirmSale(scope, input)).status).toBe("success");
       expect(state.calls[0]).toEqual({
-        name: "sales_confirm",
+        name: "sales_confirm_v2",
         args: {
           p_organization_id: org,
           p_store_id: store,
@@ -130,6 +130,7 @@ describe("PDV live authorization and mutation contracts", () => {
               expected_unit_price_cents: 1234,
             },
           ],
+          p_customer_id: null,
           p_idempotency_key: id,
         },
       });
@@ -230,6 +231,15 @@ describe("PDV live authorization and mutation contracts", () => {
     ]);
     expect(state.calls[0].args).not.toHaveProperty("p_actor_user_id");
   });
+  it("passes the optional customer to the atomic sale confirmation", async () => {
+    expect((await confirmSale(scope, { ...input, customerId: variant })).status).toBe("success");
+    expect(state.calls[0]).toMatchObject({
+      name: "sales_confirm_v2",
+      args: { p_customer_id: variant },
+    });
+    expect((await confirmSale(scope, { ...input, customerId: "bad" })).status).toBe("invalid");
+    expect(state.calls).toHaveLength(1);
+  });
   it.each([
     ["42501", "denied"],
     ["PT409", "conflict"],
@@ -320,6 +330,7 @@ describe("PDV scoped wire reads", () => {
           unit_price_cents: "1234",
         },
       ],
+      [{ customer_id: null, customer_name_snapshot: null }],
     );
     expect(await getSale(scope, id)).toMatchObject({
       sale: { totalCents: 3702 },
@@ -331,6 +342,21 @@ describe("PDV scoped wire reads", () => {
       name: "sales_items",
       args: { p_sale_id: id, p_organization_id: org, p_store_id: store },
     });
+    expect(state.calls[2]).toMatchObject({
+      name: "sales_customer",
+      args: { p_sale_id: id, p_organization_id: org, p_store_id: store },
+    });
+  });
+  it("reads the customer's sale-time name without current contact details", async () => {
+    state.responses.push(
+      [sale],
+      [{ variant_id: variant, product_name: "Camiseta", sku: "CAM-P", quantity: "1", unit_price_cents: "1234" }],
+      [{ customer_id: variant, customer_name_snapshot: "Cliente na venda" }],
+    );
+    const detail = await getSale(scope, id);
+    expect(detail?.customer).toEqual({ id: variant, name: "Cliente na venda" });
+    expect(JSON.stringify(detail)).not.toContain("phone");
+    expect(JSON.stringify(detail)).not.toContain("email");
   });
   it("refuses mismatched selectors, overflow and invalid provider values", async () => {
     state.response = [{ ...sale, id: variant }];

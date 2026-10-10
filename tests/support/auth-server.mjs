@@ -17,6 +17,7 @@ for (const file of [
   "migrations/202610090001_inventory.sql",
   "migrations/202610090002_procurement.sql",
   "migrations/202610090003_sales.sql",
+  "migrations/202610100001_customers.sql",
 ])
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
@@ -239,7 +240,12 @@ createServer((request, response) => {
           sales_list: [...scopeArgs, "p_query", "p_status", "p_limit", "p_offset", "p_sale_id"],
           sales_items: [...scopeArgs, "p_sale_id"],
           sales_confirm: [...scopeArgs, "p_items", "p_idempotency_key"],
+          sales_confirm_v2: [...scopeArgs, "p_items", "p_customer_id", "p_idempotency_key"],
+          sales_customer: [...scopeArgs, "p_sale_id"],
           sales_cancel: [...scopeArgs, "p_sale_id", "p_expected_revision", "p_reason", "p_idempotency_key"],
+          customers_list: [...scopeArgs, "p_query", "p_status", "p_limit", "p_offset", "p_customer_id"],
+          customers_sales: [...scopeArgs, "p_customer_id", "p_limit", "p_offset"],
+          customers_save: [...scopeArgs, "p_customer_id", "p_expected_revision", "p_name", "p_phone", "p_email", "p_active", "p_idempotency_key"],
           procurement_suppliers: [
             ...scopeArgs,
             "p_query",
@@ -307,6 +313,7 @@ createServer((request, response) => {
             "organizations",
             "stores",
             "memberships",
+            "user_store_access",
             "product_categories",
             "products",
             "product_variants",
@@ -325,6 +332,7 @@ createServer((request, response) => {
           "id",
           "product_id",
           "store_id",
+          "membership_id",
           "variant_id",
         ]) {
           const value = url.searchParams.get(field);
