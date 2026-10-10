@@ -1,0 +1,13 @@
+
+> comercio360@0.1.1 test
+> vitest run --configLoader runner
+
+
+ RUN  v4.1.11 C:/Users/Alexs/Desktop/Comercio360
+
+
+ Test Files  33 passed (33)
+      Tests  418 passed (418)
+   Start at  00:07:36
+   Duration  34.33s (transform 848ms, setup 0ms, import 4.60s, tests 22.70s, environment 4ms)
+

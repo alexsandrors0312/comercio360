@@ -1,0 +1,60 @@
+QA local fora do sandbox; repetição por setup não iniciado; HEAD 075c5454adddee0af0d1fddade4a964ee1a0b70d; Chromium / Next dev / PGlite / Auth simulado; npm run test:e2e -- tests/e2e/sales.spec.ts
+
+> comercio360@0.1.1 test:e2e
+> playwright test tests/e2e/sales.spec.ts
+
+[WebServer] (node:30184) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:4892) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24368) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 15 tests using 1 worker
+
+(node:22300) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:32904) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:28256) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  x   1 tests\e2e\sales.spec.ts:92:5 › catalog prices and two-line sale update stock, snapshots and full cancellation (22.7s)
+(node:19608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:27076) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+ROUND_INTERRUPTED_AFTER_FIRST_FAIL; session exit_code=1; functional pass=0 fail=1 remaining=14 not_run/incomplete; full suite not_run pending correction.
+Finding QA005-E2E01: tests/e2e/sales.spec.ts:125 expected heading Selecione uma venda after store switch; snapshot still Loja Centro selected and sale details shown. Preceding sale/stock/cancellation/replenishment assertions completed. Cause unknown; possible missing awaited store navigation; no isolation conclusion.
+Finding QA005-NAV01: error snapshot navigation Vendas / PDV link href=/app/vendas; candidate implemented route /app/pdv; inspect navigation integration.
+
+# Error details
+
+```
+Error: expect(locator).toBeVisible() failed
+
+Locator: getByRole('heading', { name: 'Selecione uma venda' })
+Expected: visible
+Timeout: 5000ms
+Error: element(s) not found
+
+Call log:
+  - Expect "toBeVisible" getByRole('heading', { name: 'Selecione uma venda' }) with timeout 5000ms
+  - waiting for getByRole('heading', { name: 'Selecione uma venda' })
+
+```
+
+```yaml
+- link "Pular para conteúdo":
+  - /url: "#main"
+app/actions/sales.ts 51AAAEFA33BF55D93709D71AFEFB1795E2C1CC051DCF70727D221DAEA64ACDF7
+app/app/pdv/page.tsx D9E3BF7F34A3E78AB0C8DCAF43D7BC9C5EAB76C9570FB5AE0A734FA1FD32768C
+lib/sales/server.ts 79F5E09531EAF812DAF71050E5CFD0C550BB17C7C7E07724AF39F76F088F7FBF
+packages/domain/sales.ts 528EB05F4D41A66A82B38426B409AD76336862C4168C2EEE4DBFB78B3B93A5BB
+packages/domain/sales-contracts.ts 4223AC6B67B68EFEC5A837C49243736FA47ED46E2A5D593ACFDD462A9F0BD851
+packages/validation/sales.ts 82AA3375746C1C7F3847DA17D2C0F8CA2026DE9E3351A35441DBCE325A1104BB
+packages/ui/sales/attempt.ts F56704448AA49D336772CA2DE9525DD6D4DF941ABFB7FABDA68444CA44179048
+packages/ui/sales/workspace.tsx 9BD317FDE52DD6079BB0DFA3EE3A73454EE537BD693C05FDBCEC617E3473A451
+supabase/migrations/202610090003_sales.sql E7AEC5256CFC7EA9669004425062FF1A689DBDBF9EF08C097F42DAAD85AD4EFD
+tests/e2e/sales.spec.ts 77FF1E9F24A2FB7DD5446C705AEA28C1EFD77A4EC0B9142C5B4B54A857EEB6DE
+tests/support/auth-server.mjs 396B658D8F760B9BF9FA835BA90D72485AAA081A2E3C6CA4E963B669D810BF71
+playwright.config.ts 458ABDA5410812D9DBBBB78D5002B4775021B1F6D2E87DC4F37FFABC6C478233

@@ -16,6 +16,7 @@ for (const file of [
   "migrations/202610030001_catalog_conflict_http.sql",
   "migrations/202610090001_inventory.sql",
   "migrations/202610090002_procurement.sql",
+  "migrations/202610090003_sales.sql",
 ])
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
@@ -234,6 +235,11 @@ createServer((request, response) => {
         const rpcName = url.pathname.replace("/rest/v1/rpc/", "");
         const scopeArgs = ["p_organization_id", "p_store_id"];
         Object.assign(catalogRpcArguments, {
+          sales_variants: [...scopeArgs, "p_query", "p_limit", "p_offset"],
+          sales_list: [...scopeArgs, "p_query", "p_status", "p_limit", "p_offset", "p_sale_id"],
+          sales_items: [...scopeArgs, "p_sale_id"],
+          sales_confirm: [...scopeArgs, "p_items", "p_idempotency_key"],
+          sales_cancel: [...scopeArgs, "p_sale_id", "p_expected_revision", "p_reason", "p_idempotency_key"],
           procurement_suppliers: [
             ...scopeArgs,
             "p_query",

@@ -1,0 +1,139 @@
+
+> comercio360@0.1.1 test
+> vitest run --configLoader runner
+
+
+ RUN  v4.1.11 C:/Users/Alexs/Desktop/Comercio360
+
+ ❯ tests/seed-diagnostics.test.ts (11 tests | 7 failed) 2406ms
+     × missing-sql-seed has a safe code and respects the write boundary 238ms
+     × denied-key has a safe code and respects the write boundary 232ms
+     × missing-schema has a safe code and respects the write boundary 228ms
+     × auth-list-denied has a safe code and respects the write boundary 233ms
+     × weak-password has a safe code and respects the write boundary 232ms
+     × profile-fk has a safe code and respects the write boundary 230ms
+     × existing-users has a safe code and respects the write boundary 230ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > missing-sql-seed has a safe code and respects the write boundary
+AssertionError: expected 62 to be 57 // Object.is equality
+
+- Expected
++ Received
+
+- 57
++ 62
+
+ ❯ tests/seed-diagnostics.test.ts:146:29
+    144|           child.on("close", (code) => resolve({ code, output }));
+    145|         });
+    146|         expect(result.code).toBe(exitCode);
+       |                             ^
+    147|         if (exitCode !== 0)
+    148|           expect(result.output.trim()).toBe(`H1-SEED-${exitCode}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > denied-key has a safe code and respects the write boundary
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > auth-list-denied has a safe code and respects the write boundary
+AssertionError: expected 62 to be 61 // Object.is equality
+
+- Expected
++ Received
+
+- 61
++ 62
+
+ ❯ tests/seed-diagnostics.test.ts:146:29
+    144|           child.on("close", (code) => resolve({ code, output }));
+    145|         });
+    146|         expect(result.code).toBe(exitCode);
+       |                             ^
+    147|         if (exitCode !== 0)
+    148|           expect(result.output.trim()).toBe(`H1-SEED-${exitCode}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > missing-schema has a safe code and respects the write boundary
+AssertionError: expected 62 to be 53 // Object.is equality
+
+- Expected
++ Received
+
+- 53
++ 62
+
+ ❯ tests/seed-diagnostics.test.ts:146:29
+    144|           child.on("close", (code) => resolve({ code, output }));
+    145|         });
+    146|         expect(result.code).toBe(exitCode);
+       |                             ^
+    147|         if (exitCode !== 0)
+    148|           expect(result.output.trim()).toBe(`H1-SEED-${exitCode}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > weak-password has a safe code and respects the write boundary
+AssertionError: expected 62 to be 76 // Object.is equality
+
+- Expected
++ Received
+
+- 76
++ 62
+
+ ❯ tests/seed-diagnostics.test.ts:146:29
+    144|           child.on("close", (code) => resolve({ code, output }));
+    145|         });
+    146|         expect(result.code).toBe(exitCode);
+       |                             ^
+    147|         if (exitCode !== 0)
+    148|           expect(result.output.trim()).toBe(`H1-SEED-${exitCode}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > profile-fk has a safe code and respects the write boundary
+AssertionError: expected 62 to be 84 // Object.is equality
+
+- Expected
++ Received
+
+- 84
++ 62
+
+ ❯ tests/seed-diagnostics.test.ts:146:29
+    144|           child.on("close", (code) => resolve({ code, output }));
+    145|         });
+    146|         expect(result.code).toBe(exitCode);
+       |                             ^
+    147|         if (exitCode !== 0)
+    148|           expect(result.output.trim()).toBe(`H1-SEED-${exitCode}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/7]⎯
+
+ FAIL  tests/seed-diagnostics.test.ts > seed sanitized diagnostics with loopback API only > existing-users has a safe code and respects the write boundary
+AssertionError: expected 62 to be +0 // Object.is equality
+
+- Expected
++ Received
+
+- 0
++ 62
+
+ ❯ tests/seed-diagnostics.test.ts:146:29
+    144|           child.on("close", (code) => resolve({ code, output }));
+    145|         });
+    146|         expect(result.code).toBe(exitCode);
+       |                             ^
+    147|         if (exitCode !== 0)
+    148|           expect(result.output.trim()).toBe(`H1-SEED-${exitCode}`);
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/7]⎯
+
+
+ Test Files  1 failed | 32 passed (33)
+      Tests  7 failed | 411 passed (418)
+   Start at  00:03:31
+   Duration  41.16s (transform 1.04s, setup 0ms, import 5.84s, tests 25.87s, environment 4ms)
+

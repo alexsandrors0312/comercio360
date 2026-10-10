@@ -1,0 +1,10 @@
+
+> comercio360@0.1.1 lint
+> eslint .
+
+
+C:\Users\Alexs\Desktop\Comercio360\docs\ai\evidencias\h04-u1-2026-09-30\playwright-u1-external.config.mjs
+  1:1  warning  Assign object to a variable before exporting as module default  import/no-anonymous-default-export
+
+✖ 1 problem (0 errors, 1 warning)
+

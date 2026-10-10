@@ -1,0 +1,35 @@
+{
+  "review_id": "PDV005-ARQ-R1",
+  "baseline_ref": "075c5454adddee0af0d1fddade4a964ee1a0b70d",
+  "reviewed_at": "2026-10-10T03:04:53Z",
+  "conclusion": "no_blocking_findings",
+  "reviewer": "independent c360-seguranca-arquitetura",
+  "scope": [
+    "Contract/ADR/domain/validation/SQL/server/actions/UI",
+    "Hosted migration guard and compensation instruments"
+  ],
+  "executed": {
+    "command": "node node_modules/vitest/vitest.mjs run tests/sales-hosted.test.ts",
+    "exit_code": 0,
+    "tests_passed": 6,
+    "powershell_guard_cases": 7,
+    "output_reference": "ac7ade"
+  },
+  "remote": "not_run",
+  "sql_domain_e2e": "not_run by this reviewer",
+  "resolved_preliminary_findings": [
+    "Only exact reviewed incremental migration accepted",
+    "All own sales and all lines validated before any cancellation",
+    "Durable run id and pre-send journal; uncertain mutations block compensation claims; all concurrent requests awaited"
+  ],
+  "sha256": {
+    "supabase/migrations/202610090003_sales.sql": "e7aec5256cfc7ea9669004425062ff1a689dbdbf9ef08c097f42daad85ad4efd",
+    "scripts/sales-hosted.ps1": "89aed3d8a3c8c02134a23bef8da5a2d5ed4c835a8672cca7a02448e3481d6c34",
+    "tests/hosted/sales.mjs": "cc2b59b4cb4bc8f65da22d31efa000f0df9f7a4f36fdca6157a1b6a72d5b6139"
+  },
+  "findings": [],
+  "limits": [
+    "Inspection does not prove all PostgreSQL interleavings",
+    "Not production approval; complete gates and remote separate"
+  ]
+}

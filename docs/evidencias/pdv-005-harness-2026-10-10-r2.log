@@ -1,0 +1,29 @@
+
+> comercio360@0.1.1 test:harness
+> node --test tests/harness-contract.test.mjs tests/harness-telemetry.test.mjs && node scripts/harness/check-skills.mjs
+
+✔ accepts a bounded read-only task and evidenced report (17.6985ms)
+✔ rejects traversal and protected writes (6.0438ms)
+✔ rejects unsupported baselines and unknown contract fields (7.8875ms)
+✔ rejects PASS without evidence and missing criteria (5.2428ms)
+✔ rejects invented execution data and baseline mismatch (5.831ms)
+✔ rejects a result through the API after HEAD advances beyond the validated task baseline (698.7552ms)
+✔ rejects missing and escaping finding evidence references (642.7641ms)
+✔ rejects reported changes in review mode, even when the actual change list is empty (6.832ms)
+✔ accepts a clean Git worktree for a read-only result (856.5695ms)
+✔ detects an index change masked by worktree content matching HEAD, without double-counting the path (1778.903ms)
+✔ rejects a read-only result with unstaged Git changes omitted from changed_files (844.2323ms)
+✔ rejects a read-only result with staged Git changes omitted from changed_files (900.7129ms)
+✔ rejects a read-only result with untracked Git changes omitted from changed_files (817.509ms)
+✔ compares real changed paths with the assigned and reported paths (10.0726ms)
+✔ usage aggregation receives only the complete turn, excluding prelude and tail (2.0773ms)
+✔ bridge captures provider usage, duration and unavailable states without raw reasoning (508.4156ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 16
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 6810.346
+Skill structure OK: 6 project skills

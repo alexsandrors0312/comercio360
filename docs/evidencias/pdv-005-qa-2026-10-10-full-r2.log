@@ -1,0 +1,216 @@
+QA local fora do sandbox; regressão completa após R2direcionado15/15; start=2026-10-10T00:12:59.4655171-03:00; HEAD 075c5454adddee0af0d1fddade4a964ee1a0b70d; Chromium / Next dev / PGlite / Auth simulado; npm run test:e2e
+app/actions/sales.ts 51AAAEFA33BF55D93709D71AFEFB1795E2C1CC051DCF70727D221DAEA64ACDF7
+app/app/pdv/page.tsx D9E3BF7F34A3E78AB0C8DCAF43D7BC9C5EAB76C9570FB5AE0A734FA1FD32768C
+lib/sales/server.ts 79F5E09531EAF812DAF71050E5CFD0C550BB17C7C7E07724AF39F76F088F7FBF
+packages/domain/sales.ts 528EB05F4D41A66A82B38426B409AD76336862C4168C2EEE4DBFB78B3B93A5BB
+packages/domain/sales-contracts.ts 4223AC6B67B68EFEC5A837C49243736FA47ED46E2A5D593ACFDD462A9F0BD851
+packages/validation/sales.ts 82AA3375746C1C7F3847DA17D2C0F8CA2026DE9E3351A35441DBCE325A1104BB
+packages/ui/sales/attempt.ts F56704448AA49D336772CA2DE9525DD6D4DF941ABFB7FABDA68444CA44179048
+packages/ui/sales/workspace.tsx 82EABABD43395CC0F8FD0E4A7003983DEABC8324E077B198C30F8FCDB57F9136
+supabase/migrations/202610090003_sales.sql E7AEC5256CFC7EA9669004425062FF1A689DBDBF9EF08C097F42DAAD85AD4EFD
+tests/e2e/sales.spec.ts 519265EB6482B799D795CCC741C16CDEDBCEE0E8EFE848CD5BD99B843D10B186
+tests/support/auth-server.mjs 396B658D8F760B9BF9FA835BA90D72485AAA081A2E3C6CA4E963B669D810BF71
+playwright.config.ts 458ABDA5410812D9DBBBB78D5002B4775021B1F6D2E87DC4F37FFABC6C478233
+packages/ui/shell.tsx 3B4A672B2B15BD6FF146919D0079D1EFCC76D73CE477DC8B54E9C4D0E56DB17A
+
+> comercio360@0.1.1 test:e2e
+> playwright test
+
+[WebServer] (node:24352) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:9288) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:10372) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 51 tests using 1 worker
+
+(node:1728) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:18316) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:6228) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  1 tests\e2e\auth.spec.ts:8:5 › active membership without stores is hidden while another organization remains usable (2.5s)
+[WebServer] (node:20976) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  2 tests\e2e\auth.spec.ts:46:5 › active membership without any authorized store remains blocked with clear guidance (1.1s)
+[WebServer] (node:10576) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  3 tests\e2e\auth.spec.ts:60:5 › valid login, authorized store selection, audited RPC and logout (1.7s)
+[WebServer] (node:31864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  4 tests\e2e\auth.spec.ts:87:5 › authenticated user without membership is refused (768ms)
+[WebServer] (node:3884) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  5 tests\e2e\auth.spec.ts:94:5 › cashier cannot expand access with a forged cookie (994ms)
+  ok  6 tests\e2e\auth.spec.ts:119:5 › invalid login shows an actionable error and does not open protected routes (536ms)
+[WebServer] (node:19876) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  7 tests\e2e\catalog.spec.ts:11:5 › manager searches and reads store price in the catalog (2.5s)
+[WebServer] (node:9472) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  8 tests\e2e\catalog.spec.ts:43:5 › cashier can read catalog but cannot edit it (1.3s)
+[WebServer] (node:16612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok  9 tests\e2e\catalog.spec.ts:56:5 › manager creates a product and sets its store price (3.1s)
+[WebServer] (node:34444) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 10 tests\e2e\catalog.spec.ts:74:7 › catalog fits viewport at 360px (1.0s)
+[WebServer] (node:15204) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 11 tests\e2e\catalog.spec.ts:74:7 › catalog fits viewport at 768px (1.0s)
+[WebServer] (node:11920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 12 tests\e2e\catalog.spec.ts:74:7 › catalog fits viewport at 1440px (1.0s)
+[WebServer] (node:29564) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 13 tests\e2e\foundation.spec.ts:3:7 › navigation and demo states at 360px (1.6s)
+[WebServer] (node:33280) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 14 tests\e2e\foundation.spec.ts:3:7 › navigation and demo states at 768px (801ms)
+[WebServer] (node:33532) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 15 tests\e2e\foundation.spec.ts:3:7 › navigation and demo states at 1440px (849ms)
+[WebServer] (node:16536) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 16 tests\e2e\foundation.spec.ts:38:5 › protected routes require a real session; demo cannot grant access (898ms)
+[WebServer] (node:15820) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:27668) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:27180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 17 tests\e2e\foundation.spec.ts:51:5 › demo context selection is explicit and navigation has no fake operations (2.6s)
+[WebServer] (node:1364) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:15224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:20468) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 18 tests\e2e\inventory.spec.ts:39:5 › inventory entry, exit, insufficient balance, history, search and store isolation (5.6s)
+[WebServer] (node:7732) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 19 tests\e2e\inventory.spec.ts:83:5 › cashier reads inventory and cannot see movement controls (1.5s)
+[WebServer] (node:34380) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 20 tests\e2e\inventory.spec.ts:102:5 › two stale forms do not overwrite stock and conflict requires review (5.1s)
+[WebServer] (node:1160) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 21 tests\e2e\inventory.spec.ts:133:5 › lost response can be confirmed with the same operation without duplicate stock (3.8s)
+[WebServer] (node:31216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 22 tests\e2e\inventory.spec.ts:168:7 › inventory is readable without page overflow at 360px (1.5s)
+[WebServer] (node:22628) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 23 tests\e2e\inventory.spec.ts:168:7 › inventory is readable without page overflow at 768px (1.6s)
+[WebServer] (node:6328) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 24 tests\e2e\inventory.spec.ts:168:7 › inventory is readable without page overflow at 1440px (1.6s)
+[WebServer] (node:23508) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:24948) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 25 tests\e2e\procurement.spec.ts:69:5 › supplier, two-line order and full receiving update only the current store (9.5s)
+[WebServer] (node:11736) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 26 tests\e2e\procurement.spec.ts:111:5 › cancellation keeps stock unchanged and records the reason (6.0s)
+[WebServer] (node:9848) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 27 tests\e2e\procurement.spec.ts:132:5 › stale cancellation cannot overwrite a received order (6.4s)
+[WebServer] (node:10212) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 28 tests\e2e\procurement.spec.ts:166:5 › lost receiving response is confirmed without duplicate inventory (6.3s)
+[WebServer] (node:30412) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:5640) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 29 tests\e2e\procurement.spec.ts:197:5 › stockist receives but cannot manage suppliers or cancel (7.1s)
+[WebServer] (node:2812) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 30 tests\e2e\procurement.spec.ts:231:5 › supplier draft keeps its original revision after an unrelated refresh (4.8s)
+[WebServer] (node:9552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 31 tests\e2e\procurement.spec.ts:283:5 › cashier cannot open purchase costs (1.0s)
+[WebServer] (node:12768) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 32 tests\e2e\procurement.spec.ts:293:5 › buyer creates an order but cannot receive it (2.6s)
+[WebServer] (node:35292) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 33 tests\e2e\procurement.spec.ts:304:5 › operational mutation forms wait for delayed client hydration (3.0s)
+[WebServer] (node:12492) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 34 tests\e2e\procurement.spec.ts:372:7 › procurement forms fit 360px (1.6s)
+[WebServer] (node:28248) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 35 tests\e2e\procurement.spec.ts:372:7 › procurement forms fit 768px (1.6s)
+[WebServer] (node:22268) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 36 tests\e2e\procurement.spec.ts:372:7 › procurement forms fit 1440px (1.7s)
+[WebServer] (node:14180) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:14636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 37 tests\e2e\sales.spec.ts:92:5 › catalog prices and two-line sale update stock, snapshots and full cancellation (15.5s)
+[WebServer] (node:23920) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 38 tests\e2e\sales.spec.ts:132:5 › zero price is sellable and missing store price blocks adding (9.7s)
+[WebServer] (node:1188) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 39 tests\e2e\sales.spec.ts:154:5 › invalid cancellation reason stays editable without a storage failure (6.9s)
+[WebServer] (node:27864) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 40 tests\e2e\sales.spec.ts:191:5 › insufficient stock refuses the complete multiline sale (10.1s)
+[WebServer] (node:14284) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 41 tests\e2e\sales.spec.ts:208:5 › catalog price changed after review causes conflict without a stock decrease (8.1s)
+[WebServer] (node:7572) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:8912) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 42 tests\e2e\sales.spec.ts:233:5 › cashier confirms without cancel controls or purchase costs (8.1s)
+[WebServer] (node:2528) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 43 tests\e2e\sales.spec.ts:266:7 › comprador cannot open PDV (1.2s)
+[WebServer] (node:31224) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 44 tests\e2e\sales.spec.ts:266:7 › estoquista cannot open PDV (1.3s)
+[WebServer] (node:17140) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 45 tests\e2e\sales.spec.ts:277:7 › lost confirm response survives reload and replays without duplicate stock (7.9s)
+[WebServer] (node:4156) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] ⨯ Error: The destination stream closed early.
+[WebServer]     at ignore-listed frames {
+[WebServer]   digest: '2184406435'
+[WebServer] }
+[WebServer] ⨯ Error: The destination stream closed early.
+[WebServer]     at ignore-listed frames {
+[WebServer]   digest: '2184406435'
+[WebServer] }
+  ok 46 tests\e2e\sales.spec.ts:277:7 › lost cancel response survives reload and replays without duplicate stock (8.9s)
+[WebServer] (node:34608) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 47 tests\e2e\sales.spec.ts:351:5 › unavailable session storage prevents sending a sale (5.8s)
+[WebServer] (node:6552) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 48 tests\e2e\sales.spec.ts:385:5 › PDV controls stay disabled until delayed hydration and recovery complete (1.7s)
+[WebServer] (node:16636) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 49 tests\e2e\sales.spec.ts:426:7 › PDV fits 360px with keyboard SKU search (1.4s)
+[WebServer] (node:1612) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 50 tests\e2e\sales.spec.ts:426:7 › PDV fits 768px with keyboard SKU search (1.2s)
+[WebServer] (node:8524) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ok 51 tests\e2e\sales.spec.ts:426:7 › PDV fits 1440px with keyboard SKU search (1.4s)
+
+  51 passed (3.2m)
+EXIT_CODE=0; end=2026-10-10T00:16:14.6581324-03:00
+CANDIDATE_HASH_RECHECK: verified=13; drift=
+POSTFLIGHT pass: fora do sandbox às2026-10-10T00:16:26-03:00 portas3001/54329 sem listeners; nenhum processo encerrado genericamente.
+CONCLUSION: no_blocking_findings no escopo E2E local R2; pass15/15direcionado e pass51/51regressão; não aprova integração ou produção.
+HISTORICAL: directed.log setupinterrompido/critérionot_run; directed-unsandboxed.log FAILprimeirocenário antesdelta+restanteincompleto. Registros anteriores preservados, nenhum PASS retroativo.
+VISUAL: revisão das capturas fictícias360/768/1440 realizada após direcionadoR2, detalhes no directed-r2.log; tecladoEnter/focoprogramático/ausênciaoverflow testados, nãoauditoriaWCAGcompleta.
+REMOTE not_run nesta QA: Supabase real/REST paralelo PostgreSQL/browserHTTPS não executados por este agente. Tipos/build/Vitest não executados por este agente; reservados ao responsável.
+REPRODUCTION: PowerShell TEMP/TMP=workspace/.next/cache/sales-test-temp; npm run test:e2e -- tests/e2e/sales.spec.ts; depois npm run test:e2e. Fora sandbox necessário após inicialização isolada semcenários. Sem edição app/testes porQA.

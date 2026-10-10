@@ -1,0 +1,128 @@
+{
+  "schema_version": 1,
+  "package": "005-PDV",
+  "state": "local_gates_passed_remote_running",
+  "baseline_ref": "075c5454adddee0af0d1fddade4a964ee1a0b70d",
+  "candidate": "pdv-005-candidate-2026-10-10.json",
+  "environment": "Windows local; PGlite and simulated Auth; remote evidence separate",
+  "checks": [
+    {
+      "id": "vitest",
+      "command": "npm test",
+      "status": "passed",
+      "tests": 418,
+      "files": 33,
+      "exit_code": 0,
+      "log": "pdv-005-vitest-2026-10-10-r2.log",
+      "prior": "pdv-005-vitest-2026-10-10.log: 411 passed,7 failed (loopback transport in sandbox)"
+    },
+    {
+      "id": "ui_delta",
+      "command": "npm test -- tests/sales-application.test.ts tests/sales-ui.test.ts",
+      "status": "passed",
+      "tests": 36,
+      "exit_code": 0,
+      "log": "pdv-005-ui-delta-2026-10-10.log"
+    },
+    {
+      "id": "lint",
+      "command": "npm run lint",
+      "status": "passed",
+      "errors": 0,
+      "warnings": 1,
+      "exit_code": 0,
+      "log": "pdv-005-lint-2026-10-10-r2.log",
+      "prior": "pdv-005-lint-2026-10-10.log:29 errors,1 historical warning"
+    },
+    {
+      "id": "types",
+      "command": "npm run typecheck",
+      "status": "passed",
+      "exit_code": 0,
+      "log": "pdv-005-types-2026-10-10.log"
+    },
+    {
+      "id": "build",
+      "command": "npm run build",
+      "status": "passed",
+      "exit_code": 0,
+      "log": "pdv-005-build-2026-10-10.log"
+    },
+    {
+      "id": "e2e_pdv",
+      "command": "npm run test:e2e -- tests/e2e/sales.spec.ts",
+      "status": "passed",
+      "tests": 15,
+      "exit_code": 0,
+      "log": "pdv-005-qa-2026-10-10-directed-r2.log",
+      "independent": true
+    },
+    {
+      "id": "e2e_regression",
+      "command": "npm run test:e2e",
+      "status": "passed",
+      "tests": 51,
+      "exit_code": 0,
+      "log": "pdv-005-qa-2026-10-10-full-r2.log",
+      "independent": true
+    },
+    {
+      "id": "harness",
+      "command": "npm run test:harness",
+      "status": "passed",
+      "tests": 16,
+      "project_skills": 6,
+      "exit_code": 0,
+      "log": "pdv-005-harness-2026-10-10-r2.log",
+      "prior": "pdv-005-harness-2026-10-10.log:Git temporary fixture denied in sandbox"
+    },
+    {
+      "id": "cleanup_local",
+      "command": "npm run test:cleanup",
+      "status": "passed",
+      "tests": 104,
+      "exit_code": 0,
+      "log": "pdv-005-cleanup-local-2026-10-10.log",
+      "remote_cleanup": false
+    },
+    {
+      "id": "independent_review",
+      "status": "no_blocking_findings",
+      "references": [
+        "pdv-005-review-2026-10-10-r1.json",
+        "pdv-005-review-2026-10-10-r2.json"
+      ]
+    }
+  ],
+  "prior_e2e": [
+    {
+      "log": "pdv-005-qa-2026-10-10-directed.log",
+      "runner": "interrupted_exit_1_setup",
+      "scenarios": "not_run"
+    },
+    {
+      "log": "pdv-005-qa-2026-10-10-directed-unsandboxed.log",
+      "runner": "failed_exit_1",
+      "first_scenario": "failed_store_switch_navigation_sync",
+      "remaining": "not_run"
+    }
+  ],
+  "visual": {
+    "widths": [
+      360,
+      768,
+      1440
+    ],
+    "independent_inspection": "passed",
+    "keyboard_enter_and_overflow": "passed",
+    "limit": "Not a complete WCAG or sequential Tab audit"
+  },
+  "remote": {
+    "migration": "running",
+    "publication": "not_run",
+    "hosted": "not_run",
+    "cleanup_retry": "not_run"
+  },
+  "production": "not_authorized",
+  "dsh": "runtime_unavailable_not_simulated"
+}

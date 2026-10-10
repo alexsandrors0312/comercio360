@@ -1,0 +1,8 @@
+QA local; HEAD 075c5454adddee0af0d1fddade4a964ee1a0b70d; browser Chromium / Next dev / PGlite / Auth simulado; comando npm run test:e2e -- tests/e2e/sales.spec.ts
+
+> comercio360@0.1.1 test:e2e
+> playwright test tests/e2e/sales.spec.ts
+
+[WebServer] (node:28296) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+SETUP_INTERRUPTED: runner sem cenários e sem bind observado após aproximadamente 180 s; interrompida somente sessão 76679 via Ctrl+C; saída da sessão 1; critérios funcionais not_run.

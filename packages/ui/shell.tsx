@@ -109,15 +109,16 @@ export function Shell({
           <nav>
             {navigation.map((item) => {
               const Icon = icons[item.icon];
+              const href = `${base}/${base === "/app" && item.slug === "vendas" ? "pdv" : item.slug}`;
               const selected =
-                path === `${base}/${item.slug}` ||
+                path === href ||
                 (path === "/demo" && item.slug === "visao-geral");
               return (
                 <Link
                   aria-current={selected ? "page" : undefined}
                   className={selected ? "nav-item active" : "nav-item"}
                   key={item.slug}
-                  href={`${base}/${item.slug}`}
+                  href={href}
                   onClick={() => setOpen(false)}
                 >
                   <Icon size={19} />

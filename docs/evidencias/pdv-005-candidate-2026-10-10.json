@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "baseline_ref": "075c5454adddee0af0d1fddade4a964ee1a0b70d",
+  "recorded_at": "2026-10-10",
+  "files": [
+    {
+      "path": "app/actions/sales.ts",
+      "sha256": "51aaaefa33bf55d93709d71afefb1795e2c1cc051dcf70727d221daea64acdf7"
+    },
+    {
+      "path": "app/app/pdv/page.tsx",
+      "sha256": "d9e3bf7f34a3e78ab0c8dcaf43d7bc9c5eab76c9570fb5ae0a734fa1fd32768c"
+    },
+    {
+      "path": "app/app/pdv/loading.tsx",
+      "sha256": "3c1782ba5c473246a6c2e24fec54a823660edfd90c5cd88e2740f26549c77c2d"
+    },
+    {
+      "path": "app/app/pdv/error.tsx",
+      "sha256": "cda25f63443af18697708b65e4a2c0543a7231cca38acf6b2c05ac4e129f33bb"
+    },
+    {
+      "path": "app/app/pdv/sales.module.css",
+      "sha256": "f2ba22eb133f1e35af654eefa7524d04f21140b3f326785d0f65368dc8cc7045"
+    },
+    {
+      "path": "lib/sales/server.ts",
+      "sha256": "79f5e09531eaf812daf71050e5cfd0c550bb17c7c7e07724af39f76f088f7fbf"
+    },
+    {
+      "path": "packages/domain/sales-contracts.ts",
+      "sha256": "4223ac6b67b68efec5a837c49243736fa47ed46e2a5d593acfdd462a9f0bd851"
+    },
+    {
+      "path": "packages/domain/sales.ts",
+      "sha256": "528eb05f4d41a66a82b38426b409ad76336862c4168c2eee4dbfb78b3b93a5bb"
+    },
+    {
+      "path": "packages/validation/sales.ts",
+      "sha256": "82aa3375746c1c7f3847da17d2c0f8ca2026de9e3351a35441dbce325a1104bb"
+    },
+    {
+      "path": "packages/ui/sales/attempt.ts",
+      "sha256": "f56704448aa49d336772ca2de9525dd6d4df941abfb7fabda68444ca44179048"
+    },
+    {
+      "path": "packages/ui/sales/workspace.tsx",
+      "sha256": "82eababd43395cc0f8fd0e4a7003983deabc8324e077b198c30f8fcdb57f9136"
+    },
+    {
+      "path": "packages/ui/shell.tsx",
+      "sha256": "3b4a672b2b15bd6ff146919d0079d1efcc76d73ce477dc8b54e9c4d0e56db17a"
+    },
+    {
+      "path": "scripts/sales-hosted.ps1",
+      "sha256": "89aed3d8a3c8c02134a23bef8da5a2d5ed4c835a8672cca7a02448e3481d6c34"
+    },
+    {
+      "path": "supabase/migrations/202610090003_sales.sql",
+      "sha256": "e7aec5256cfc7ea9669004425062ff1a689dbdbf9ef08c097f42daad85ad4efd"
+    },
+    {
+      "path": "tests/sales-domain.test.ts",
+      "sha256": "76c935157643a005248899017946a7d553d316eb8df14d1bdf2a0c6275d16375"
+    },
+    {
+      "path": "tests/sales-sql.test.ts",
+      "sha256": "e194da29c6ff69cb1b8a8dba7e8dd5aff96b9046f89cf9a24cf15a352e5fcd8c"
+    },
+    {
+      "path": "tests/sales-application.test.ts",
+      "sha256": "c938e20cf208ed9934449f87d685c347db4ae068d1d61d47791b4cc824e38d6b"
+    },
+    {
+      "path": "tests/sales-ui.test.ts",
+      "sha256": "a42ffe8c8e73f005ed0548241f764b665e7530879f4965c04491652107c6bc5f"
+    },
+    {
+      "path": "tests/sales-hosted.test.ts",
+      "sha256": "3c79f530b8b9ebda49ec02e891ffcdcef49f897680cd4148bdf4d9e48eaa05d4"
+    },
+    {
+      "path": "tests/e2e/sales.spec.ts",
+      "sha256": "519265eb6482b799d795ccc741c16cdedbcee0e8efe848cd5bd99b843d10b186"
+    },
+    {
+      "path": "tests/hosted/sales.mjs",
+      "sha256": "cc2b59b4cb4bc8f65da22d31efa000f0df9f7a4f36fdca6157a1b6a72d5b6139"
+    },
+    {
+      "path": "tests/support/auth-server.mjs",
+      "sha256": "396b658d8f760b9bf9fa835ba90d72485aaa081a2e3c6ca4e963b669d810bf71"
+    }
+  ]
+}

@@ -1,0 +1,45 @@
+{
+    "schema_version":  1,
+    "started_at":  "2026-10-10T03:17:29.8814137Z",
+    "finished_at":  "2026-10-10T03:17:53.0094608Z",
+    "status":  "passed",
+    "failed_phase":  null,
+    "checks":  [
+                   {
+                       "name":  "deployment_preflight",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "database_preflight",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "migration_dry_run",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "migration_apply",
+                       "status":  "PASS"
+                   },
+                   {
+                       "name":  "deployment_postflight",
+                       "status":  "PASS"
+                   }
+               ],
+    "postflight":  {
+                       "confirmed":  true,
+                       "identities_preserved":  true,
+                       "passwords_preserved":  true,
+                       "hmac_preserved":  true,
+                       "images_preserved":  true,
+                       "audit_preserved":  true,
+                       "audit_events_added":  0,
+                       "migration_count":  10,
+                       "bucket_private":  true
+                   },
+    "cleanup_retry":  "not_run",
+    "web_version":  "6112d18f-2cd7-4c91-9513-cb413d736e37",
+    "mode":  "migrate",
+    "migration_sha256":  "e7aec5256cfc7ea9669004425062ff1a689dbdbf9ef08c097f42daad85ad4efd",
+    "process_termination_confirmed":  true
+}

@@ -1,0 +1,21 @@
+{
+  "review_id": "PDV005-ARQ-R2",
+  "baseline": "PDV005-ARQ-R1",
+  "conclusion": "no_blocking_findings",
+  "reviewer": "independent c360-seguranca-arquitetura",
+  "scope": [
+    "Recovery requestAnimationFrame with cancellation",
+    "Notice focus in component; hook has no render refs",
+    "Authenticated menu /app/pdv; demo /demo/vendas",
+    "E2E waits store change and verifies menu"
+  ],
+  "sha256": {
+    "packages/ui/sales/workspace.tsx": "82eababd43395cc0f8fd0e4a7003983deabc8324e077b198c30f8fcdb57f9136",
+    "packages/ui/shell.tsx": "3b4a672b2b15bd6ff146919d0079d1efcc76d73ce477dc8b54e9c4d0e56db17a",
+    "tests/e2e/sales.spec.ts": "519265eb6482b799d795ccc741c16cdedbcee0e8efe848cd5bd99b843d10b186"
+  },
+  "findings": [],
+  "executed": "independent delta inspection",
+  "tests_and_remote": "not_run by reviewer in R2",
+  "limit": "Restricted to inspected delta; not production approval"
+}

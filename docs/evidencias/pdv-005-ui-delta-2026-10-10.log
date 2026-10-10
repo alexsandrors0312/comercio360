@@ -1,0 +1,13 @@
+
+> comercio360@0.1.1 test
+> vitest run --configLoader runner tests/sales-application.test.ts tests/sales-ui.test.ts
+
+
+ RUN  v4.1.11 C:/Users/Alexs/Desktop/Comercio360
+
+
+ Test Files  2 passed (2)
+      Tests  36 passed (36)
+   Start at  00:11:43
+   Duration  1.64s (transform 296ms, setup 0ms, import 852ms, tests 117ms, environment 0ms)
+

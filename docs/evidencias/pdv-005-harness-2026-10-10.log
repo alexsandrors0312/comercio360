@@ -1,0 +1,212 @@
+
+> comercio360@0.1.1 test:harness
+> node --test tests/harness-contract.test.mjs tests/harness-telemetry.test.mjs && node scripts/harness/check-skills.mjs
+
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-paSuoN/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-5Jaayu/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-MJTpWt/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kbExuT/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-DJ8GXP/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kvO7d1/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-UaBUK1/repo/.git/config: Permission denied
+fatal: could not set 'core.repositoryformatversion' to '0'
+✔ accepts a bounded read-only task and evidenced report (29.7441ms)
+✔ rejects traversal and protected writes (14.9683ms)
+✔ rejects unsupported baselines and unknown contract fields (19.8256ms)
+✔ rejects PASS without evidence and missing criteria (12.9388ms)
+✔ rejects invented execution data and baseline mismatch (14.1725ms)
+✖ rejects a result through the API after HEAD advances beyond the validated task baseline (190.0087ms)
+✖ rejects missing and escaping finding evidence references (169.6053ms)
+✔ rejects reported changes in review mode, even when the actual change list is empty (16.1285ms)
+✖ accepts a clean Git worktree for a read-only result (178.1648ms)
+✖ detects an index change masked by worktree content matching HEAD, without double-counting the path (170.2789ms)
+✖ rejects a read-only result with unstaged Git changes omitted from changed_files (168.5529ms)
+✖ rejects a read-only result with staged Git changes omitted from changed_files (167.8581ms)
+✖ rejects a read-only result with untracked Git changes omitted from changed_files (171.0692ms)
+✔ compares real changed paths with the assigned and reported paths (23.3405ms)
+✔ usage aggregation receives only the complete turn, excluding prelude and tail (2.4444ms)
+✔ bridge captures provider usage, duration and unavailable states without raw reasoning (620.2217ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 9
+ℹ fail 7
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 1642.5085
+
+✖ failing tests:
+
+test at tests\harness-contract.test.mjs:110:1
+✖ rejects a result through the API after HEAD advances beyond the validated task baseline (190.0087ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-paSuoN/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:111:47)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-paSuoN/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 12804,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-paSuoN/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }
+
+test at tests\harness-contract.test.mjs:119:1
+✖ rejects missing and escaping finding evidence references (169.6053ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-5Jaayu/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:120:36)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-5Jaayu/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 12436,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-5Jaayu/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }
+
+test at tests\harness-contract.test.mjs:137:1
+✖ accepts a clean Git worktree for a read-only result (178.1648ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-MJTpWt/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:138:19)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-MJTpWt/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 26580,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-MJTpWt/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }
+
+test at tests\harness-contract.test.mjs:144:1
+✖ detects an index change masked by worktree content matching HEAD, without double-counting the path (170.2789ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kbExuT/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:145:61)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kbExuT/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 24652,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kbExuT/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }
+
+test at tests\harness-contract.test.mjs:177:3
+✖ rejects a read-only result with unstaged Git changes omitted from changed_files (168.5529ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-DJ8GXP/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:178:32)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-DJ8GXP/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 30112,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-DJ8GXP/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }
+
+test at tests\harness-contract.test.mjs:177:3
+✖ rejects a read-only result with staged Git changes omitted from changed_files (167.8581ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kvO7d1/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:178:32)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kvO7d1/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 5368,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-kvO7d1/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }
+
+test at tests\harness-contract.test.mjs:177:3
+✖ rejects a read-only result with untracked Git changes omitted from changed_files (171.0692ms)
+  Error: Command failed: git init -q
+  error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-UaBUK1/repo/.git/config: Permission denied
+  fatal: could not set 'core.repositoryformatversion' to '0'
+  
+      at genericNodeError (node:internal/errors:985:15)
+      at wrappedFn (node:internal/errors:539:14)
+      at checkExecSyncError (node:child_process:925:11)
+      at execFileSync (node:child_process:961:15)
+      at git (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:35:10)
+      at resultFixture (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:46:3)
+      at TestContext.<anonymous> (file:///C:/Users/Alexs/Desktop/Comercio360/tests/harness-contract.test.mjs:178:32)
+      at Test.runInAsyncScope (node:async_hooks:214:14)
+      at Test.run (node:internal/test_runner/test:1103:25)
+      at Test.processPendingSubtests (node:internal/test_runner/test:785:18) {
+    status: 128,
+    signal: null,
+    output: [ null, '', "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-UaBUK1/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n" ],
+    pid: 15832,
+    stdout: '',
+    stderr: "error: could not write config file C:/Users/Alexs/AppData/Local/Packages/sandbox.{0fd5b8d6-ec00-4c35-9222-b69c7d18dd3f}/AC/Temp/c360-harness-UaBUK1/repo/.git/config: Permission denied\nfatal: could not set 'core.repositoryformatversion' to '0'\n"
+  }

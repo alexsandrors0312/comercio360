@@ -1,0 +1,378 @@
+{
+  "recorded_at": "2026-10-10",
+  "baseline_ref": "075c5454adddee0af0d1fddade4a964ee1a0b70d",
+  "tracked_original_unrelated": [
+    {
+      "path": ".agents/skills/c360-orquestrar/SKILL.md",
+      "hash": "BD8A37607C5B3275D0BECE7C312EF79A45F6E547F7FF494D5551227ED4CA7287",
+      "preserved": true
+    },
+    {
+      "path": "GEMINI.md",
+      "hash": "C18D0D8966CE0CFF66838BF488AF565F3EF7449FCE5A400D20E603FA2BEEA103",
+      "preserved": true
+    },
+    {
+      "path": "GUIA_DESENVOLVIMENTO_AGENTES.md",
+      "hash": "deleted",
+      "preserved": true
+    },
+    {
+      "path": "GUIA_DESENVOLVIMENTO_COMERCIO_360.md",
+      "hash": "deleted",
+      "preserved": true
+    },
+    {
+      "path": "docs/ENTREGA_COMPRAS_004_2026-10-09.md",
+      "hash": "791E9187F4214A8601C9CC15006160F364C872712D789246CA04D441CD64544F",
+      "preserved": true
+    },
+    {
+      "path": "docs/PASSAGEM_DESENVOLVIMENTO_2026-10-04.md",
+      "hash": "A367340F5B088588DBECD434DBF4C717DA361B7E7B955E33F55EE68165186632",
+      "preserved": true
+    },
+    {
+      "path": "docs/PERSPECTIVA_DESENVOLVIMENTO_2026-10-09.md",
+      "hash": "1B754C8AAC9BD0B0575343600A427657A5328275E17A50DBA7EC0C8695D4BDCF",
+      "preserved": true
+    },
+    {
+      "path": "docs/PUBLICACAO_OPERACAO_2026-10-03.md",
+      "hash": "27EF84E6781A588C0B7A7223F19D8CCF9DA3B19056FBFEB6DECCCFF9E884FED4",
+      "preserved": true
+    },
+    {
+      "path": "package.json",
+      "hash": "2AFD9B027B067CE22F75972246A48A9891527A4BA8B03E3CFACA0FEA79598846",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-image-cleanup.RUNBOOK.md",
+      "hash": "3FF293A3161161E470F70CC5FC8C8F759C6FD30FFC05E184F386BDBA57834DD8",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-image-cleanup.mjs",
+      "hash": "E935A5163A255246EAFCAD8F8AF9A7F0B4646DD9E790E477F3EAC2B901736460",
+      "preserved": true
+    },
+    {
+      "path": "scripts/cloudflare-https.ps1",
+      "hash": "027A8D74C1DBF33AC2CD00E719D15CF1EED566F9ADD7118F9581BE840CFC4047",
+      "preserved": true
+    },
+    {
+      "path": "tests/hosted/cloudflare-https.mjs",
+      "hash": "C548CA7568E58CED78A5618633E250076BBA9B7075ECCA2878278926D59866F0",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/README.md",
+      "hash": "E574BE3C8842D28EA6C3FC24BFDC2EEB3CE48B73C5A7926E6A29337BEF733C00",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/src/index.mjs",
+      "hash": "4A94FFE639C0708747AF85DA5E5530F796D7365DBA8CE7494D424D17D0829240",
+      "preserved": true
+    }
+  ],
+  "untracked_original_unrelated": [
+    {
+      "path": "docs/CONTINUIDADE_2026-10-05.md",
+      "hash": "E1A0269353F8A9601EDADCCF9EEEEE810DD809AE4386A87CE992BFC79E264D9A",
+      "preserved": true
+    },
+    {
+      "path": "docs/ORGANIZACAO_2026-10-05.md",
+      "hash": "13F1EB4CF2939E1A1EC5D9FC0E99FB04D1992D69D6AB20CA6DF944463BDF8D30",
+      "preserved": true
+    },
+    {
+      "path": "docs/REVISAO_CONTINUIDADE_2026-10-05.md",
+      "hash": "F0519657A6A866E73EC60CAAF297AC9C4D5A3CF6C2C1BA92915C10B5D96EDE33",
+      "preserved": true
+    },
+    {
+      "path": "docs/ai/TELEMETRIA_CODEX_ESPERA_2026-10-05.md",
+      "hash": "10DB7DA49DA415B28E955F131075B0C13D28845F8FD9EC419677656C9C4475E9",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/2026-10-05-https-renovacao.log",
+      "hash": "F5CC45DEB0CC7F1130BE7AE8EB74BD155FFFED163CB9FB98839FE82FF16F7442",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/2026-10-05-verificacoes.log",
+      "hash": "9533130DB9DAAFAC4356A7CF11389117CCF49387A747F4691E11107C8FA06E80",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-observation-2026-10-05T21-39-02-941Z.json",
+      "hash": "76CE5B28F5F776F49E64FA59F04EE4ED9197DECB26A4976B971706A58917B372",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-observation-2026-10-05T21-45-09-951Z.json",
+      "hash": "C32CD37C20820B956DF67FB5DA407E40A53D404F891D96F640F4B7A21A6C3041",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-observation-2026-10-05T22-00-09-307Z.json",
+      "hash": "4D00725B9E3CCC8F2D86AB56FEFD438BBCADAB76EFCF97F0BAFFD1B70AFF9C90",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-1a548f71-de22-470f-91a2-de095ebabfbc-1791338467243.json",
+      "hash": "FB6D304813C4CC6465F144853A8A87BA96AEB87A6546A1D03ADDD96A16751983",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-4ed652fe-3c5e-419a-b16a-f4d1376f7536-1791316326690.json",
+      "hash": "90CEAD55EAE57550C0DAE194C68D76D2061D3C5DB590C49FC3DDDADA49FEF234",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-approved-2026-10-06-1500.json",
+      "hash": "B2D3D89E1D1AF3255E63C05D7F0618356427D9793621137C3337C7233F2E0A4B",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-approved-2026-10-06-2100.json",
+      "hash": "BB18C260ED271A9B7E3B03562D1C97DA3A3B31D44104D9D04AC13712F83164E9",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-audit-2026-10-06.json",
+      "hash": "760744A37290908CA3652840E5976EB68F280C1AFD02EF146E9431F23179E377",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-audit-2026-10-07.json",
+      "hash": "2EC741D091770DA2773F6B918F11EDD464941521A8F56EF8E0458BD5737862D5",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-preflight-1791243529459.json",
+      "hash": "D52D8E5EC5929D5055B507D03730CF5E54DB1861D686FAA0E1483C8731113FD4",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-preflight-2026-10-06-2100.json",
+      "hash": "6B951BF015B868CD925E80838AD236021F9F41BB93E5C7E878CAD292DD31C6A5",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-readiness-2026-10-06.json",
+      "hash": "684F5DEFC059700E3C1EEB709EFA89ECC6C3565B7813D1F37B03CB22E6575AD0",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-review-2026-10-05-r3.json",
+      "hash": "F83FF5A611154BF04E0585DDBD8EC6BDDEDD647465C0FD78F386E2D3E30A8795",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-review-2026-10-06-r4.json",
+      "hash": "C94E9B98C4EC42B8B79CDAFFBCA71FC47AC09BE59C76594438EF0A47EA227043",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-review-2026-10-06-r5.json",
+      "hash": "9C24623F8F3540A120CB7B64C6470666B5D62B8BAE7F40FD2454FD109689E5FC",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-schedule-2026-10-05.json",
+      "hash": "D37625650FFEACCBC85D34A54B38D091BFE8056A334F343CE8934331EF9BE167",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-schedule-2026-10-06-1500.ps1",
+      "hash": "FC50133DDCD6203E6AF6E3CC6E08789EB81242AB9E50B55A9A5F455BE769104B",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/catalog-cleanup-retry-schedule-2026-10-06-2100.json",
+      "hash": "C6EA191F6C97BFBB492C889AB379710C8B2C0024B0AFC62F95EF63DB8075B1C3",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/compras-004-validation-2026-10-09.json",
+      "hash": "E342080845625730BDB440592F6A6842857895D0D9F78867EB17460038CEB30A",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/operacoes-003-004-publication-2026-10-10T01-34-00Z.json",
+      "hash": "E179E2DBB34063DFB2C788153A418807656E42A16988B19FC696C4494B04126C",
+      "preserved": true
+    },
+    {
+      "path": "docs/evidencias/operacoes-004-hosted-2026-10-10T01-33-23-227Z.json",
+      "hash": "7423C6E6C7FDFCBAE1D613696D4C8E67ACF37DD6A8FD945564485ADE2C65F218",
+      "preserved": true
+    },
+    {
+      "path": "docs/guias/AMBIENTE_LOCAL.md",
+      "hash": "7B44340758A91D0593110339C56C7FDB71CEE3ADDCD75EDEE70F4503F101EF07",
+      "preserved": true
+    },
+    {
+      "path": "docs/guias/GUIA_DESENVOLVIMENTO_AGENTES.md",
+      "hash": "265D61208B08E982F8DAA4934514A680B9BE069A5B194DE714B67279D350A3FB",
+      "preserved": true
+    },
+    {
+      "path": "docs/historico/GUIA_DESENVOLVIMENTO_COMERCIO_360.md",
+      "hash": "088CE2BF986444D3AB2AFDA0BAD3677A8048F39778FFE0B1D546FB8E748BB07B",
+      "preserved": true
+    },
+    {
+      "path": "docs/historico/README.md",
+      "hash": "9237B445B2E8F7BB6BFB53AB9E2870D0FE0C195F96D34922A4CDB903128E5613",
+      "preserved": true
+    },
+    {
+      "path": "docs/operacao/CATALOGO_CRON_PUBLICACAO_2026-10-05.md",
+      "hash": "E31D4AD2E4C05567654D158398AA53BAA35321422A99C34FD9DB5C058F568734",
+      "preserved": true
+    },
+    {
+      "path": "docs/operacao/CATALOGO_LIMPEZA_TRANSPORTE_2026-10-05.md",
+      "hash": "02F819701A4F7220283AA0996F737C3A1F8D40A561279F2CAE021B3B819AD11A",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-client.mjs",
+      "hash": "39DB87B7886AE5945E73443664185AC697EB3601931436E93F12A992FAF4CC3C",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-observe.mjs",
+      "hash": "3DBBB111A867563C79567793042F8BC791AFC56F117B7B2DE0D226C5803F5FE9",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry-approved.json",
+      "hash": "BB18C260ED271A9B7E3B03562D1C97DA3A3B31D44104D9D04AC13712F83164E9",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry-evidence.mjs",
+      "hash": "C8F1AACA2F461CB891C1BA7139F5B5582FB946B412729721396B11FB5F17B71D",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry-fixtures.mjs",
+      "hash": "732612037905339695D82BC27ADF6F39EE1BB5EFCF7B01B68B042CC4B4D31DEF",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry-journal.mjs",
+      "hash": "58F38E5E65CDB5F397B93979C76401D9B6B0B172B1D099C37AF4E85420CFD8BE",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry-provider.mjs",
+      "hash": "D1CF2BFF07E9FCE682DB7C1E4F12F1F322F624C5DB2C380A9F4F9A7158897165",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry-schedule.ps1",
+      "hash": "596FD5EA9BD8449B975270D6CF2ACA94101230BEDB507856AE49A4FEC29367D2",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry.RUNBOOK.md",
+      "hash": "4F2983C1D91D22164442AE50BC1F833C5E4A85772B72EB53C922E06EDB773903",
+      "preserved": true
+    },
+    {
+      "path": "scripts/catalog-cleanup-retry.mjs",
+      "hash": "7C1DF893F71DE311139E43EDB2B1D7176EBCFCC7FAD37D244AC9AC94D7ADD00A",
+      "preserved": true
+    },
+    {
+      "path": "scripts/cloudflare-https.RUNBOOK.md",
+      "hash": "82DF9CEF1A6EF4E67C0BB25FACD6A1FA25D6513168FA673D28A953DCD9C40329",
+      "preserved": true
+    },
+    {
+      "path": "tests/cloudflare-session-renewal.test.ts",
+      "hash": "7F10A5B501631BC597C4E667D14F4909A5A9465C243ADAAD119699C7EB444DFD",
+      "preserved": true
+    },
+    {
+      "path": "tests/hosted/cloudflare-session-renewal.mjs",
+      "hash": "D72423BB6DBC863E01740EDBCC093013B0024EED9C54BBDE9B1F1735C6326537",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup-fault-probe/README.md",
+      "hash": "E3C215BA3F124C5DA3EDFA212F8A6F07792D58FC24BEFB11EA6ADCC07348980A",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup-fault-probe/src/index.mjs",
+      "hash": "3C560ED75F1DADD5E4F616D496CD3CFB50699311F8FD270A3D08C0368B6F090E",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup-fault-probe/wrangler.dry-run.jsonc",
+      "hash": "EDE6534B4D6ACFF95F0617C9E9607A40C5F23D50E0A3044B1630ECC102C2BAA4",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/fault-probe.test.mjs",
+      "hash": "1CDBB13EA32174B8869833F2069A692973ACD908CD97BA1AD480FCA829A7FAE8",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/observation.test.mjs",
+      "hash": "ABA1682FD161C5A01F2E3056E3033F7F3274575B88B2A504B29ED9844106A950",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/retry-evidence.test.mjs",
+      "hash": "47477099B2F34EB20B5A7F68DDDC3114D2315321CA6600B3EC2CAADC0F7DD334",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/retry-fixtures.test.mjs",
+      "hash": "E417DBEE9D654E4F0BE7E753FED8283EBBEE5B3AE6CCBC8A303218EE39A24AF5",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/retry-journal.test.mjs",
+      "hash": "026A605B6F21A780ACDF2135195C8223183024A483E63032ADFF1930027E2AC9",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/retry-provider.test.mjs",
+      "hash": "7C071CA4BD80F32DA9C0434DA13DA83BAEB488FD9DD0186B6841F217B7B7761C",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/retry-runner.test.mjs",
+      "hash": "40B320596EDA7E017DE00A9E5CAE050A9E66A21B0924A7D42A9FD8247328E916",
+      "preserved": true
+    },
+    {
+      "path": "workers/catalog-cleanup/test/transport.test.mjs",
+      "hash": "37F79091900EFDB63C5834FB65FA30A0D61E37AB08201D3F50D3001FD9060C1A",
+      "preserved": true
+    }
+  ],
+  "intentionally_updated_existing": [
+    "context.md",
+    "README.md",
+    "CHANGELOG.md",
+    "docs/architecture/ARQUITETURA.md",
+    "docs/ai/REPOMAP.md",
+    "docs/README.md"
+  ],
+  "staging_policy": "Only explicit PDV code/new documentation/evidence; previous dirty documentation and cleanup excluded",
+  "all_unrelated_preserved": true
+}
