@@ -1,0 +1,18 @@
+.workspace { display: grid; gap: 20px; max-width: 1500px; margin: auto; min-width: 0; }
+.workspace h1, .workspace h2 { overflow-wrap: anywhere; }
+.workspace p { line-height: 1.6; }
+.card { background: white; border: 1px solid #cbdcd4; border-radius: 12px; padding: 20px; min-width: 0; }
+.card h2 { font-size: 1.05rem; margin: 0 0 12px; }
+.number { font-size: 2rem; font-weight: 700; margin: 10px 0; }
+.notice { background: #edf7f1; border: 1px solid #bdd5c8; border-radius: 8px; padding: 14px; }
+.metrics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); gap: 16px; }
+.list { list-style: none; padding: 0; margin: 0; }
+.list li { display: grid; gap: 8px; padding: 16px 0; border-bottom: 1px solid #e3ebe6; overflow-wrap: anywhere; }
+.list li:last-child { border-bottom: 0; }
+.filters { display: flex; gap: 12px; align-items: end; flex-wrap: wrap; }
+.field { display: grid; gap: 7px; flex: 1 1 180px; min-width: 0; }
+.field input, .field select { width: 100%; min-height: 44px; padding: 10px; border: 1px solid #9eb7aa; border-radius: 6px; background: white; color: #172f32; font: inherit; }
+.button { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 10px 16px; background: #08685f; color: white; border: 1px solid #08685f; border-radius: 7px; font: inherit; text-decoration: none; cursor: pointer; }
+.pagination { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin-top: 20px; }
+.workspace a { overflow-wrap: anywhere; }
+.workspace a:focus-visible, .workspace button:focus-visible, .workspace input:focus-visible, .workspace select:focus-visible { outline: 3px solid #da9d34; outline-offset: 3px; }

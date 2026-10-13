@@ -1,10 +1,20 @@
 import { notFound } from "next/navigation";
 import { Shell } from "@/packages/ui/shell";
 import { Dashboard } from "@/packages/ui/dashboard";
-import { Construction } from "@/packages/ui/states";
+import { AuthenticatedModule, Construction } from "@/packages/ui/states";
 import { navigation } from "@/packages/config/navigation";
 import { demoOrganizations, demoStores } from "@/mocks/dashboard";
 export const dynamic = "force-dynamic";
+const authenticatedModules = new Set([
+  "vendas",
+  "pedidos",
+  "produtos",
+  "estoque",
+  "compras",
+  "clientes",
+  "relatorios",
+  "configuracoes",
+]);
 export default async function Demo({
   params,
 }: {
@@ -24,6 +34,10 @@ export default async function Demo({
     >
       {slug === "visao-geral" ? (
         <Dashboard />
+      ) : authenticatedModules.has(slug) ? (
+        <AuthenticatedModule
+          label={slug === "clientes" ? "Clientes" : item.label}
+        />
       ) : (
         <Construction label={item.label} />
       )}

@@ -31,8 +31,15 @@ for (const width of [360, 768, 1440]) {
       .getByRole("link", { name: "Vendas / PDV" })
       .click();
     await expect(
-      page.getByRole("heading", { name: "Em construção" }),
+      page.getByRole("heading", { name: "Disponível na área autenticada" }),
     ).toBeVisible();
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= window.innerWidth,
+      ),
+    ).toBe(true);
+    await page.getByRole("link", { name: "Entrar para operar" }).click();
+    await expect(page).toHaveURL(/\/login$/);
   });
 }
 test("protected routes require a real session; demo cannot grant access", async ({
@@ -45,8 +52,10 @@ test("protected routes require a real session; demo cannot grant access", async 
     { name: "c360-org", value: "forged", domain: "127.0.0.1", path: "/" },
     { name: "c360-store", value: "forged", domain: "127.0.0.1", path: "/" },
   ]);
-  await page.goto("/app/estoque");
-  await expect(page).toHaveURL(/\/login/);
+  for (const path of ["/app/estoque", "/app/pdv", "/app/configuracoes"]) {
+    await page.goto(path);
+    await expect(page).toHaveURL(/\/login/);
+  }
 });
 test("demo context selection is explicit and navigation has no fake operations", async ({
   page,
@@ -71,9 +80,26 @@ test("demo context selection is explicit and navigation has no fake operations",
     "configuracoes",
   ]) {
     await page.goto(`/demo/${slug}`);
-    await expect(
-      page.getByRole("heading", { name: "Em construção" }),
-    ).toBeVisible();
+    if (["entregas", "marketing", "financeiro"].includes(slug)) {
+      await expect(
+        page.getByRole("heading", { name: "Em construção" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("link", { name: "Entrar para operar" }),
+      ).toHaveCount(0);
+    } else {
+      await expect(
+        page.getByRole("heading", { name: "Disponível na área autenticada" }),
+      ).toBeVisible();
+      await expect(
+        page.getByRole("link", { name: "Entrar para operar" }),
+      ).toHaveAttribute("href", "/login");
+      await expect(
+        page.getByText("Esta demonstração usa dados fictícios", {
+          exact: false,
+        }),
+      ).toBeVisible();
+    }
   }
   await page.goto("/demo/nonexistent");
   await expect(page.getByText("404", { exact: true })).toBeVisible();

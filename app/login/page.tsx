@@ -32,6 +32,7 @@ export default function Login() {
           </div>
         )}
         <LoginForm configured={configured} />
+        <p><Link href="/cadastro">Criar minha conta</Link></p>
         {process.env.DEMO_ENABLED !== "false" && (
           <Link className="demo-link" href="/demo">
             Explorar demonstração com dados fictícios →

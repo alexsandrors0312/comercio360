@@ -1,4 +1,25 @@
 import { Construction as ConstructionIcon, CircleCheck } from "lucide-react";
+import Link from "next/link";
+export function AuthenticatedModule({ label }: { label: string }) {
+  return (
+    <section className="center-state">
+      <span className="state-icon" aria-hidden="true">
+        <CircleCheck size={32} />
+      </span>
+      <p className="eyebrow">OPERAÇÃO DA LOJA</p>
+      <h1>{label}</h1>
+      <h2>Disponível na área autenticada</h2>
+      <p>
+        Entre com sua conta para acessar as operações permitidas para sua
+        empresa e loja. Esta demonstração usa dados fictícios e não realiza
+        operações.
+      </p>
+      <Link className="primary" href="/login">
+        Entrar para operar
+      </Link>
+    </section>
+  );
+}
 export function Construction({ label }: { label: string }) {
   return (
     <section className="center-state">

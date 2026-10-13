@@ -3,6 +3,7 @@
 import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
+import { randomUUID } from "node:crypto";
 const db = new PGlite();
 for (const file of [
   "tests/bootstrap.sql",
@@ -18,6 +19,8 @@ for (const file of [
   "migrations/202610090002_procurement.sql",
   "migrations/202610090003_sales.sql",
   "migrations/202610100001_customers.sql",
+  "migrations/202610100002_orders.sql",
+  "migrations/202610120001_settings.sql",
 ])
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
@@ -54,6 +57,11 @@ const identities = {
   "estoquista.aurora@example.test": "8",
   "comprador.aurora@example.test": "9",
 };
+const signupPasswords = new Map();
+// Explicitly simulated verified Auth identities; does not send/verify actual email.
+for (const [email, letter] of Object.entries(identities)) {
+ await db.query("update auth.users set email=$1,email_confirmed_at=now() where id=$2",[email,`${letter}0000000-0000-4000-8000-000000000001`]);
+}
 let queue = Promise.resolve();
 const reply = (response, status, data) => {
   response.writeHead(status, {
@@ -72,16 +80,24 @@ createServer((request, response) => {
         const body = raw ? JSON.parse(raw) : {};
         if (url.pathname === "/health")
           return reply(response, 200, { ok: true });
+        if (url.pathname === "/auth/v1/signup") {
+          if (!body.email?.endsWith("@example.test") || identities[body.email]) return reply(response,400,{msg:"Fixture signup rejected"});
+          const id = randomUUID(); identities[body.email]=id; signupPasswords.set(body.email,body.password);
+          await db.exec("reset role");
+          await db.query("insert into auth.users(id,email,email_confirmed_at) values($1,$2,now())",[id,body.email]);
+          return reply(response,200,{id,email:body.email,email_confirmed_at:new Date().toISOString(),aud:"authenticated",created_at:new Date().toISOString()});
+        }
         if (url.pathname === "/auth/v1/token") {
           const letter = identities[body.email];
-          if (!letter || body.password !== "test-password-only")
+          if (!letter || body.password !== (signupPasswords.get(body.email) ?? "test-password-only"))
             return reply(response, 400, {
               code: "invalid_credentials",
               msg: "Invalid login credentials",
             });
           const user = {
-            id: `${letter}0000000-0000-4000-8000-000000000001`,
+            id: letter.length===36 ? letter : `${letter}0000000-0000-4000-8000-000000000001`,
             email: body.email,
+            email_confirmed_at: "2026-09-05T00:00:00Z",
             aud: "authenticated",
             role: "authenticated",
             app_metadata: { provider: "email" },
@@ -134,6 +150,18 @@ createServer((request, response) => {
             body.p_store_id,
           ]);
           return reply(response, 200, null);
+        }
+        const settingsArgs = {
+          settings_read: ["p_org","p_store"],
+          settings_mutate: ["p_org","p_store","p_operation","p_payload","p_key"],
+          settings_onboard: ["p_name","p_store_name","p_display_name","p_key"],
+          settings_accept: ["p_code","p_display_name","p_key"],
+        };
+        const settingsName=url.pathname.split("/").at(-1);
+        if (url.pathname.startsWith("/rest/v1/rpc/") && settingsArgs[settingsName]) {
+          const names=settingsArgs[settingsName];
+          const result=await db.query("select public."+settingsName+"("+names.map((_,i)=>"$"+(i+1)).join(",")+") value",names.map(n=>n==="p_payload"?JSON.stringify(body[n]):body[n]??null));
+          return reply(response,200,result.rows[0].value);
         }
         const catalogRpcArguments = {
           inventory_stock: [
@@ -246,6 +274,11 @@ createServer((request, response) => {
           customers_list: [...scopeArgs, "p_query", "p_status", "p_limit", "p_offset", "p_customer_id"],
           customers_sales: [...scopeArgs, "p_customer_id", "p_limit", "p_offset"],
           customers_save: [...scopeArgs, "p_customer_id", "p_expected_revision", "p_name", "p_phone", "p_email", "p_active", "p_idempotency_key"],
+          orders_list: [...scopeArgs, "p_status", "p_limit", "p_offset", "p_order_id"],
+          orders_items: [...scopeArgs, "p_order_id"],
+          orders_create: [...scopeArgs, "p_channel", "p_customer_id", "p_items", "p_idempotency_key"],
+          orders_cancel: [...scopeArgs, "p_order_id", "p_expected_revision", "p_reason", "p_idempotency_key"],
+          orders_fulfill: [...scopeArgs, "p_order_id", "p_expected_revision", "p_idempotency_key"],
           procurement_suppliers: [
             ...scopeArgs,
             "p_query",
@@ -360,7 +393,7 @@ createServer((request, response) => {
       } catch (error) {
         reply(
           response,
-          error.code === "42501" ? 403 : error.code === "PT409" ? 409 : 500,
+          error.code === "42501" ? 403 : error.code === "PT409" ? 409 : error.code === "PT422" ? 422 : 500,
           {
             message: error.message,
             code: error.code,

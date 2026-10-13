@@ -1,4 +1,5 @@
 import { logout } from "../actions";
+import Link from "next/link";
 export default function NoAccess() {
   return (
     <main className="center-state">
@@ -8,6 +9,8 @@ export default function NoAccess() {
         pelo menos uma loja ativa. Ter vínculo com a empresa não libera acesso
         às lojas. Solicite a liberação ao responsável.
       </p>
+      <p><Link href="/onboarding">Cadastrar empresa</Link></p>
+      <p><Link href="/convites">Aceitar convite manual</Link></p>
       <form action={logout}>
         <button className="primary">Voltar ao login</button>
       </form>

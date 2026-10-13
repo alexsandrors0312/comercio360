@@ -1,0 +1,27 @@
+# Pacote009 — Configurações e administração
+
+12/10/2026. Autorização direta do responsável para cadastro/administração de empresas, lojas e usuários, após007/008. Desenvolvimento/validação local com dados fictícios; sem migração remota, deploy ou homologação integrada. Base `acc6207` mais alterações locais preservadas. [ADR-0017](adr/ADR-0017-administracao-acessos.md).
+
+## Fluxos e autoridade
+
+Cadastro de conta usa Supabase Auth com chave pública, senha e confirmação de email. Não cria usuário confirmado por API administrativa. O ambiente local habilita cadastro; serviço hospedado e entrega de email precisam validação própria. Cadastro não concede nenhum vínculo. Login existente e bloqueio `/sem-acesso` permanecem.
+
+Identidade autenticada, não anônima, com email confirmado pode criar nova empresa, primeira loja e vínculo owner/concessão na mesma transação, em `/onboarding`, fora do layout operacional. Nunca eleva papel em empresa existente. Nome de exibição é global e criado somente se perfil ainda não existir. Limite operacional de cinco empresas criadas por identidade, sem representar plano comercial.
+
+`/app/configuracoes`: proprietário ativo com concessão explícita à loja ativa administra nome da empresa, cria/renomeia/inativa/reativa lojas, lista vínculos da empresa e altera papel/estado/concessões de outros membros. Administração de metadados é uma capacidade organizacional explícita; não dá bypass às operações das lojas. Criar loja concede acesso ao criador, atomicamente e de forma explícita. Demais papéis veem estado sem permissão administrativa. Gerente não administra acessos. Não editar próprio vínculo neste recorte; impedir que inativação de loja deixe qualquer owner ativo sem loja ativa concedida. Não eliminar empresa/loja/usuário/histórico nem mover chaves estruturais.
+
+Owner gera convite manual para email, papel e uma ou mais lojas ativas. Código aleatório UUID, armazenado somente como SHA-256 no banco, expira em sete dias; nunca em URL/auditoria/log. UI apresenta código ao autor para compartilhamento manual; não envia email/WhatsApp. `/convites`, fora do layout operacional, aceita código por POST para identidade Auth com email confirmado correspondente. Um aceite cria perfil/vínculo/concessões atomicamente. Não sobrescreve vínculo existente, inclusive inativo: owner reativa/ajusta pelo fluxo próprio. Convite só pode ser aceito se emissor continua owner autorizado e lojas continuam ativas. Revogação e aceite concorrem sob o mesmo lock. Reenvio do mesmo aceite retorna o mesmo resultado somente enquanto vínculo/acesso atual continuam válidos.
+
+## Integridade e recuperação
+
+Incremental009, sem alterar migrações aplicadas. Adicionar revisões de empresa/loja/vínculo, convites privados e ledger privado. Leitura administrativa por RPC retorna DTO mínimo: nome/revisão empresa; lojas/estado/revisão; nomes de exibição/IDs/papéis/concessões/revisão; convites email/papel/lojas/estado/expiração/revisão, sem hash/código. DML direto continua negado e RLS operacional inalterada.
+
+Mutações recebem chave UUID, entrada normalizada e revisão quando alteram entidade. Replay exige mesma entrada, ator e escopo; outra entrada conflita. Autoridade atual verificada antes do replay. Ordem: lock empresa → autorização/concessão → entidade/ledger. Bootstrap serializa por ator; aceite deriva empresa do hash sem expor existência antes de verificar email. Alterações de acessos e registros auditáveis são atômicas. Ledger não guarda senha ou código bruto. Auditoria de convite contém IDs/estado/papel/lojas, sem email/hash/token. Auditoria da fundação existente preservada.
+
+Tentativas persistidas por usuário/empresa/loja no sessionStorage antes do envio; controles bloqueados até hidratação/recuperação. Convite usa código gerado no cliente, guardado somente na tentativa da aba até confirmar/descartar; a persistência temporária permite recuperar resposta perdida e deve ser tratada como dado privado de convite. Código removido ao confirmar/descartar a tentativa; tentativa ambígua permanece isolada pela chave de usuário/escopo inclusive após sair, até recuperação explícita ou fechar a aba. Código sozinho não autoriza aceite: exige conta do destinatário com email confirmado. O código não vai a telemetria ou URL. Resultado ambíguo mantém entrada/chave para reenvio; falha confirmada permite nova tentativa. Sem storage, escrita bloqueada. Senha de cadastro não é persistida. Limites operacionais:100 lojas,200 vínculos e100 convites pendentes por empresa; não equivalem a cobrança.
+
+## Aceite e limites
+
+Provas SQL reais em PGlite: bootstrap/replay, autorização antes de replay, isolamento, CAS, revogação/reativação, último owner operacional, concessões cruzadas, convite/email confirmado/anônimo/expiração/revogação/replay, token fora do ledger/auditoria e rollback. Aplicação: getUser e validação, DTOs/mensagens sanitizados, sem Admin Auth. E2E: cadastro fictício/onboarding, lojas/usuários/convite manual, restrição de papéis, revogação de sessão aberta, resposta perdida/recarga, responsividade360/768/1440. Gates lint/tipos/Vitest/build/E2E e revisões independentes.
+
+Recuperação de senha, alteração de email, transferência de propriedade própria, cobrança, exclusão de empresa/identidade e provedor de mensagens ficam para contratos próprios. Ausência de email real/piloto não bloqueia esse desenvolvimento fictício. Confirmação/antiabuso Auth hospedado, concorrência PostgreSQL multissessão e operação real não são comprovadas por mocks. Política de guarda permanece pendente para dados reais.
