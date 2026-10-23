@@ -14,6 +14,9 @@ const authenticatedModules = new Set([
   "clientes",
   "relatorios",
   "configuracoes",
+  "financeiro",
+  "entregas",
+  "marketing",
 ]);
 export default async function Demo({
   params,

@@ -1,0 +1,22 @@
+.workspace { display: grid; gap: 24px; max-width: 1120px; margin: 0 auto; }
+.header p { max-width: 75ch; }
+.notice { border: 1px solid #b6c9c0; background: #eff7f2; padding: 16px; border-radius: 12px; }
+.notice p { margin: 0 0 10px; }
+.notice button { margin-right: 10px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px,1fr)); gap: 18px; }
+.card { border: 1px solid #d9e2dd; border-radius: 14px; padding: 20px; background: #fff; min-width: 0; }
+.card h2 { margin-top: 0; }
+.form { display: grid; gap: 12px; }
+.form label { display: grid; gap: 5px; }
+.form input, .form select { width: 100%; min-height: 42px; padding: 8px; border: 1px solid #a6b8ae; border-radius: 8px; background: white; color: #172722; }
+.form button, .row button, .notice button { min-height: 40px; padding: 8px 12px; border: 1px solid #205844; border-radius: 8px; background: #205844; color: white; cursor: pointer; }
+.form button:disabled, .row button:disabled, .notice button:disabled { opacity: .5; cursor: not-allowed; }
+.list { display: grid; gap: 12px; list-style: none; margin: 0; padding: 0; }
+.row { display: grid; gap: 8px; padding: 12px 0; border-top: 1px solid #e2e9e5; overflow-wrap: anywhere; }
+.row:first-child { border-top: 0; }
+.row form { display: flex; flex-wrap: wrap; gap: 8px; align-items: end; }
+.row form label { flex: 1 1 180px; }
+.row small { color: #4c6157; }
+.pill { display: inline-block; border-radius: 999px; background: #edf3ef; padding: 2px 9px; font-size: .8rem; }
+.warning { color: #87520c; font-weight: 600; }
+@media (max-width: 600px) { .card { padding: 15px; } .row form { display: grid; } }

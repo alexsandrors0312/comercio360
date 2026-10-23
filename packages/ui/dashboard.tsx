@@ -229,7 +229,7 @@ export function Dashboard() {
               <Link href={`${base}/estoque`}>
                 Acompanhar estoque <ArrowRight size={17} />
               </Link>
-              <small>Módulos em construção</small>
+              <small>Operações disponíveis na área autenticada</small>
             </section>
           </div>
         </>

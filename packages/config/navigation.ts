@@ -6,7 +6,7 @@ export const navigation = [
   { slug: "estoque", label: "Estoque", icon: "inventory" },
   { slug: "compras", label: "Compras / Fornecedores", icon: "procurement" },
   { slug: "clientes", label: "Clientes / CRM", icon: "customers" },
-  { slug: "entregas", label: "Entregas / Fretes", icon: "logistics" },
+  { slug: "entregas", label: "Entregas / Retiradas", icon: "logistics" },
   { slug: "marketing", label: "Marketing", icon: "marketing" },
   { slug: "financeiro", label: "Financeiro", icon: "finance" },
   { slug: "relatorios", label: "Relatórios", icon: "reports" },
