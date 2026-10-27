@@ -156,7 +156,7 @@ function Preview({ campaign, scope, objective, body, products }: {
         <small>Saldo consultado: {product.quantity}</small>
       </div>)}
     </div>}
-    <p className={styles.previewFoot}>Prévia interna. Confira preços e disponibilidade antes de divulgar.</p>
+    <p className={styles.previewFoot}>Fotos ilustrativas por produto. Confira cor, tamanho, preços e disponibilidade antes de divulgar.</p>
   </section>;
 }
 
@@ -202,10 +202,14 @@ async function exportPng(campaign: MarketingRichCampaign, scope: MarketingScope,
     }
     context.fillStyle = "#17352c"; context.font = "bold 27px sans-serif";
     drawText(context, product.name, x + 18, y + photoH + 42, cardW - 36, 34, 2);
+    context.fillStyle = "#40584d"; context.font = "20px sans-serif";
+    const variant = [product.sku, product.color, product.size].filter(Boolean).join(" · ");
+    drawText(context, variant, x + 18, y + photoH + (products.length <= 3 ? 130 : 104), cardW - 36, 24, 1);
     context.fillStyle = "#22654d"; context.font = "bold 34px sans-serif";
     context.fillText(money(product.priceCents), x + 18, y + cardH - 28);
   }
-  context.fillStyle = "#425d50"; context.font = "23px sans-serif";
+  context.fillStyle = "#425d50"; context.font = "20px sans-serif";
+  context.fillText("Fotos ilustrativas por produto; cor e tamanho são os da variante.", 56, 1279);
   context.fillText("Preços e saldos consultados no sistema. Confirme antes de divulgar.", 56, 1315);
   const blob = await new Promise<Blob>((resolve, reject) => canvas.toBlob(value => value ? resolve(value) : reject(new Error("Falha ao gerar PNG")), "image/png"));
   const url = URL.createObjectURL(blob);
