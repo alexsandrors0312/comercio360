@@ -51,6 +51,7 @@ describe("Pacotes 010–013: SQL local com Auth simulado", () => {
       "20261022205548_finance_manual.sql", "20261022205557_deliveries_manual.sql",
       "20261022205611_marketing_calendar.sql",
       "20261026164724_marketing_rich.sql",
+      "20261027133500_marketing_locking_reads.sql",
     ]) await db.exec(sql("migrations/" + file));
   });
   afterAll(async () => { await db?.close(); });
@@ -281,5 +282,16 @@ describe("Pacotes 010–013: SQL local com Auth simulado", () => {
     await user(marketing);
     await denied(() => command("marketing_product_search", [org, store, "", 20, 0]), "42501");
     expect((await db.query("select name from storage.objects where bucket_id='catalog-private'")).rows).toHaveLength(0);
+  });
+
+  it("marca as leituras 013 como voláteis porque a autorização bloqueia linhas", async () => {
+    const functions = (await db.query<{ proname: string; provolatile: string }>(
+      "select proname,provolatile from pg_proc where pronamespace=(select oid from pg_namespace where nspname='public') and proname in ('marketing_product_search','marketing_rich_read','marketing_cover_path') order by proname",
+    )).rows;
+    expect(functions).toEqual([
+      { proname: "marketing_cover_path", provolatile: "v" },
+      { proname: "marketing_product_search", provolatile: "v" },
+      { proname: "marketing_rich_read", provolatile: "v" },
+    ]);
   });
 });

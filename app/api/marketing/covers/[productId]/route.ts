@@ -31,7 +31,7 @@ export async function GET(request: Request, { params }: Context) {
       p_org: organizationId,
       p_store: storeId,
       p_product: productId,
-    }, { get: true });
+    });
     if (path.error) {
       if (path.error.code === "42501") return failure(403, "Acesso negado.");
       if (path.error.code === "22023") return failure(400, "Seleção de capa inválida.");

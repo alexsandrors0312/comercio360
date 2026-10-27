@@ -53,7 +53,7 @@ describe("Capa privada de Marketing 013", () => {
     expect(source.authorized).toHaveBeenCalledWith({ organizationId, storeId });
     expect(source.rpc).toHaveBeenCalledWith("marketing_cover_path", {
       p_org: organizationId, p_store: storeId, p_product: productId,
-    }, { get: true });
+    });
     expect(source.download).toHaveBeenCalledWith("private/opaque/path");
   });
 

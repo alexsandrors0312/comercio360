@@ -85,7 +85,7 @@ describe("Marketing 013: adaptador autenticado", () => {
     expect(source.rpc).toHaveBeenCalledWith("marketing_product_search", {
       p_org: scope.organizationId, p_store: scope.storeId,
       p_query: "camisa", p_limit: 20, p_offset: 0,
-    }, { get: true });
+    });
   });
 
   it("aceita período limitado e mantém preço ausente como desconhecido", async () => {
@@ -104,7 +104,7 @@ describe("Marketing 013: adaptador autenticado", () => {
     expect(source.rpc).toHaveBeenCalledWith("marketing_rich_read", {
       p_org: scope.organizationId, p_store: scope.storeId,
       p_from: "2026-10-26T00:00:00.000Z", p_until: "2026-11-05T00:00:00.000Z",
-    }, { get: true });
+    });
     await expect(readMarketingRich(scope, "2026-01-01T00:00:00Z", "2026-05-01T00:00:00Z"))
       .rejects.toMatchObject({ kind: "invalid" });
   });

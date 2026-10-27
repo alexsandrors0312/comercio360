@@ -27,6 +27,7 @@ for (const file of [
   "migrations/20261022205557_deliveries_manual.sql",
   "migrations/20261022205611_marketing_calendar.sql",
   "migrations/20261026164724_marketing_rich.sql",
+  "migrations/20261027133500_marketing_locking_reads.sql",
 ]) {
   if (file === "migrations/20261026164724_marketing_rich.sql")
     await db.exec("create schema if not exists storage;create table storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit integer,allowed_mime_types text[]);create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null,name text not null);alter table storage.objects enable row level security;grant usage on schema storage to authenticated;grant select,insert on storage.objects to authenticated;");
@@ -377,9 +378,12 @@ createServer((request, response) => {
         });
         const argumentNames = catalogRpcArguments[rpcName];
         if (url.pathname.startsWith("/rest/v1/rpc/") && argumentNames) {
-          const stableMarketingRead = ["marketing_rich_read", "marketing_product_search", "marketing_cover_path"].includes(rpcName);
-          if (stableMarketingRead && request.method !== "GET")
-            return reply(response, 405, { code: "PGRST101", message: "Read-only RPC requires GET" });
+          const lockingMarketingRead = ["marketing_rich_read", "marketing_product_search", "marketing_cover_path"].includes(rpcName);
+          if (lockingMarketingRead) {
+            const metadata = await db.query("select provolatile from pg_proc where oid=$1::regproc", ["public." + rpcName]);
+            if (request.method !== "POST" || metadata.rows[0]?.provolatile !== "v")
+              return reply(response, 405, { code: "25006", message: "RPC requires a read-write transaction" });
+          }
           const rpcInput = request.method === "GET" ? Object.fromEntries(url.searchParams) : body;
           const placeholders = argumentNames
             .map((_, index) => "$" + (index + 1))
