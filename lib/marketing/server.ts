@@ -68,7 +68,7 @@ export async function readMarketingRich(
       p_store: scope.storeId,
       p_from: start.toISOString(),
       p_until: end.toISOString(),
-    });
+    }, { get: true });
     if (error) throw classify(error.code);
     return marketingRichDataSchema.parse(data);
   } catch (error) {
@@ -88,7 +88,7 @@ export async function readMarketingProducts(input: unknown): Promise<MarketingPr
       p_query: value.query,
       p_limit: value.limit,
       p_offset: value.offset,
-    });
+    }, { get: true });
     if (error) throw classify(error.code);
     return marketingProductSearchDataSchema.parse(data);
   } catch (error) {

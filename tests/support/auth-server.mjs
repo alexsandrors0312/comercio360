@@ -377,14 +377,18 @@ createServer((request, response) => {
         });
         const argumentNames = catalogRpcArguments[rpcName];
         if (url.pathname.startsWith("/rest/v1/rpc/") && argumentNames) {
+          const stableMarketingRead = ["marketing_rich_read", "marketing_product_search", "marketing_cover_path"].includes(rpcName);
+          if (stableMarketingRead && request.method !== "GET")
+            return reply(response, 405, { code: "PGRST101", message: "Read-only RPC requires GET" });
+          const rpcInput = request.method === "GET" ? Object.fromEntries(url.searchParams) : body;
           const placeholders = argumentNames
             .map((_, index) => "$" + (index + 1))
             .join(",");
           const values = argumentNames.map((name) =>
             name === "p_items"
               || name === "p_payload"
-              ? JSON.stringify(body[name] ?? null)
-              : (body[name] ?? null),
+              ? JSON.stringify(rpcInput[name] ?? null)
+              : (rpcInput[name] ?? null),
           );
           const result = await db.query(
             "select * from public." + rpcName + "(" + placeholders + ")",
