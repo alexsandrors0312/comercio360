@@ -4,6 +4,8 @@ import { createServer } from "node:http";
 import { readFileSync } from "node:fs";
 import { PGlite } from "@electric-sql/pglite";
 import { randomUUID } from "node:crypto";
+const marketingFixtureCoverPath = "10000000-0000-4000-8000-000000000001/10000000-0000-4000-8000-000000000201/10000000-0000-4000-8000-000000000401";
+const marketingFixtureCover = Buffer.from("iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAIAAAD8GO2jAAAACXBIWXMAAAPoAAAD6AG1e1JrAAAAPElEQVRIie3WuQkAMBADQfdfoQIVoDJchcHBwOWCQ8+erE/vEJgXlYsiaFUV0aYzODGZQxUFXoOO/ZquL7F2cJd56/XHAAAAAElFTkSuQmCC", "base64");
 const db = new PGlite();
 for (const file of [
   "tests/bootstrap.sql",
@@ -21,10 +23,17 @@ for (const file of [
   "migrations/202610100001_customers.sql",
   "migrations/202610100002_orders.sql",
   "migrations/202610120001_settings.sql",
-])
+  "migrations/20261022205548_finance_manual.sql",
+  "migrations/20261022205557_deliveries_manual.sql",
+  "migrations/20261022205611_marketing_calendar.sql",
+  "migrations/20261026164724_marketing_rich.sql",
+]) {
+  if (file === "migrations/20261026164724_marketing_rich.sql")
+    await db.exec("create schema if not exists storage;create table storage.buckets(id text primary key,name text not null,public boolean not null,file_size_limit integer,allowed_mime_types text[]);create table storage.objects(id uuid primary key default gen_random_uuid(),bucket_id text not null,name text not null);alter table storage.objects enable row level security;grant usage on schema storage to authenticated;grant select,insert on storage.objects to authenticated;");
   await db.exec(
     readFileSync(new URL("../../supabase/" + file, import.meta.url), "utf8"),
   );
+}
 await db.exec(`
   insert into auth.users(id) values ('80000000-0000-4000-8000-000000000001'),('90000000-0000-4000-8000-000000000001');
   insert into public.profiles(id,display_name) values ('80000000-0000-4000-8000-000000000001','Estoquista fictício'),('90000000-0000-4000-8000-000000000001','Comprador fictício');
@@ -45,6 +54,19 @@ await db.exec(`
   insert into public.product_prices(organization_id,store_id,variant_id,amount) values
    ('10000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000011',
     '10000000-0000-4000-8000-000000000301',59.90);
+  insert into public.catalog_image_objects
+   (id,organization_id,product_id,actor_user_id,object_path,state,mime_type,byte_size,width,height)
+  values ('10000000-0000-4000-8000-000000000401',
+   '10000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000201',
+   'a0000000-0000-4000-8000-000000000001',
+   '${marketingFixtureCoverPath}','active','image/png',${marketingFixtureCover.length},32,32);
+  insert into public.product_images(id,organization_id,product_id,object_id)
+  values ('10000000-0000-4000-8000-000000000501',
+   '10000000-0000-4000-8000-000000000001','10000000-0000-4000-8000-000000000201',
+   '10000000-0000-4000-8000-000000000401');
+  insert into storage.buckets(id,name,public,file_size_limit,allowed_mime_types)
+  values ('catalog-private','catalog-private',false,5242880,array['image/png']);
+  insert into storage.objects(bucket_id,name) values('catalog-private','${marketingFixtureCoverPath}');
 `);
 const tokens = new Map();
 const identities = {
@@ -144,6 +166,23 @@ createServer((request, response) => {
           user.id,
         ]);
         await db.exec("set role authenticated");
+        const storagePrefix = "/storage/v1/object/catalog-private/";
+        if (request.method === "GET" && url.pathname.startsWith(storagePrefix)) {
+          const path = decodeURIComponent(url.pathname.slice(storagePrefix.length));
+          const object = await db.query(
+            "select name from storage.objects where bucket_id=$1 and name=$2",
+            ["catalog-private", path],
+          );
+          if (object.rows.length === 0 || path !== marketingFixtureCoverPath)
+            return reply(response, 404, { message: "Cover unavailable" });
+          response.writeHead(200, {
+            "Content-Type": "image/png",
+            "Content-Length": marketingFixtureCover.length,
+            "Cache-Control": "no-store",
+          });
+          response.end(marketingFixtureCover);
+          return;
+        }
         if (url.pathname === "/rest/v1/rpc/set_active_store") {
           await db.query("select public.set_active_store($1,$2)", [
             body.p_organization_id,
@@ -264,6 +303,18 @@ createServer((request, response) => {
         const rpcName = url.pathname.replace("/rest/v1/rpc/", "");
         const scopeArgs = ["p_organization_id", "p_store_id"];
         Object.assign(catalogRpcArguments, {
+          finance_read: ["p_org", "p_store"],
+          finance_record: ["p_org", "p_store", "p_sale", "p_amount", "p_method", "p_note", "p_key"],
+          finance_reverse: ["p_org", "p_store", "p_receipt", "p_reason", "p_key"],
+          finance_cash: ["p_org", "p_store", "p_direction", "p_amount", "p_note", "p_key"],
+          deliveries_read: ["p_org", "p_store"],
+          deliveries_mutate: ["p_org", "p_store", "p_operation", "p_payload", "p_key"],
+          marketing_read: ["p_org", "p_store"],
+          marketing_mutate: ["p_org", "p_store", "p_operation", "p_payload", "p_key"],
+          marketing_rich_read: ["p_org", "p_store", "p_from", "p_until"],
+          marketing_product_search: ["p_org", "p_store", "p_query", "p_limit", "p_offset"],
+          marketing_rich_save: ["p_org", "p_store", "p_campaign", "p_expected_revision", "p_objective", "p_content", "p_variants", "p_key"],
+          marketing_cover_path: ["p_org", "p_store", "p_product"],
           sales_variants: [...scopeArgs, "p_query", "p_limit", "p_offset"],
           sales_list: [...scopeArgs, "p_query", "p_status", "p_limit", "p_offset", "p_sale_id"],
           sales_items: [...scopeArgs, "p_sale_id"],
@@ -331,6 +382,7 @@ createServer((request, response) => {
             .join(",");
           const values = argumentNames.map((name) =>
             name === "p_items"
+              || name === "p_payload"
               ? JSON.stringify(body[name] ?? null)
               : (body[name] ?? null),
           );
@@ -338,6 +390,10 @@ createServer((request, response) => {
             "select * from public." + rpcName + "(" + placeholders + ")",
             values,
           );
+          if (["finance_read", "finance_record", "finance_reverse", "finance_cash",
+            "deliveries_read", "deliveries_mutate", "marketing_read", "marketing_mutate",
+            "marketing_rich_read", "marketing_product_search", "marketing_rich_save", "marketing_cover_path"].includes(rpcName))
+            return reply(response, 200, Object.values(result.rows[0] ?? {})[0] ?? null);
           return reply(response, 200, result.rows);
         }
         const table = url.pathname.split("/").at(-1);

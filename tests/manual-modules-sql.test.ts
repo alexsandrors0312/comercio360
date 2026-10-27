@@ -34,7 +34,7 @@ async function command(rpc: string, args: unknown[]) {
   )).rows[0].result;
 }
 
-describe("Pacotes 010–012: SQL local com Auth simulado", () => {
+describe("Pacotes 010–013: SQL local com Auth simulado", () => {
   beforeAll(async () => {
     db = new PGlite();
     for (const file of [
@@ -50,6 +50,7 @@ describe("Pacotes 010–012: SQL local com Auth simulado", () => {
       "202610100001_customers.sql", "202610100002_orders.sql", "202610120001_settings.sql",
       "20261022205548_finance_manual.sql", "20261022205557_deliveries_manual.sql",
       "20261022205611_marketing_calendar.sql",
+      "20261026164724_marketing_rich.sql",
     ]) await db.exec(sql("migrations/" + file));
   });
   afterAll(async () => { await db?.close(); });
@@ -131,5 +132,154 @@ describe("Pacotes 010–012: SQL local com Auth simulado", () => {
     expect(done.status).toBe("completed");
     await denied(() => command("marketing_mutate", [org, store, "update",
       JSON.stringify({ id: first.id, revision: "3", title: "Campanha alterada", channel: "store", plannedAt: "2026-11-02T12:00:00Z" }), randomUUID()]), "PT409");
+  });
+
+  it("salva conteúdo e variantes com replay, revisão e estado terminal", async () => {
+    const created = await command("marketing_mutate", [org, store, "create",
+      JSON.stringify({ title: "Vitrine fictícia", channel: "instagram", plannedAt: "2026-11-01T12:00:00Z" }), randomUUID()]);
+    const key = randomUUID();
+    const args = [org, store, created.id, 1, "promotion", "Conheça o produto da loja.", [variant], key];
+    const saved = await command("marketing_rich_save", args);
+    expect(saved).toEqual({ id: created.id, status: "draft", revision: "2" });
+    expect(await command("marketing_rich_save", args)).toEqual(saved);
+    const read = await command("marketing_rich_read", [org, store,
+      "2026-11-01T00:00:00Z", "2026-11-02T00:00:00Z"]) as unknown as {
+      campaigns: { objective: string; contentBody: string; products: {
+        variantId: string; priceCents: string; quantity: number; hasCover: boolean
+      }[] }[]; hasMore: boolean;
+    };
+    expect(read.hasMore).toBe(false);
+    expect(read.campaigns[0]).toMatchObject({ objective: "promotion", contentBody: "Conheça o produto da loja." });
+    expect(read.campaigns[0].products).toMatchObject([
+      { variantId: variant, priceCents: "1000", quantity: 3, hasCover: false },
+    ]);
+    const candidates = (await command("marketing_product_search", [org, store, "Produto", 20, 0])) as unknown as {
+      items: { variantId: string; priceCents: string }[]; total: number
+    };
+    expect(candidates.total).toBe(1);
+    expect(candidates.items[0]).toMatchObject({ variantId: variant, priceCents: "1000" });
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 2,
+      "promotion", "Texto diferente", [variant], key]), "PT409");
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 1,
+      "promotion", "Texto antigo", [variant], randomUUID()]), "PT409");
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 2,
+      "promotion", "Outro texto", [variant, variant], randomUUID()]), "22023");
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 2,
+      "promotion", "Outro texto", Array.from({ length: 7 }, () => randomUUID()), randomUUID()]), "22023");
+    await denied(() => command("marketing_rich_save", [org, otherStore, created.id, 2,
+      "promotion", "Outra loja", [variant], randomUUID()]), "PT409");
+    await db.exec("reset role");
+    await db.query("delete from public.product_prices where organization_id=$1 and store_id=$2 and variant_id=$3",
+      [org, store, variant]);
+    await user(manager);
+    const afterPriceRemoval = await command("marketing_rich_read", [org, store,
+      "2026-11-01T00:00:00Z", "2026-11-02T00:00:00Z"]) as unknown as {
+      campaigns: { products: { priceCents: string | null }[] }[]
+    };
+    expect(afterPriceRemoval.campaigns[0].products[0].priceCents).toBeNull();
+    expect(await command("marketing_rich_save", args)).toEqual(saved);
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 2,
+      "promotion", "Novo texto", [variant], randomUUID()]), "22023");
+    const scheduled = await command("marketing_mutate", [org, store, "transition",
+      JSON.stringify({ id: created.id, revision: "2", status: "scheduled" }), randomUUID()]);
+    const completed = await command("marketing_mutate", [org, store, "transition",
+      JSON.stringify({ id: created.id, revision: scheduled.revision, status: "completed" }), randomUUID()]);
+    await denied(() => command("marketing_rich_save", [org, store, created.id, Number(completed.revision),
+      "promotion", "Não pode mudar", [variant], randomUUID()]), "PT409");
+    expect(await command("marketing_rich_save", args)).toEqual(saved);
+    expect((await db.query<{ n: string }>("select count(*)::text as n from public.audit_events where entity_id=$1 and action='marketing.content'", [created.id])).rows[0].n).toBe("1");
+  });
+
+  it("nega variante inativa e fora da organização na primeira gravação", async () => {
+    const created = await command("marketing_mutate", [org, store, "create",
+      JSON.stringify({ title: "Vitrine fictícia", channel: "store", plannedAt: "2026-11-01T12:00:00Z" }), randomUUID()]);
+    await db.exec("reset role");
+    await db.query("update public.product_variants set active=false where organization_id=$1 and id=$2", [org, variant]);
+    await user(manager);
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 1,
+      "institutional", "Teste", [variant], randomUUID()]), "22023");
+    await denied(() => command("marketing_rich_save", [org, store, created.id, 1,
+      "institutional", "Teste", [randomUUID()], randomUUID()]), "22023");
+  });
+
+  it("invalida preço e capa de variante vinculada que ficou inativa", async () => {
+    const created = await command("marketing_mutate", [org, store, "create",
+      JSON.stringify({ title: "Vitrine fictícia", channel: "store", plannedAt: "2026-11-01T12:00:00Z" }), randomUUID()]);
+    await command("marketing_rich_save", [org, store, created.id, 1,
+      "institutional", "Teste", [variant], randomUUID()]);
+    await db.exec("reset role");
+    await db.query("update public.product_variants set active=false where organization_id=$1 and id=$2", [org, variant]);
+    await user(manager);
+    const read = await command("marketing_rich_read", [org, store,
+      "2026-11-01T00:00:00Z", "2026-11-02T00:00:00Z"]) as unknown as {
+      campaigns: { products: { priceCents: string | null; hasCover: boolean }[] }[]
+    };
+    expect(read.campaigns[0].products[0]).toMatchObject({ priceCents: null, hasCover: false });
+    const product = (await db.query<{ product_id: string }>(
+      "select product_id from public.product_variants where id=$1", [variant])).rows[0].product_id;
+    await db.exec("reset role");
+    await db.query("update public.product_variants set active=true where organization_id=$1 and id=$2", [org, variant]);
+    await db.query("update public.products set active=false where organization_id=$1 and id=$2", [org, product]);
+    await user(manager);
+    const inactiveProductRead = await command("marketing_rich_read", [org, store,
+      "2026-11-01T00:00:00Z", "2026-11-02T00:00:00Z"]) as unknown as {
+      campaigns: { products: { priceCents: string | null; hasCover: boolean }[] }[]
+    };
+    expect(inactiveProductRead.campaigns[0].products[0]).toMatchObject({ priceCents: null, hasCover: false });
+  });
+
+  it("isola catálogo e capas por papel, loja e objeto ativo", async () => {
+    const marketing = "e0000000-0000-4000-8000-000000000001";
+    const membership = "e0000000-0000-4000-8000-000000000011";
+    const product = (await db.query<{ product_id: string }>(
+      "select product_id from public.product_variants where id=$1", [variant])).rows[0].product_id;
+    const objectId = randomUUID();
+    const path = `${org}/${product}/${objectId}`;
+    await db.exec("reset role");
+    await db.query("insert into auth.users(id) values($1)", [marketing]);
+    await db.query("insert into public.profiles(id,display_name) values($1,'Marketing fictício')", [marketing]);
+    await db.query("insert into public.memberships(id,organization_id,user_id,role) values($1,$2,$3,'marketing')",
+      [membership, org, marketing]);
+    await db.query("insert into public.user_store_access(organization_id,membership_id,store_id) values($1,$2,$3)",
+      [org, membership, store]);
+    await db.query("insert into public.catalog_image_objects(id,organization_id,product_id,actor_user_id,object_path,state) values($1,$2,$3,$4,$5,'active')",
+      [objectId, org, product, manager, path]);
+    await db.query("insert into public.product_images(organization_id,product_id,object_id) values($1,$2,$3)",
+      [org, product, objectId]);
+    await db.query("insert into storage.objects(bucket_id,name) values('catalog-private',$1)", [path]);
+    await db.query("insert into storage.objects(bucket_id,name) values('catalog-private',$1)", [`${org}/${product}/${randomUUID()}`]);
+    await user(marketing);
+    const marketingProducts = (await command("marketing_product_search", [org, store, "", 20, 0])) as unknown as {
+      items: { hasCover: boolean }[]
+    };
+    expect(marketingProducts.items[0].hasCover).toBe(true);
+    expect((await command("marketing_cover_path", [org, store, product]) as unknown)).toBe(path);
+    expect((await db.query<{ name: string }>("select name from storage.objects where bucket_id='catalog-private'")).rows)
+      .toEqual([{ name: path }]);
+    expect((await db.query("select id from public.product_prices")).rows).toHaveLength(0);
+    await denied(() => command("marketing_product_search", [org, otherStore, "", 20, 0]), "42501");
+    await denied(() => command("marketing_cover_path", ["20000000-0000-4000-8000-000000000001",
+      "20000000-0000-4000-8000-000000000011", product]), "42501");
+    await db.exec("reset role");
+    await db.query("delete from public.product_prices where organization_id=$1 and store_id=$2 and variant_id=$3",
+      [org, store, variant]);
+    await user(marketing);
+    expect(await command("marketing_cover_path", [org, store, product])).toBeNull();
+    expect((await db.query("select name from storage.objects where bucket_id='catalog-private'")).rows).toHaveLength(0);
+    await user(manager);
+    await db.query("select * from public.catalog_set_price($1,$2,$3,$4,$5)", [org, store, variant, null, "10.00"]);
+    await db.exec("reset role");
+    await db.query("update public.products set active=false where organization_id=$1 and id=$2", [org, product]);
+    await user(marketing);
+    expect(await command("marketing_cover_path", [org, store, product])).toBeNull();
+    expect((await db.query("select name from storage.objects where bucket_id='catalog-private'")).rows).toHaveLength(0);
+    await user(cashier);
+    await denied(() => command("marketing_rich_read", [org, store,
+      "2026-11-01T00:00:00Z", "2026-11-02T00:00:00Z"]), "42501");
+    await db.exec("reset role");
+    await db.query("delete from public.user_store_access where organization_id=$1 and membership_id=$2", [org, membership]);
+    await user(marketing);
+    await denied(() => command("marketing_product_search", [org, store, "", 20, 0]), "42501");
+    expect((await db.query("select name from storage.objects where bucket_id='catalog-private'")).rows).toHaveLength(0);
   });
 });

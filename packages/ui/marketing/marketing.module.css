@@ -1,0 +1,103 @@
+.workspace { max-width: 1500px; margin: 0 auto; display: grid; gap: 24px; color: #17352c; }
+.pageHeader { display: grid; gap: 8px; }
+.pageHeader h1 { margin: 0; font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -.03em; }
+.pageHeader p { margin: 0; max-width: 70ch; }
+.kicker { margin: 0; color: #406652; font-size: .73rem; font-weight: 800; letter-spacing: .12em; text-transform: uppercase; }
+.headerBoundary { color: #536a5d; font-size: .9rem; }
+.layout { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(340px, 1fr); gap: 22px; align-items: start; }
+.main, .side { min-width: 0; display: grid; gap: 22px; }
+.card, .editor { border: 1px solid #d9e3dc; border-radius: 18px; background: #fff; box-shadow: 0 8px 25px rgba(20,55,38,.035); min-width: 0; padding: 22px; }
+.cardHeading, .calendarHeading, .editorHeader { display: flex; gap: 16px; align-items: start; justify-content: space-between; }
+.cardHeading h2, .calendarHeading h2, .editorHeader h2 { margin: 5px 0 0; font-size: 1.3rem; line-height: 1.25; }
+.form { display: grid; gap: 13px; }
+.form label, .toolbar label, .searchRow label { display: grid; gap: 6px; min-width: 0; font-size: .87rem; font-weight: 700; }
+.form input, .form select, .form textarea, .toolbar select, .searchRow input {
+  width: 100%; min-width: 0; border: 1px solid #a9bdaf; border-radius: 10px; background: #fff;
+  color: #17352c; padding: 10px 12px; font: inherit; min-height: 42px;
+}
+.form textarea { resize: vertical; min-height: 125px; line-height: 1.45; }
+.form input:focus-visible, .form select:focus-visible, .form textarea:focus-visible,
+.toolbar select:focus-visible, .searchRow input:focus-visible, .workspace button:focus-visible,
+.details summary:focus-visible, .calendarScroll:focus-visible { outline: 3px solid #dd9a35; outline-offset: 2px; }
+.twoFields { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.hint, .counter { margin: 0; color: #526b5b; font-size: .84rem; line-height: 1.45; }
+.counter { justify-self: end; }
+.workspace button { min-height: 39px; border: 1px solid #205844; border-radius: 9px; padding: 8px 12px; background: #205844; color: #fff; font: inherit; font-size: .88rem; font-weight: 700; cursor: pointer; }
+.workspace button:hover:not(:disabled) { filter: brightness(.94); }
+.workspace button:disabled { opacity: .5; cursor: not-allowed; }
+.workspace .ghostButton, .workspace .secondaryButton { background: #fff; color: #205844; }
+.workspace .secondaryButton { background: #edf6ef; }
+.monthControls { display: flex; align-items: center; justify-content: flex-end; gap: 7px; white-space: nowrap; }
+.monthControls strong { min-width: 138px; text-align: center; font-size: .91rem; }
+.workspace .monthControls button { padding: 5px 8px; min-width: 36px; }
+.toolbar { display: flex; flex-wrap: wrap; align-items: end; gap: 10px; margin: 22px 0 16px; }
+.toolbar label { flex: 1 1 125px; }
+.viewSwitch { display: flex; border: 1px solid #bfd0c3; border-radius: 10px; padding: 3px; background: #edf4ee; }
+.workspace .viewSwitch button { background: transparent; border: 0; color: #315743; min-height: 36px; }
+.workspace .viewSwitch button[aria-pressed="true"] { background: #205844; color: white; }
+.calendarScroll { overflow-x: auto; border: 1px solid #e1e8e2; border-radius: 12px; }
+.calendarGrid { display: grid; grid-template-columns: repeat(7, minmax(70px, 1fr)); min-width: 490px; }
+.weekday { background: #edf4ee; color: #315743; text-align: center; font-size: .77rem; font-weight: 800; padding: 12px 4px; border-bottom: 1px solid #dce7de; }
+.day { min-height: 104px; border-right: 1px solid #e5ebe6; border-bottom: 1px solid #e5ebe6; padding: 7px; overflow: hidden; }
+.day:nth-child(7n) { border-right: 0; }
+.outsideMonth { background: #f8faf8; color: #789082; }
+.dayNumber { display: block; font-size: .79rem; font-weight: 800; margin: 0 0 5px; }
+.workspace .dayCampaign { display: grid; text-align: left; width: 100%; min-height: 0; border: 0; border-left: 3px solid #51816a; border-radius: 6px; background: #eef5ef; color: #184031; margin-bottom: 4px; padding: 5px 6px; font-size: .7rem; font-weight: 700; line-height: 1.2; }
+.dayCampaign span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dayCampaign small { font-size: .64rem; font-weight: 600; }
+.workspace .dayCampaign.whatsapp { background: #e8f5e8; border-color: #318b59; }
+.workspace .dayCampaign.instagram { background: #f7eaf4; border-color: #b05491; }
+.workspace .dayCampaign.store { background: #eaf0fb; border-color: #5682c5; }
+.workspace .dayCampaign.other { background: #f6f1e5; border-color: #a58044; }
+.workspace .selectedDayCampaign { outline: 2px solid #163f31; outline-offset: -2px; }
+.list { display: grid; gap: 10px; list-style: none; padding: 0; margin: 0; }
+.workspace .campaignCard { display: grid; width: 100%; min-height: 0; text-align: left; background: #fff; color: #17352c; border-color: #d8e4da; padding: 12px; gap: 7px; }
+.workspace .selectedCard { border-color: #205844; background: #eff7f0; }
+.cardTop { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: #516959; font-size: .78rem; }
+.channelDot { width: 9px; height: 9px; border-radius: 50%; background: #a58044; }
+.channelDot.whatsapp { background: #318b59; }.channelDot.instagram { background: #b05491; }.channelDot.store { background: #5682c5; }
+.pill { display: inline-block; margin-left: auto; border-radius: 999px; padding: 3px 8px; background: #e8eee9; color: #315340; font-size: .72rem; font-weight: 700; white-space: nowrap; }
+.pill.scheduled { background: #e2f0e9; }.pill.completed { background: #eaf1e8; }.pill.cancelled { background: #f3e7e5; color: #864138; }
+.cardMeta { font-size: .78rem; color: #4f6657; }
+.empty, .selectPrompt { color: #526b5b; }
+.empty { padding: 25px 10px; text-align: center; }
+.selectPrompt h2 { color: #17352c; }
+.notice { background: #eff7f1; border: 1px solid #b6d3be; border-radius: 12px; padding: 15px; }
+.notice p { margin: 0 0 9px; }
+.noticeActions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.noticeActions p { flex-basis: 100%; }
+.editor { display: grid; gap: 18px; position: sticky; top: 18px; max-height: calc(100vh - 36px); overflow-y: auto; }
+.editorHeader h2 { overflow-wrap: anywhere; }
+.editorMeta { display: flex; flex-wrap: wrap; align-items: center; gap: 7px; color: #526b5b; font-size: .84rem; }
+.details { border-top: 1px solid #e3eae5; padding-top: 14px; }
+.details summary { cursor: pointer; font-weight: 700; }
+.details .form { margin-top: 13px; }
+.transitions, .outputActions { display: flex; gap: 9px; flex-wrap: wrap; }
+.sectionTitle { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; border-top: 1px solid #e3eae5; padding-top: 15px; }
+.sectionTitle h3 { margin: 0; font-size: 1.02rem; }.sectionTitle span { font-size: .76rem; color: #52705d; }
+.productPicker { display: grid; gap: 11px; }
+.searchRow { display: flex; align-items: end; gap: 8px; }.searchRow label { flex: 1; }
+.chosenList, .candidateList { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; max-height: 230px; overflow: auto; }
+.chosenList li, .candidateList li { border: 1px solid #e4ebe5; border-radius: 9px; padding: 8px 10px; display: flex; gap: 8px; justify-content: space-between; align-items: center; }
+.chosenList span, .candidateList span { min-width: 0; display: grid; gap: 4px; }.chosenList strong, .candidateList strong { font-size: .82rem; }
+.chosenList small, .candidateList small { color: #587061; font-size: .73rem; }
+.workspace .chosenList button, .workspace .candidateList button { font-size: .72rem; min-height: 31px; padding: 5px 8px; }
+.preview { border-radius: 15px; padding: 18px; background: #f4f8f3; border: 1px solid #d9e6d8; overflow-wrap: anywhere; }
+.previewHeader { display: flex; justify-content: space-between; gap: 8px; color: #52705d; font-size: .66rem; font-weight: 800; letter-spacing: .08em; }
+.preview h3 { margin: 13px 0; font-size: 1.35rem; }.previewBody { white-space: pre-wrap; line-height: 1.45; font-size: .9rem; }
+.previewProducts { display: grid; grid-template-columns: repeat(auto-fit, minmax(125px, 1fr)); gap: 8px; margin-top: 15px; }
+.previewProduct { display: grid; gap: 4px; background: white; border: 1px solid #e0eae1; border-radius: 10px; padding: 8px; }
+.productPhoto { background: #edf2ed; height: 105px; display: grid; place-items: center; color: #60776a; overflow: hidden; border-radius: 7px; font-size: .72rem; }
+.productPhoto img { width: 100%; height: 100%; object-fit: cover; }
+.previewProduct strong { font-size: .73rem; }.previewProduct small { font-size: .66rem; color: #5d7164; }.previewProduct .price { color: #176347; font-weight: 800; font-size: .84rem; }
+.previewFoot { color: #536e5c; font-size: .72rem; margin: 14px 0 0; }
+.warning { color: #87520c; font-weight: 700; font-size: .84rem; }
+.srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+@media (max-width: 1050px) { .layout { grid-template-columns: minmax(0, 1fr); }.editor { position: static; max-height: none; }.side { order: 2; } }
+@media (max-width: 600px) {
+  .workspace { gap: 16px; }.card, .editor { padding: 16px; border-radius: 14px; }.twoFields { grid-template-columns: 1fr; }
+  .calendarHeading { display: grid; }.monthControls { justify-content: space-between; }.toolbar { display: grid; grid-template-columns: 1fr 1fr; }
+  .toolbar .viewSwitch { grid-column: 1 / -1; }.toolbar label { min-width: 0; }.calendarGrid { min-width: 560px; grid-template-columns: repeat(7,80px); }
+  .day { min-height: 82px; }.dayCampaign small { display: none; }.searchRow { align-items: stretch; flex-direction: column; }
+  .previewProducts { grid-template-columns: repeat(2,minmax(0,1fr)); }.outputActions button { flex: 1 1 100%; }
+}

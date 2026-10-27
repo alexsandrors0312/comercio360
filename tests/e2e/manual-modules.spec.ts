@@ -54,5 +54,6 @@ test("venda fictícia alimenta financeiro, entrega e calendário sem integraçã
   await page.getByLabel("Data e hora").fill("2026-11-01T09:00");
   await page.getByRole("button", { name: "Criar rascunho" }).click();
   await expect(page.getByText("Operação confirmada.")).toBeVisible();
+  await page.goto("/app/marketing?mes=2026-11");
   await expect(page.getByText("Campanha fictícia de teste")).toBeVisible();
 });
